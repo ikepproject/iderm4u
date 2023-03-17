@@ -70,11 +70,17 @@ $routes->get('product/getdata', 'Web\Product::getdata', ["filter" => "authweb"])
 $routes->post('product/create', 'Web\Product::create', ["filter" => "authweb"]);
 $routes->post('product/update', 'Web\Product::update', ["filter" => "authweb"]);
 
-$routes->get('medical/getdata', 'Web\medical::getdata', ["filter" => "authweb"]); 
-$routes->post('medical/create', 'Web\medical::create', ["filter" => "authweb"]);
-$routes->post('medical/update', 'Web\medical::update', ["filter" => "authweb"]);
-$routes->post('medical/delete', 'Web\medical::delete', ["filter" => "authweb"]);
+$routes->get('medical/getdata', 'Web\Medical::getdata', ["filter" => "authweb"]); 
+$routes->post('medical/create', 'Web\Medical::create', ["filter" => "authweb"]);
+$routes->post('medical/update', 'Web\Medical::update', ["filter" => "authweb"]);
+$routes->post('medical/delete', 'Web\Medical::delete', ["filter" => "authweb"]);
+$routes->post('medical/addgallery', 'Web\Medical::addgallery', ["filter" => "authweb"]);                //Medical Detail Add Gallery
+$routes->post('medical/deletegallery', 'Web\Medical::deletegallery', ["filter" => "authweb"]);           //Medical Detail Delete Gallery
+$routes->post('medical/cancel', 'Web\Medical::cancel', ["filter" => "authweb"]);                        //Medical Cancel Action
 $routes->get('api/web/patient/get', 'Api\WebPatient::get', ["filter" => "authweb"]);
+
+$routes->post('transaction/cash', 'Web\Transaction::cash', ["filter" => "authweb"]);                    //Cash Pay Confirmation
+$routes->post('medicalrefer/create', 'Web\MedicalRefer::create', ["filter" => "authweb"]);               //Medical Refer Create
 
 $routes->get('patient/tes', 'Web\Patient::tes'); 
 
@@ -100,15 +106,9 @@ $routes->post('product/formedit', 'Web\Product::formedit', ["filter" => "authweb
 $routes->get('medical', 'Web\Medical::index', ["filter" => "authweb"]);                                 //Medical Page
 $routes->get('medicalformadd', 'Web\Medical::formadd', ["filter" => "authweb"]);                        //Medical Add Page
 $routes->post('medical/formdetail', 'Web\Medical::formdetail', ["filter" => "authweb"]);                //Medical Detail Modal
-$routes->post('medical/addgallery', 'Web\Medical::addgallery', ["filter" => "authweb"]);                //Medical Detail Add Gallery
-$routes->post('medical/deletegallery', 'Web\Medical::deletegallery', ["filter" => "authweb"]);           //Medical Detail Delete Gallery
-$routes->post('medical/cancel', 'Web\Medical::cancel', ["filter" => "authweb"]);                        //Medical Cancel Action
-$routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);  //Checkout & Invoice Transaction Page
+
+$routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);  //Pay & Invoice Transaction Page
 // $routes->post('transaction/formcash', 'Web\Transaction::formcash', ["filter" => "authweb"]);         //Cash Checkout Modal
-$routes->post('transaction/cash', 'Web\Transaction::cash', ["filter" => "authweb"]);                    //Cash Pay Confirmation
-
-$routes->post('medicalrefer/create', 'Web\MedicalRefer::create', ["filter" => "authweb"]);               //Medical Refer Create
-
 
 //Mobile API Endpoint
 $routes->group('api', ["filter" => "authapp"],  function($routes) {

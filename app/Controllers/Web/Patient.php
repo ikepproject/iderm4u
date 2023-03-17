@@ -345,6 +345,8 @@ class Patient extends BaseController
         $tes = 'ss';
         $db->transComplete();
 
-        var_dump($tes);
+        $t = date('Y-m-d\TH:i:s.Z\Z', time());
+
+        var_dump($t);
     }
 }
