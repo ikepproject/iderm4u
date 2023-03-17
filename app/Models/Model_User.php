@@ -41,7 +41,8 @@ class Model_User extends Model
             ->where('user_faskes', $user_faskes)
             ->where('user_active', 't')
             ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
-            ->like('patient_name', $searchTerm)
+            ->like('LOWER("patient_name")', strtolower($searchTerm), FALSE)
+            ->limit(10)
             ->orderBy('patient_name', 'ASC')
             ->get()->getResultArray();
     }

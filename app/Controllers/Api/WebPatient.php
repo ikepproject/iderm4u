@@ -180,16 +180,8 @@ class WebPatient extends ResourceController
         $user_faskes = $user['user_faskes'];
                 
         $tb_user     = new Model_User;
-        // $data = $tb_user->api_list_patient($user_faskes);
-        // if ($this->request->getVar('term', TRUE)) {
-		// 	$data = $tb_user->api_list_patient_like($user_faskes, $this->request->getVar('term', TRUE));
-		// } else {
-        //     $tb_user->api_list_patient($user_faskes);
-        // }
-        // $item = $tb_user->api_list_patient($user_faskes);
-        // $total= $tb_user->api_total_patient($user_faskes);
-        if ($this->request->getPost('searchTerm', TRUE)) {
-			$item = $tb_user->api_list_patient_like($user_faskes, $this->request->getPost('searchTerm', TRUE));
+        if ($this->request->getVar('searchTerm') == TRUE) {
+			$item = $tb_user->api_list_patient_like($user_faskes, $this->request->getVar('searchTerm'));
 		} else {
             $item = $tb_user->api_list_patient($user_faskes);
         }
