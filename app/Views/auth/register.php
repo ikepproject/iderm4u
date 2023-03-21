@@ -1,5 +1,17 @@
 <?= $this->extend('partials/main_auth') ?>
 <?= $this->section('isi') ?>
+        <style>
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                /* display: none; <- Crashes Chrome on hover */
+                -webkit-appearance: none;
+                margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+            }
+
+            input[type=number] {
+                -moz-appearance:textfield; /* Firefox */
+            }
+        </style>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6 col-xl-5">
@@ -27,53 +39,71 @@
                                 </a>
                             </div>
                             <div class="p-2">
-                                <?= form_open('api/web/auth/register', ['class' => 'formregister']) ?>
+                                <?= form_open('doregister', ['class' => 'formregister']) ?>
                                 <?= csrf_field() ?>
                                 <form class="form-horizontal">
                                     <div class="mb-3">
-                                        <label for="name" class="form-label">Nama <code>*</code></label>
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Masukan alamat nama anda..." >
-                                        <div class="invalid-feedback error_name"></div>
+                                        <label for="user_name" class="form-label">Nama <code>*</code></label>
+                                        <input type="text" class="form-control" id="user_name" name="user_name" placeholder="Masukan alamat nama anda..." >
+                                        <div class="invalid-feedback error_user_name"></div>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="email" class="form-label">Email <code>*</code></label>
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="Masukan alamat email anda..." >
-                                        <div class="invalid-feedback error_email"></div>
+                                        <label for="user_email" class="form-label">Email <code>*</code></label>
+                                        <input type="email" class="form-control text-lowercase" id="user_email" name="user_email" placeholder="Masukan alamat email anda..." >
+                                        <div class="invalid-feedback error_user_email"></div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="user_phone" class="form-label">No. WA <code>*</code> Contoh: 08123456789 
+                                            <button type="button" class="btn btn-light position-relative p-0 avatar-xs rounded-circle" data-toggle="tooltip" data-placement="top" title="OTP untuk verifikasi akun anda akan dikirim via WA pada nomor yang anda daftarkan ini. Harap diisi sesuai dengan No. HP anda yang terdaftar pada WA.">
+                                                <span class="avatar-title bg-transparent text-reset">
+                                                    <i class="bx bxs-info-circle"></i>
+                                                </span>
+                                            </button>
+                                        </label>
+                                        <input type="number" class="form-control" id="user_phone" name="user_phone" placeholder="Masukan No. HP yang terdaftar WA">
+                                        <div class="invalid-feedback error_user_phone"></div>
                                     </div>
                                         
                                     <div class="mb-3">
-                                        <label for="faskes" class="form-label">Pilih Faskes Asal <code>*</code> </label>
-                                        <select class="form-select" id="faskes" name="faskes">
+                                        <label for="user_faskes" class="form-label">Pilih Faskes Asal <code>*</code> </label>
+                                        <select class="form-select" id="user_faskes" name="user_faskes">
                                             <option selected disabled>Pilih...</option>
                                             <?php foreach ($faskes as $key => $data) { ?>
                                                 <option value="<?= $data['faskes_code'] ?>"><?= $data['faskes_name'] ?></option>
                                             <?php } ?>
                                         </select>
-                                        <div class="invalid-feedback error_faskes"></div>
+                                        <div class="invalid-feedback error_user_faskes"></div>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label for="password" class="form-label">Password <code>*</code></label>
+                                        <label for="user_password" class="form-label">Password <code>*</code> (Min. 8 Karakter)</label>
                                         <div class="input-group auth-pass-inputgroup">
-                                            <input type="password" class="form-control" id="password"  name="password" placeholder="Masukan password...">
+                                            <input type="password" class="form-control" id="user_password"  name="user_password" placeholder="Masukan password...">
                                             <button class="btn btn-light " type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
-                                            <div class="invalid-feedback error_password"></div>
+                                            <div class="invalid-feedback error_user_password"></div>
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="confirm_password" class="form-label">Konfirmasi Password <code>*</code></label>
-                                        <input type="password" class="form-control" id="confirm_password" placeholder="Ketik ulang password..." name="confirm_password">
+                                        <input type="password" class="form-control" id="confirm_password" placeholder="Masukan ulang password..." name="confirm_password">
                                         <div class="invalid-feedback error_confirm_password"></div>
                                     </div>
 
-                                    <div class="mt-4 form-check">
-                                        <input class="form-check-input" type="checkbox" name="toc" id="toc">
-                                        <p class="mb-0">Dengan ini Anda menyatakan telah membaca, memahami, mengetahui, menerima, dan menyetujui seluruh informasi, syarat-syarat, dan ketentuan-ketentuan penggunaan fitur yang terdapat pada platform iDerm4U. <br> <a href="#" class="text-primary">Baca Syarat & Ketentuan Penggunaan.</a></p>
+                                    <div class="mb-3">
+                                        <button type="button" class="btn btn-link waves-effect" data-bs-toggle="modal" data-bs-target="#TermAndCondition">
+                                        Baca Syarat & Ketentuan Penggunaan.
+                                        </button>
                                     </div>
 
-                                    <div class="mt-4 d-grid">
+                                    <div class="mt-2 form-check">
+                                        <input class="form-check-input" type="checkbox" name="toc" id="toc">
+                                        <p class="mb-0">Dengan ini Anda menyatakan telah membaca, memahami, mengetahui, menerima, dan menyetujui seluruh informasi, syarat-syarat, dan ketentuan-ketentuan penggunaan fitur yang terdapat pada platform iDerm4U. </p>
+                                    </div>
+                                    
+                                    <div class="mt-4 ml-4">
                                         <button class="btn btn-primary waves-effect waves-ligh" type="submit" id="registration" name="registration" disabled>Register</button>
                                     </div>
                                 </form>
@@ -92,6 +122,23 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+        </div>
+        <!-- Modal Syarat dan Ketentuan -->
+        <div class="modal fade" id="TermAndCondition" tabindex="-1" aria-labelledby="TermAndConditionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="TermAndConditionLabel">Syarat & Ketentuan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
                 </div>
             </div>
         </div>
@@ -127,36 +174,44 @@
             },
             success: function (response) {
                 if (response.error) {
-                if (response.error.name) {
-                    $("#name").addClass("is-invalid");
-                    $(".error_name").html(response.error.name);
+                if (response.error.user_name) {
+                    $("#user_name").addClass("is-invalid");
+                    $(".error_user_name").html(response.error.user_name);
                 } else {
-                    $("#name").removeClass("is-invalid");
-                    $(".error_name").html("");
+                    $("#user_name").removeClass("is-invalid");
+                    $(".error_user_name").html("");
                 }
 
-                if (response.error.email) {
-                    $("#email").addClass("is-invalid");
-                    $(".error_email").html(response.error.email);
+                if (response.error.user_email) {
+                    $("#user_email").addClass("is-invalid");
+                    $(".error_user_email").html(response.error.user_email);
                 } else {
-                    $("#email").removeClass("is-invalid");
-                    $(".error_email").html("");
+                    $("#user_email").removeClass("is-invalid");
+                    $(".error_user_email").html("");
                 }
 
-                if (response.error.faskes) {
-                    $("#faskes").addClass("is-invalid");
-                    $(".error_faskes").html(response.error.faskes);
+                if (response.error.user_phone) {
+                    $("#user_phone").addClass("is-invalid");
+                    $(".error_user_phone").html(response.error.user_phone);
                 } else {
-                    $("#faskes").removeClass("is-invalid");
-                    $(".error_faskes").html("");
+                    $("#user_phone").removeClass("is-invalid");
+                    $(".error_user_phone").html("");
                 }
 
-                if (response.error.password) {
-                    $("#password").addClass("is-invalid");
-                    $(".error_password").html(response.error.password);
+                if (response.error.user_faskes) {
+                    $("#user_faskes").addClass("is-invalid");
+                    $(".error_user_faskes").html(response.error.user_faskes);
                 } else {
-                    $("#password").removeClass("is-invalid");
-                    $(".error_password").html("");
+                    $("#user_faskes").removeClass("is-invalid");
+                    $(".error_user_faskes").html("");
+                }
+
+                if (response.error.user_password) {
+                    $("#user_password").addClass("is-invalid");
+                    $(".error_user_password").html(response.error.user_password);
+                } else {
+                    $("#user_password").removeClass("is-invalid");
+                    $(".error_user_password").html("");
                 }
 
                 if (response.error.confirm_password) {
@@ -182,7 +237,9 @@
             return false;
         });
     });
-    
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
 </script>
         
 <!-- End Page-content -->

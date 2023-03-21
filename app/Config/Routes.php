@@ -52,10 +52,10 @@ $routes->setAutoRoute(false);
 // Authentication API Endpoint Mobile - http://localhost:8080/api/mobile
 $routes->post('api/app/auth/login', 'Api\AppAuth::login');         		
 
-// Authentication API Endpoint Web - http://localhost:8080/api/web
-$routes->post('api/web/auth/login', 'Api\WebAuth::login'); 				
-$routes->post('api/web/auth/register', 'Api\WebAuth::register');
-$routes->post('logout', 'Api\WebAuth::logout');
+// Web Action
+$routes->post('dologin', 'Web\Auth::dologin'); 				
+$routes->post('doregister', 'Web\Auth::doregister');
+$routes->post('logout', 'Web\Auth::logout');
 
 $routes->get('patient/getdata', 'Web\Patient::getdata', ["filter" => "authweb"]); 
 $routes->post('patient/create', 'Web\Patient::create', ["filter" => "authweb"]);
@@ -75,12 +75,12 @@ $routes->post('medical/create', 'Web\Medical::create', ["filter" => "authweb"]);
 $routes->post('medical/update', 'Web\Medical::update', ["filter" => "authweb"]);
 $routes->post('medical/delete', 'Web\Medical::delete', ["filter" => "authweb"]);
 $routes->post('medical/addgallery', 'Web\Medical::addgallery', ["filter" => "authweb"]);                //Medical Detail Add Gallery
-$routes->post('medical/deletegallery', 'Web\Medical::deletegallery', ["filter" => "authweb"]);           //Medical Detail Delete Gallery
+$routes->post('medical/deletegallery', 'Web\Medical::deletegallery', ["filter" => "authweb"]);          //Medical Detail Delete Gallery
 $routes->post('medical/cancel', 'Web\Medical::cancel', ["filter" => "authweb"]);                        //Medical Cancel Action
 $routes->get('api/web/patient/get', 'Api\WebPatient::get', ["filter" => "authweb"]);
 
 $routes->post('transaction/cash', 'Web\Transaction::cash', ["filter" => "authweb"]);                    //Cash Pay Confirmation
-$routes->post('medicalrefer/create', 'Web\MedicalRefer::create', ["filter" => "authweb"]);               //Medical Refer Create
+$routes->post('medicalrefer/create', 'Web\MedicalRefer::create', ["filter" => "authweb"]);              //Medical Refer Create
 
 $routes->get('patient/tes', 'Web\Patient::tes'); 
 
@@ -110,10 +110,10 @@ $routes->post('medical/formdetail', 'Web\Medical::formdetail', ["filter" => "aut
 $routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);  //Pay & Invoice Transaction Page
 // $routes->post('transaction/formcash', 'Web\Transaction::formcash', ["filter" => "authweb"]);         //Cash Checkout Modal
 
-//Mobile API Endpoint
-$routes->group('api', ["filter" => "authapp"],  function($routes) {
-	$routes->get('user', 'Api\User::index');
-});
+//Mobile API Endpoint Group Example
+// $routes->group('api', ["filter" => "authapp"],  function($routes) {
+// 	$routes->get('user', 'Api\User::index');
+// });
 
 /**
  * --------------------------------------------------------------------

@@ -24,7 +24,13 @@
                         </div>
                         <div class="mb-3">
                             <label for="user_email" class="form-label">Email Pasien <code>*</code></label>
-                            <input type="email" class="form-control" id="user_email" name="user_email" value="<?= $profile['user_email'] ?>" readonly>
+                            <input type="email" class="form-control" id="user_email" name="user_email" value="<?= $profile['user_email'] ?>">
+                            <div class="invalid-feedback error_user_email"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="user_phone" class="form-label">No. WA <code>*</code></label>
+                            <input type="number" class="form-control" id="user_phone" name="user_phone" value="<?= $profile['user_phone'] ?>">
+                            <div class="invalid-feedback error_user_phone"></div>
                         </div>
                         <div class="mb-3">
                             <label for="patient_gender" class="form-label">Jenis Kelamin <code>*</code></label>
@@ -51,12 +57,8 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            <label for="patient_nik" class="form-label">NIK</label>
-                            <input type="number" class="form-control" id="patient_nik" name="patient_nik" value="<?= $profile['patient_nik'] ?>" >
-                        </div>
-                        <div class="mb-3">
-                            <label for="patient_phone" class="form-label">No. HP</label>
-                            <input type="text" class="form-control" id="patient_phone" name="patient_phone" value="<?= $profile['patient_phone'] ?>">
+                            <label for="user_nik" class="form-label">NIK</label>
+                            <input type="number" class="form-control" id="user_nik" name="user_nik" value="<?= $profile['user_nik'] ?>" >
                         </div>
                         <div class="mb-3">
                             <label for="patient_address" class="form-label">Alamat</label>
@@ -151,6 +153,23 @@
                 $("#patient_type").removeClass("is-invalid");
                 $(".error_patient_type").html("");
             }
+
+            if (response.error.user_email) {
+                $("#user_email").addClass("is-invalid");
+                $(".error_user_email").html(response.error.user_email);
+            } else {
+                $("#user_email").removeClass("is-invalid");
+                $(".error_user_email").html("");
+            }
+
+            if (response.error.user_phone) {
+                $("#user_phone").addClass("is-invalid");
+                $(".error_user_phone").html(response.error.user_phone);
+            } else {
+                $("#user_phone").removeClass("is-invalid");
+                $(".error_user_phone").html("");
+            }
+
             } else {
             if (response.success) {
                 Swal.fire({

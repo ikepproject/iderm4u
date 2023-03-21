@@ -49,7 +49,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td><b>NIK</b></td>
-                                                    <td><?= $profile['patient_nik'] ?></td>
+                                                    <td><?= $profile['user_nik'] ?></td>
                                                 </tr>
                                                 <tr>
                                                     <td><b>Tanggal Lahir</b></td>
@@ -65,7 +65,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td><b>HP</b></td>
-                                                    <td><?= $profile['patient_phone'] ?></td>
+                                                    <td><?= $profile['user_phone'] ?></td>
                                                 </tr>
                                                 <tr>
                                                     <td><b>Alamat</b></td>

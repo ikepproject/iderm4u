@@ -8,7 +8,7 @@ class Model_User extends Model
 {
     protected $table      = 'tb_user';
     protected $primaryKey = 'user_id';
-    protected $allowedFields = ['user_email','user_password','user_role','user_faskes', 'user_patient', 'user_employee', 'user_create', 'user_edit', 'user_active', 'user_photo', 'user_name'];
+    protected $allowedFields = ['user_email','user_password','user_role','user_faskes', 'user_patient', 'user_employee', 'user_create', 'user_edit', 'user_active', 'user_photo', 'user_name', 'user_phone', 'user_nik', 'user_otp', 'user_otp_active', 'user_username'];
 
     public function list_patient($user_faskes)
     {
@@ -53,5 +53,14 @@ class Model_User extends Model
             ->where('user_id', $user_id)
             ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
             ->get()->getRowArray();
+    }
+
+    public function last_patient_code($user_faskes)
+    {
+        return $this->table('tb_user')
+            ->where('user_faskes', $user_faskes)
+            ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->orderBy('patient_code', 'desc')
+            ->get()->getFirstRow('array');
     }
 }

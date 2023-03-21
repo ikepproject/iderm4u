@@ -2,8 +2,8 @@
     <thead>
         <tr class="table-secondary">
             <th width="2%">#</th>
-            <th width="8%">ID</th>
             <th width="15%">Nama</th>
+            <th width="8%">ID</th>
             <th width="10%">Jenis Kelamin</th>
             <th width="8%">Usia</th>
             <th width="8%">Kategori</th>
@@ -17,12 +17,12 @@
             $nomor++; ?>
             <tr>
                 <td><?= $nomor ?></td>
-                <td><?= $data['patient_code'] ?></td>
                 <td><?= $data['patient_name'] ?></td>
+                <td><?= $data['patient_code'] ?></td>
                 <td><?= $data['patient_gender'] ?></td>
                 <td><?= umur($data['patient_birth']) ?> Thn</td>
                 <td><?= $data['patient_type'] ?></td>
-                <td><?= $data['patient_phone'] ?></td>
+                <td><?= $data['user_phone'] ?></td>
                 <td>
                     <button type="button" class="btn btn-primary mb-2" onclick="detail('<?= $data['user_id'] ?>')">
                         <i class="bx bx-detail"></i>

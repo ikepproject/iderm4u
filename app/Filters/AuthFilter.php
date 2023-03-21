@@ -5,6 +5,7 @@ namespace App\Filters;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\HTTP\IncomingRequest;
 use App\Libraries\JWTCI4;
 
 class AuthFilter implements FilterInterface
@@ -26,6 +27,7 @@ class AuthFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
+        $request = service('request');
         if( !$request->getHeader('Authorization') )
 		{
 			$response = service('response');

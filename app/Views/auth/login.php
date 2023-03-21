@@ -35,19 +35,19 @@
                             </a>
                         </div>
                         <div class="p-2">
-                            <?= form_open('api/web/auth/login', ['class' => 'formlogin']) ?>
+                            <?= form_open('dologin', ['class' => 'formlogin']) ?>
                             <?= csrf_field() ?>
                             <form class="form-horizontal">
 
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="text" class="form-control" name="email" placeholder="Masukan email anda...">
+                                    <label for="user_username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" name="user_username" placeholder="Masukan username anda...">
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">Password</label>
                                     <div class="input-group auth-pass-inputgroup">
-                                        <input type="password" class="form-control" placeholder="Masukan password anda..." aria-label="Password" aria-describedby="password-addon" name="password">
+                                        <input type="password" class="form-control" placeholder="Masukan password anda..." aria-label="Password" aria-describedby="password-addon" name="user_password">
                                         <button class="btn btn-light " type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
                                     </div>
                                 </div>
@@ -131,6 +131,10 @@
         });
         return false;
     });
+});
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
 });
 </script>
 

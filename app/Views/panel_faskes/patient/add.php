@@ -13,19 +13,19 @@
                     <div class="col-lg-6">
                         <input type="hidden" id="user_faskes" name="user_faskes" value="<?= $user['user_faskes'] ?>">
                         <div class="mb-3">
-                            <label for="patient_code" class="form-label">ID Pasien <code>*</code></label>
-                            <input type="text" class="form-control" id="patient_code" name="patient_code" placeholder="Masukan pasien id..." >
-                            <div class="invalid-feedback error_patient_code"></div>
-                        </div>
-                        <div class="mb-3">
                             <label for="patient_name" class="form-label">Nama <code>*</code></label>
                             <input type="text" class="form-control" id="patient_name" name="patient_name" placeholder="Masukan nama pasien..." >
                             <div class="invalid-feedback error_patient_name"></div>
                         </div>
                         <div class="mb-3">
                             <label for="user_email" class="form-label">Email Pasien <code>*</code></label>
-                            <input type="email" class="form-control" id="user_email" name="user_email" placeholder="Masukan email pasien..." >
+                            <input type="email" class="form-control text-lowercase" id="user_email" name="user_email" placeholder="Masukan email pasien..." >
                             <div class="invalid-feedback error_user_email"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="user_phone" class="form-label">No. WA <code>*</code></label>
+                            <input type="number" class="form-control" id="user_phone" name="user_phone" placeholder="Masukan No. WA pasien..." >
+                            <div class="invalid-feedback error_user_phone"></div>
                         </div>
                         <div class="mb-3">
                             <label for="patient_gender" class="form-label">Jenis Kelamin <code>*</code></label>
@@ -54,12 +54,8 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            <label for="patient_nik" class="form-label">NIK</label>
-                            <input type="number" class="form-control" id="patient_nik" name="patient_nik" placeholder="Masukan nik pasien..." >
-                        </div>
-                        <div class="mb-3">
-                            <label for="patient_phone" class="form-label">No. HP</label>
-                            <input type="text" class="form-control" id="patient_phone" name="patient_phone" placeholder="Masukan no. hp pasien..." >
+                            <label for="user_nik" class="form-label">NIK</label>
+                            <input type="number" class="form-control" id="user_nik" name="user_nik" placeholder="Masukan nik pasien..." >
                         </div>
                         <div class="mb-3">
                             <label for="patient_address" class="form-label">Alamat</label>
@@ -73,7 +69,10 @@
                         </div>
                         <div class="mb-3">
                             <label for="user_photo" class="form-label">Foto</label>
-                            <input type="file" class="form-control" id="user_photo" name="user_photo" accept=".jpg,.jpeg,.png">
+                            <input type="file" class="form-control" id="user_photo" name="user_photo" onchange="preview_images();" name="user_photo" accept=".jpg,.jpeg,.png">
+                        </div>
+                        <div class="mb-3">
+                            <div style="display: inline-block;" id="image_preview"></div>
                         </div>
                     </div>
                 </div>
@@ -113,13 +112,6 @@
         },
         success: function (response) {
             if (response.error) {
-            if (response.error.patient_code) {
-                $("#patient_code").addClass("is-invalid");
-                $(".error_patient_code").html(response.error.patient_code);
-            } else {
-                $("#patient_code").removeClass("is-invalid");
-                $(".error_patient_code").html("");
-            }
 
             if (response.error.patient_name) {
                 $("#patient_name").addClass("is-invalid");
@@ -135,6 +127,14 @@
             } else {
                 $("#user_email").removeClass("is-invalid");
                 $(".error_user_email").html("");
+            }
+
+            if (response.error.user_phone) {
+                $("#user_phone").addClass("is-invalid");
+                $(".error_user_phone").html(response.error.user_phone);
+            } else {
+                $("#user_phone").removeClass("is-invalid");
+                $(".error_user_phone").html("");
             }
 
             if (response.error.patient_gender) {
@@ -177,4 +177,12 @@
         });
         });
     });
+    function preview_images() 
+    {
+        var total_file=document.getElementById("user_photo").files.length;
+        for(var i=0;i<total_file;i++)
+        {
+        $('#image_preview').append("<img style='object-fit:scale-down;width:100px;height:100px; margin-right:10px;' class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'>");
+        }
+    };
 </script>

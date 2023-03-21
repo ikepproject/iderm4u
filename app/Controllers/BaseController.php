@@ -81,4 +81,46 @@ class BaseController extends Controller
 		$userdata= $this->user->find($user_id);
 		return $userdata;
 	}
+
+	public function generate_patient_code()
+	{
+        $user_faskes 		= $this->request->getVar('user_faskes');
+        $last        		= $this->user->last_patient_code($user_faskes);
+        $faskes      		= $this->faskes->find($user_faskes);
+        $initial     		= $faskes['faskes_initial'];
+		if ($last == NULL) {
+            $last           = '00001';
+            $patient_code   = $initial . '-'  . $last;
+        } else {
+            $last           = $last['patient_code'];
+            $code0          = substr($last, -5); // get last 5 char
+            $code1          = substr($last,0, 3); // get 3 first char
+            $code2          = $code0 + 1;
+            $code2          = str_pad($code2,5,"0",STR_PAD_LEFT);
+            $patient_code   = $code1 . $code2;
+        }
+		return $patient_code;
+	}
+
+    public function generate_medical_code()
+    {
+        $user               = $this->userauth(); // Return array
+        $user_faskes        = $user['user_faskes'];
+        $faskes             = $this->faskes->find($user_faskes);
+        $initial            = $faskes['faskes_initial'];
+        $last               = $this->medical->where('medical_faskes', $user_faskes )->orderBy('medical_code', 'desc')->first();
+        
+        if ($last == NULL) {
+            $last           = '0000001';
+            $medical_code   = 'MED-' . $initial . '-'  . $last;
+        } else {
+            $last           = $last['medical_code'];
+            $code0          = substr($last, -7); // get last 7 char
+            $code1          = substr($last,0, 7); // get 7 first char
+            $code2          = $code0 + 1;
+            $code2          = str_pad($code2,7,"0",STR_PAD_LEFT);
+            $medical_code   = $code1 . $code2;
+        }
+        return $medical_code;
+    }
 }

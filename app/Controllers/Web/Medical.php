@@ -116,20 +116,9 @@ class Medical extends BaseController
                 $user_name          = $user['user_name'];
                 $faskes             = $this->faskes->find($user_faskes);
                 $initial            = $faskes['faskes_initial'];
-                $last               = $this->medical->where('medical_faskes', $user_faskes )->orderBy('medical_code', 'desc')->first();
                 $medical_create     = str_replace(str_split('T'), ' ', $this->request->getVar('medical_create'));
                 $amount             = 0; 
-                if ($last == NULL) {
-                    $last           = '0000001';
-                    $medical_code   = 'MED-' . $initial . '-'  . $last;
-                } else {
-                    $last           = $last['medical_code'];
-                    $code0          = substr($last, -7); // get last 7 char
-                    $code1          = substr($last,0, 7); // get 7 first char
-                    $code2          = $code0 + 1;
-                    $code2          = str_pad($code2,7,"0",STR_PAD_LEFT);
-                    $medical_code   = $code1 . $code2;
-                }
+                $medical_code       = $this->generate_medical_code();
 
                 $new = [
                     'medical_code'         => $medical_code,

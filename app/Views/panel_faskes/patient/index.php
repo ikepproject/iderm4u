@@ -1,6 +1,19 @@
 <?= $this->extend('partials/main') ?>
 <?= $this->section('isi') ?>
 
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    }
+
+    input[type=number] {
+        -moz-appearance:textfield; /* Firefox */
+    }
+</style>
+
 <div class="page-content">
     <div class="container-fluid">
 
@@ -13,10 +26,6 @@
                         <button type="button" class="btn btn-primary waves-effect waves-light mb-4 add">
                             <i class="bx bx-plus-circle font-size-16 align-middle me-2"></i> Tambah
                         </button>
-                        <button type="button" class="btn btn-success waves-effect waves-light mb-4">
-                            <i class="bx bx-import font-size-16 align-middle me-2"></i> Import Data
-                        </button>
-                        
 
                         <div class="dataPatien">
                         </div>

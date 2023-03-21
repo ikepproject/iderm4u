@@ -12,7 +12,7 @@ class Patient extends BaseController
 			'title'  => 'Pasien',
 			'user'   => $user,
 		];
-		return view('panel_faskes/pasien/index', $data);
+		return view('panel_faskes/patient/index', $data);
 	}
 
     public function getdata()
@@ -24,14 +24,10 @@ class Patient extends BaseController
                 'list' => $this->user->list_patient($user_faskes)
             ];
             $response = [
-                'data' => view('panel_faskes/pasien/list', $data)
+                'data' => view('panel_faskes/patient/list', $data)
             ];
             echo json_encode($response);
         }
-        // $user        = $this->userauth(); //Return array
-        // $user_faskes = $user->fsk;
-        // $tes = $this->user->list_patient($user_faskes);
-        // var_dump($tes);
     }
 
 	public function formadd()
@@ -43,7 +39,7 @@ class Patient extends BaseController
                 'user'   => $user,
             ];
             $response = [
-                'data' => view('panel_faskes/pasien/add', $data)
+                'data' => view('panel_faskes/patient/add', $data)
             ];
             echo json_encode($response);
         }
@@ -60,7 +56,7 @@ class Patient extends BaseController
                 'medical'   => $this->medical->list_by_user($user_id)
             ];
             $response = [
-                'data' => view('panel_faskes/pasien/detail', $data)
+                'data' => view('panel_faskes/patient/detail', $data)
             ];
             echo json_encode($response);
         }
@@ -76,7 +72,7 @@ class Patient extends BaseController
                 'profile'   => $profile,
             ];
             $response = [
-                'data' => view('panel_faskes/pasien/edit', $data)
+                'data' => view('panel_faskes/patient/edit', $data)
             ];
             echo json_encode($response);
         }
@@ -87,12 +83,12 @@ class Patient extends BaseController
         if ($this->request->isAJAX()) {
             $validation = \Config\Services::validation();
             $rules = [
-                'patient_code'      => 'required|is_unique[tb_patient.patient_code]',
                 'patient_name'      => 'required',
                 'patient_gender'    => 'required',
                 'patient_birth'     => 'required',
                 'patient_type'      => 'required',
                 'user_email'        => 'required|valid_email|is_unique[tb_user.user_email]',
+                'user_phone'        => 'required|is_unique[tb_user.user_phone]',
             ];
     
             $errors = [
@@ -116,7 +112,11 @@ class Patient extends BaseController
                     'required'   => 'Email Pasien harus diisi.',
                     'valid_email' => 'Email Pasien harus berformat email',
                     'is_unique'  => 'Email Pasien sudah terdaftar', 
-                ]
+                ],
+                'user_phone' => [
+                    'required'   => 'No. WA harus diisi.',
+                    'is_unique'  => 'No. WA sudah terdaftar', 
+                ],
             ];
             $valid = $this->validate($rules, $errors);
             if (!$valid) {
@@ -128,30 +128,18 @@ class Patient extends BaseController
                         'patient_birth'     => $validation->getError('patient_birth'),
                         'patient_type'      => $validation->getError('patient_type'),
                         'user_email'        => $validation->getError('user_email'),
+                        'user_phone'        => $validation->getError('user_phone'),
                     ]
                 ];
             } else {
 
-                $newPatient = [
-                    'patient_code'         => $this->request->getVar('patient_code'),
-                    'patient_nik'          => $this->request->getVar('patient_nik'),
-                    'patient_name'         => $this->request->getVar('patient_name'),
-                    'patient_gender'       => $this->request->getVar('patient_gender'),
-                    'patient_type'         => $this->request->getVar('patient_type'),
-                    'patient_birth'        => $this->request->getVar('patient_birth'),
-                    'patient_phone'        => $this->request->getVar('patient_phone'),
-                    'patient_address'      => $this->request->getVar('patient_address'),
-                    'patient_other'        => $this->request->getVar('patient_other'),
-                    'patient_create'       => date('Y-m-d H:i:s'),
-                ];
-                $this->patient->insert($newPatient);
+                $patient_code		        = $this->generate_patient_code();
+                $user_faskes                = $this->request->getVar('user_faskes');
 
                 $userPhoto  = $this->request->getFile('user_photo');
                 if ($userPhoto->getName()!= NULL) {
                     //Get Datetime now
-                    $date        = date("Y-m-d");
-                    $time        = date("H-i-s");
-                    $namePhoto   = $this->request->getVar('patient_code') . '_' . $date . '_' . $time . '_' . $userPhoto->getName();
+                    $namePhoto   = $patient_code . '_' . date("YmdHis") . '_' . $userPhoto->getName();
                     $user_photo  = $namePhoto;
                     \Config\Services::image()
                         ->withFile($userPhoto)
@@ -161,19 +149,52 @@ class Patient extends BaseController
                     $user_photo = 'default.png';
                 }
 
+                if ($user_faskes == 'MC01') {
+                    $password = 'mcits2023';
+                }
+
+                if ($user_faskes == 'ESTD') {
+                    $password = 'estdps2023';
+                }
+
+                if ($user_faskes == 'MKSR') {
+                    $password = 'makasar2023';
+                }
+
+                if ($user_faskes == 'RSUA') {
+                    $password = 'rsua23iderm';
+                }
+
+                $newPatient = [
+                    'patient_code'         => $patient_code,
+                    'patient_name'         => $this->request->getVar('patient_name'),
+                    'patient_gender'       => $this->request->getVar('patient_gender'),
+                    'patient_type'         => $this->request->getVar('patient_type'),
+                    'patient_birth'        => $this->request->getVar('patient_birth'),
+                    'patient_address'      => trim($this->request->getVar('patient_address')),
+                    'patient_other'        => trim($this->request->getVar('patient_other')),
+                    'patient_create'       => date('Y-m-d H:i:s'),
+                ];
+
                 $newUser = [
-                    'user_email'         => $this->request->getVar('user_email'),
-                    'user_password'      => password_hash($this->request->getVar('patient_code'), PASSWORD_BCRYPT),
+                    'user_email'         => strtolower($this->request->getVar('user_email')),
+                    'user_password'      => password_hash($password, PASSWORD_BCRYPT),
                     'user_role'          => 1011,
                     'user_faskes'        => $this->request->getVar('user_faskes'),
-                    'user_patient'       => $this->request->getVar('patient_code'),
+                    'user_patient'       => $patient_code,
                     'user_create'        => date('Y-m-d H:i:s'),
                     'user_active'        => 't',
                     'user_photo'         => $user_photo,
                     'user_name'          => $this->request->getVar('patient_name'),
+                    'user_phone'         => $this->request->getVar('user_phone'),
+                    'user_nik'           => $this->request->getVar('user_nik'),
+                    'user_username'      => $patient_code,
                 ];
 
+                $this->db->transStart();
+                $this->patient->insert($newPatient);
                 $this->user->insert($newUser);
+                $this->db->transComplete();
 
                 $response = [
                     'success' => 'Data Berhasil Disimpan'
@@ -307,46 +328,48 @@ class Patient extends BaseController
 
     public function tes()
     {
-        $tes = $this->user->orderBy('user_id', 'desc')->first(); // get highest id
-        $tes = substr('TR-MC-00001', -5); // get last 5 char
-        $tes2 = substr('TR-MC-00001',0, 6); // get 6 first char
-        $s = '51';
-        $p = $tes + 1;
-        $k = str_pad($p,5,"0",STR_PAD_LEFT); // get 0000X, -> x is result from summary
-        $n = $tes2 . $k;
-        $d = date('Ymd');
-        $f = 'K' . 'MC' . '-' . $d . '-' . $k;
+        // $tes = $this->user->orderBy('user_id', 'desc')->first(); // get highest id
+        // $tes = substr('TR-MC-00001', -5); // get last 5 char
+        // $tes2 = substr('TR-MC-00001',0, 6); // get 6 first char
+        // $s = '51';
+        // $p = $tes + 1;
+        // $k = str_pad($p,5,"0",STR_PAD_LEFT); // get 0000X, -> x is result from summary
+        // $n = $tes2 . $k;
+        // $d = date('Ymd');
+        // $f = 'K' . 'MC' . '-' . $d . '-' . $k;
 
-        $date = date('Y-m-d H:i:s');
-        $dt = strtok($date, ' '); // get char before space
-        $dt = explode(' ', $date); // get char use explode, result is array
-        // $a = $this->treatment->orderBy('treatment_code', 'desc')->first();
+        // $date = date('Y-m-d H:i:s');
+        // $dt = strtok($date, ' '); // get char before space
+        // $dt = explode(' ', $date); // get char use explode, result is array
+        // // $a = $this->treatment->orderBy('treatment_code', 'desc')->first();
         
-        $config         = new \Config\Encryption();
-        // $config->driver = 'OpenSSL';
-        // Your CI3's encryption_key
-        $config->key            = getenv("encrypt_key");
-        // $config->rawData = false;
+        // $config         = new \Config\Encryption();
+        // // $config->driver = 'OpenSSL';
+        // // Your CI3's encryption_key
+        // $config->key            = getenv("encrypt_key");
+        // // $config->rawData = false;
 
-        // ENCRYPTION
-        $encrypter = \Config\Services::encrypter($config, false);
-        $plainText  = 'xnd_development_tc6PAc89hlleb6sGvzLhEO653zJvLXRUgUaXaR4x55qBvR0JUx2LX7LyhVslq';
-        $enc = $encrypter->encrypt($plainText);
-        $enc2 = base64_encode($enc);
-        $dec = $encrypter->decrypt(base64_decode($enc2));
-        $d1 = [
-            'employee_code' => 'tes',
-        ];
+        // // ENCRYPTION
+        // $encrypter = \Config\Services::encrypter($config, false);
+        // $plainText  = 'xnd_development_tc6PAc89hlleb6sGvzLhEO653zJvLXRUgUaXaR4x55qBvR0JUx2LX7LyhVslq';
+        // $enc = $encrypter->encrypt($plainText);
+        // $enc2 = base64_encode($enc);
+        // $dec = $encrypter->decrypt(base64_decode($enc2));
+        // $d1 = [
+        //     'employee_code' => 'tes',
+        // ];
 
-        // Transaction
-        $db      = \Config\Database::connect();
-        $db->transStart();
-        $this->employee->insert($d1);
-        $tes = 'ss';
-        $db->transComplete();
+        // // Transaction
+        // $db      = \Config\Database::connect();
+        // $db->transStart();
+        // $this->employee->insert($d1);
+        // $tes = 'ss';
+        // $db->transComplete();
 
-        $t = date('Y-m-d\TH:i:s.Z\Z', time());
-
-        var_dump($t);
+        // $t = date('Y-m-d\TH:i:s.Z\Z', time());
+        
+        //Add time
+        // $convertedTime = date('Y-m-d H:i:s', strtotime('+20 minutes', strtotime(date('Y-m-d H:i:s'))));
+        // var_dump(date($convertedTime));
     }
 }
