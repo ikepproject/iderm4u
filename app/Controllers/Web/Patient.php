@@ -213,6 +213,8 @@ class Patient extends BaseController
                 'patient_gender'    => 'required',
                 'patient_birth'     => 'required',
                 'patient_type'      => 'required',
+                'user_email'        => 'required',
+                'user_phone'        => 'required',
             ];
     
             $errors = [
@@ -228,6 +230,12 @@ class Patient extends BaseController
                 'patient_type' => [
                     'required'   => 'Kategori Pasien harus dipilih.',
                 ],
+                'user_email' => [
+                    'required'   => 'Email harus diisi.',
+                ],
+                'user_phone' => [
+                    'required'   => 'No. WA harus diisi.',
+                ],
             ];
             $valid = $this->validate($rules, $errors);
             if (!$valid) {
@@ -237,12 +245,13 @@ class Patient extends BaseController
                         'patient_gender'    => $validation->getError('patient_gender'),
                         'patient_birth'     => $validation->getError('patient_birth'),
                         'patient_type'      => $validation->getError('patient_type'),
+                        'user_email'        => $validation->getError('user_email'),
+                        'user_phone'        => $validation->getError('user_phone'),
                     ]
                 ];
             } else {
                 $patient_code = $this->request->getVar('patient_code');
                 $updatePatient = [
-                    'patient_nik'          => $this->request->getVar('patient_nik'),
                     'patient_name'         => $this->request->getVar('patient_name'),
                     'patient_gender'       => $this->request->getVar('patient_gender'),
                     'patient_type'         => $this->request->getVar('patient_type'),
@@ -252,15 +261,14 @@ class Patient extends BaseController
                     'patient_other'        => $this->request->getVar('patient_other'),
                     'patient_edit'         => date('Y-m-d H:i:s'),
                 ];
-                $this->patient->update($patient_code, $updatePatient);
-
+                
                 $userPhoto      = $this->request->getFile('user_photo');
                 $user_photo_old = $this->request->getVar('user_photo_old');
                 if ($userPhoto->getName()!= NULL) {
                     //Get Datetime now
                     $date        = date("Y-m-d");
                     $time        = date("H-i-s");
-                    $namePhoto   = $this->request->getVar('patient_code') . '_' . $date . '_' . $time . '_' . $userPhoto->getName();
+                    $namePhoto   = $this->request->getVar('patient_code') . '_' . date("YmdHis") . '_' . $userPhoto->getName();
                     $user_photo  = $namePhoto;
                     if ($user_photo_old != 'default.png') {
                         unlink('public/assets/images/users/' . $user_photo_old);
@@ -279,9 +287,15 @@ class Patient extends BaseController
                     'user_edit'          => date('Y-m-d H:i:s'),
                     'user_photo'         => $user_photo,
                     'user_name'          => $this->request->getVar('patient_name'),
+                    'user_email'         => $this->request->getVar('user_email'),
+                    'user_phone'         => $this->request->getVar('user_phone'),
+                    'user_nik'           => $this->request->getVar('user_nik'),
                 ];
 
+                $this->db->transStart();
+                $this->patient->update($patient_code, $updatePatient);
                 $this->user->update($user_id, $updateUser);
+                $this->db->transComplete();
 
                 $response = [
                     'success' => 'Data Berhasil Diupdate'
