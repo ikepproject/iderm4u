@@ -212,7 +212,7 @@ class Auth extends BaseController
                     'user_name'          => $this->request->getVar('user_name'),
 					'user_phone'		 => $this->request->getVar('user_phone'),
 					'user_otp' 			 => rand(1000, 9999),
-					'user_otp_active'    => date('Y-m-d H:i:s', strtotime('+20 minutes', strtotime(date('Y-m-d H:i:s')))),
+					'user_otp_active'    => date('Y-m-d H:i:s', strtotime('+2 minutes', strtotime(date('Y-m-d H:i:s')))),
 					'user_username' 	 => $patient_code
                 ];
                 $this->user->insert($newUser);

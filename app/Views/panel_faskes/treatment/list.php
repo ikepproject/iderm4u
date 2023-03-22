@@ -40,7 +40,7 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-
+ <div class="editmodal"></div>
 <script>
 $(document).ready(function () {
     //treatment Table

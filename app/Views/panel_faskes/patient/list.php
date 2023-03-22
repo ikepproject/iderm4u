@@ -40,6 +40,9 @@
     </tbody>
 </table>
 
+<div class="detailmodal"></div>
+<div class="editmodal"></div>
+
 <script>
 $(document).ready(function () {
     //Patient Table

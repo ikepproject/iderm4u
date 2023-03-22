@@ -48,7 +48,7 @@
                           <select class="form-control" name="invoice_method" id="invoice_method">
                             <option selected disabled>Pilih...</option>
                             <option value="Cash">Cash</option>
-                            <option value="VA" disabled>Virtual Account (+ Rp 4.500)</option>
+                            <option value="VA" disabled>Transfer / Virtual Account (+ Rp 3.500)</option>
                             <option value="QR" disabled>QRIS (+ 0.7%)</option>
                           </select>
                           <div class="invalid-feedback error_invoice_method"></div>
@@ -161,6 +161,10 @@
                         <!-- <div class="file-loading">
                             <input id="inp-krajee-explorer-fa6-1" name="inp-krajee-explorer-fa6-1" type="file" multiple accept="image">
                         </div> -->
+                        <div class="mb-3">
+                          <label for="medgal_disease">Indikasi Dalam Foto</label>
+                          <input type="text" class="form-control" id="medgal_disease" name="medgal_disease">
+                        </div>
                         <div class="mb-3">
                           <label for="name">Pilih foto</label>
                           <input type="file" class="form-control" id="images" name="images[]" onchange="preview_images();" accept=".jpg,.jpeg,.png" multiple/>

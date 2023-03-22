@@ -33,12 +33,6 @@
                         <div class="addmodal">
                         </div>
 
-                        <div class="detailmodal">
-                        </div>
-
-                        <div class="editmodal">
-                        </div>
-
                         
                     </div>
                 </div>

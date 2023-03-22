@@ -18,12 +18,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="product_price" class="form-label">Harga product<code>*</code></label>
-                        <input type="text" class="form-control" id="product_price" name="product_price" value="<?= $product['product_price'] ?>" >
+                        <input type="text" class="form-control price" id="product_price" name="product_price" value="<?= $product['product_price'] ?>" >
                         <div class="invalid-feedback error_product_price"></div>
                     </div>
                     <div class="mb-3">
                         <label for="product_qty" class="form-label">Jumlah Product<code>*</code></label>
-                        <input type="number" class="form-control" id="product_qty" name="product_qty" value="<?= $product['product_qty'] ?>" >
+                        <input type="number" class="form-control" id="product_qty" name="product_qty" value="<?= $product['product_qty'] ?>" readonly>
                         <div class="invalid-feedback error_product_qty"></div>
                     </div>
                     <div class="mb-3">
@@ -61,7 +61,7 @@
     $(document).ready(function () {
         $('#product_description').val("<?= $product['product_description'] ?>");
 
-        $('#product_price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});
+        $('.price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});
 
         $(".formupdate").submit(function (e) {
         e.preventDefault();
@@ -91,14 +91,6 @@
                 } else {
                     $("#product_name").removeClass("is-invalid");
                     $(".error_product_name").html("");
-                }
-
-                if (response.error.product_qty) {
-                    $("#product_qty").addClass("is-invalid");
-                    $(".error_product_qty").html(response.error.product_qty);
-                } else {
-                    $("#product_qty").removeClass("is-invalid");
-                    $(".error_product_qty").html("");
                 }
 
                 if (response.error.product_unit) {

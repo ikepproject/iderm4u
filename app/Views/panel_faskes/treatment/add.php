@@ -18,7 +18,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="treatment_price" class="form-label">Harga Treatment<code>*</code></label>
-                            <input type="text" class="form-control" id="treatment_price" name="treatment_price" placeholder="Masukan harga treatment..." >
+                            <input type="text" class="form-control price" id="treatment_price" name="treatment_price" placeholder="Masukan harga treatment..." >
                             <div class="invalid-feedback error_treatment_price"></div>
                         </div>
                         <div class="mb-3">
@@ -51,7 +51,7 @@
 <script>
     $(document).ready(function () {
 
-        $('#treatment_price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});
+        $('.price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});
 
         $(".formadd").submit(function (e) {
         e.preventDefault();

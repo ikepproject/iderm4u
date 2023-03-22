@@ -61,6 +61,25 @@ class Product extends BaseController
         }
     }
 
+    public function formstock()
+    {
+        if ($this->request->isAJAX()) {
+            $product_code = $this->request->getVar('product_code');
+            $product      = $this->product->find($product_code);
+            $stock        = $this->product_stock->list($product_code);
+            
+            $data = [
+                'title'     => 'Data Stok Produk',
+                'product'   => $product,
+                'stock'     => $stock
+            ];
+            $response = [
+                'data' => view('panel_faskes/product/stock', $data)
+            ];
+            echo json_encode($response);
+        }
+    }
+
     public function create()
     {
         if ($this->request->isAJAX()) {
@@ -150,7 +169,6 @@ class Product extends BaseController
             $rules = [
                 'product_name'    => 'required',
                 'product_price'   => 'required',
-                'product_qty'     => 'required',
                 'product_unit'    => 'required',
                 'product_status'  => 'required',
             ];
@@ -161,9 +179,6 @@ class Product extends BaseController
                 ],
                 'product_price' => [
                     'required'   => 'Harga produk harus diisi.',
-                ],
-                'product_qty' => [
-                    'required'   => 'Jumlah produk harus diisi.',
                 ],
                 'product_unit' => [
                     'required'   => 'Satuan jumlah produk harus diisi.',
@@ -178,7 +193,6 @@ class Product extends BaseController
                     'error' => [
                         'product_name'      => $validation->getError('product_name'),
                         'product_price'     => $validation->getError('product_price'),
-                        'product_qty'       => $validation->getError('product_qty'),
                         'product_unit'      => $validation->getError('product_unit'),
                         'product_status'    => $validation->getError('product_status'),
                     ]
@@ -190,7 +204,6 @@ class Product extends BaseController
                 $update = [
                     'product_name'        => $this->request->getVar('product_name'),
                     'product_price'       => $product_price,
-                    'product_qty'         => $this->request->getVar('product_qty'),
                     'product_unit'        => $this->request->getVar('product_unit'),
                     'product_description' => $this->request->getVar('product_description'),
                     'product_edit'        => date('Y-m-d H:i:s'),
@@ -201,6 +214,68 @@ class Product extends BaseController
 
                 $response = [
                     'success' => 'Data Berhasil Diupdate'
+                ];
+            }
+            echo json_encode($response);
+        }
+    }
+
+    public function restock()
+    {
+        if ($this->request->isAJAX()) {
+            $validation = \Config\Services::validation();
+            $rules = [
+                'stock_type'    => 'required',
+                'stock_qty'     => 'required',
+            ];
+    
+            $errors = [
+                'stock_type' => [
+                    'required'   => 'Tipe restock produk harus dipilih.',
+                ],
+                'stock_qty' => [
+                    'required'   => 'Jumlah restock produk harus diisi.',
+                ]
+            ];
+            $valid = $this->validate($rules, $errors);
+            if (!$valid) {
+                $response = [
+                    'error' => [
+                        'stock_type'    => $validation->getError('stock_type'),
+                        'stock_qty'     => $validation->getError('stock_qty'),
+                    ]
+                ];
+            } else {
+                $product_code = $this->request->getVar('product_code');
+                $product      = $this->product->find($product_code);
+                $product_qty  = $product['product_qty'];
+                $stock_type   = $this->request->getVar('stock_type');
+                $stock_qty    = $this->request->getVar('stock_qty');
+                if ($stock_type == 'Penambahan') {
+                    $product_qty_update = $product_qty + $stock_qty;
+                } else {
+                    $product_qty_update = $product_qty - $stock_qty;
+                }
+                
+                $newStock = [
+                    'stock_product'     => $product_code,
+                    'stock_type'        => $stock_type,
+                    'stock_qty'         => $stock_qty,
+                    'stock_create'      => date('Y-m-d H:i:s'),
+                    'stock_description' => trim($this->request->getVar('stock_description'))
+                ];
+
+                $updateProduct = [
+                    'product_qty'       => $product_qty_update,
+                ];
+
+                $this->db->transStart();
+                $this->product_stock->insert($newStock);
+                $this->product->update($product_code, $updateProduct);
+                $this->db->transComplete();
+
+                $response = [
+                    'success' => 'Data Produk Berhasil Direstock'
                 ];
             }
             echo json_encode($response);

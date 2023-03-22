@@ -196,8 +196,14 @@ class Medical extends BaseController
                 if ($images_items[0]->getName() != "") {
                     foreach ($images_items as $images) {
                         $img_name       = $images->getName();
+                        $disease        = trim($this->request->getVar('medgal_disease'));
+
+                        if ($disease == NULL) {
+                            $disease = 'unnamed';
+                        }
+
                         $datetime       = date("YmdHis");
-                        $new_img_name   = $medical_code . '_' . $datetime . '_' . $img_name;
+                        $new_img_name   = $disease . '_' . $medical_code . '_' . $datetime . '_' . $img_name;
                         \Config\Services::image()
                         ->withFile($images)
                         ->fit(250, 250, 'center')
@@ -207,6 +213,7 @@ class Medical extends BaseController
                             'medgal_medical'  => $medical_code,
                             'medgal_create'   => date('Y-m-d H:i:s'),
                             'medgal_filename' => $new_img_name,
+                            'medgal_disease'  => $disease
                         ];
                         $this->medgal->insert($newMedgal);
                     }
@@ -214,7 +221,7 @@ class Medical extends BaseController
 
                 $invoice_method = $this->request->getVar('invoice_method');
                 if ($invoice_method == 'VA') {
-                    $invoice_admin_fee = 4500;
+                    $invoice_admin_fee = 3500;
                 } elseif ($invoice_method == 'QR') {
                     $invoice_admin_fee = $amount * 0.007;
                 } else {
@@ -246,11 +253,17 @@ class Medical extends BaseController
         if ($this->request->isAJAX()) {
             $images_items     = $this->request->getFileMultiple('images');
             $medical_code     = $this->request->getVar('medical_code');
+            $disease          = trim($this->request->getVar('medgal_disease'));
+                        
+            if ($disease == NULL) {
+                $disease = 'unnamed';
+            }
+
             if ($images_items[0]->getName() != "") {
                 foreach ($images_items as $images) {
                     $img_name       = $images->getName();
                     $datetime       = date("YmdHis");
-                    $new_img_name   = $medical_code . '_' . $datetime . '_' . $img_name;
+                    $new_img_name   = $disease . '_' . $medical_code . '_' . $datetime . '_' . $img_name;
                     \Config\Services::image()
                     ->withFile($images)
                     ->fit(250, 250, 'center')
@@ -260,6 +273,7 @@ class Medical extends BaseController
                         'medgal_medical'  => $medical_code,
                         'medgal_create'   => date('Y-m-d H:i:s'),
                         'medgal_filename' => $new_img_name,
+                        'medgal_disease'  => $disease
                     ];
                     $this->medgal->insert($newMedgal);
                 }

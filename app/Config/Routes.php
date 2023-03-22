@@ -69,6 +69,7 @@ $routes->post('treatment/update', 'Web\Treatment::update', ["filter" => "authweb
 $routes->get('product/getdata', 'Web\Product::getdata', ["filter" => "authweb"]); 
 $routes->post('product/create', 'Web\Product::create', ["filter" => "authweb"]);
 $routes->post('product/update', 'Web\Product::update', ["filter" => "authweb"]);
+$routes->post('product/restock', 'Web\Product::restock', ["filter" => "authweb"]);
 
 $routes->get('medical/getdata', 'Web\Medical::getdata', ["filter" => "authweb"]); 
 $routes->post('medical/create', 'Web\Medical::create', ["filter" => "authweb"]);
@@ -99,9 +100,10 @@ $routes->get('treatment', 'Web\Treatment::index', ["filter" => "authweb"]);     
 $routes->get('treatment/formadd', 'Web\Treatment::formadd', ["filter" => "authweb"]);      //Treatment Add Modal
 $routes->post('treatment/formedit', 'Web\Treatment::formedit', ["filter" => "authweb"]);   //Treatment Edit Modal
 
-$routes->get('product', 'Web\Product::index', ["filter" => "authweb"]);                //Product Page
-$routes->get('product/formadd', 'Web\Product::formadd', ["filter" => "authweb"]);      //Product Add Modal
-$routes->post('product/formedit', 'Web\Product::formedit', ["filter" => "authweb"]);   //Product Edit Modal
+$routes->get('product', 'Web\Product::index', ["filter" => "authweb"]);                 //Product Page
+$routes->get('product/formadd', 'Web\Product::formadd', ["filter" => "authweb"]);       //Product Add Modal
+$routes->post('product/formedit', 'Web\Product::formedit', ["filter" => "authweb"]);    //Product Edit Modal
+$routes->post('product/formstock', 'Web\Product::formstock', ["filter" => "authweb"]);  //Product Stock Modal
 
 $routes->get('medical', 'Web\Medical::index', ["filter" => "authweb"]);                                 //Medical Page
 $routes->get('medicalformadd', 'Web\Medical::formadd', ["filter" => "authweb"]);                        //Medical Add Page

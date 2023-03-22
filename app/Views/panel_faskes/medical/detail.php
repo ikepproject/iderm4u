@@ -33,7 +33,7 @@
                                             <img class="rounded-circle avatar-lg" src="<?= base_url() ?>/public/assets/images/users/<?= $user['user_photo'] ?>" alt="">
                                         </div>
                                         <h5 class="font-size-15 mb-1"><a class="text-dark"><?= $patient['patient_code'] ?> - <?= $patient['patient_name'] ?></a></h5>
-                                        <p class="text-muted mb-1"><?= $user['user_email'] ?> / <?= $patient['patient_phone'] ?> </p>
+                                        <p class="text-muted mb-1"><?= $user['user_email'] ?> / <?= $user['user_phone'] ?> </p>
                                         <p class="text-muted mb-1"><?= umur($patient['patient_birth']) ?> Tahun</p>
                                         <p class="text-muted"><?= $patient['patient_gender'] ?></p>
                                         <a class="btn btn-primary btn-sm" data-bs-toggle="collapse" href="#patientData" aria-expanded="true" aria-controls="patientData">
@@ -54,7 +54,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td><b>NIK</b></td>
-                                                            <td><?= $patient['patient_nik'] ?></td>
+                                                            <td><?= $user['user_nik'] ?></td>
                                                         </tr>
                                                         <tr>
                                                             <td><b>Tanggal Lahir</b></td>
@@ -70,7 +70,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td><b>HP</b></td>
-                                                            <td><?= $patient['patient_phone'] ?></td>
+                                                            <td><?= $user['user_phone'] ?></td>
                                                         </tr>
                                                         <tr>
                                                             <td><b>Alamat</b></td>
@@ -102,7 +102,7 @@
                                                     <address>
                                                         <strong>Kepada:</strong><br>
                                                         <?= $patient['patient_name'] ?><br>
-                                                        <?= $patient['patient_phone'] ?><br>
+                                                        <?= $user['user_phone'] ?><br>
                                                         <?= $patient['patient_address'] ?>
                                                     </address>
                                                 </div>
@@ -224,6 +224,10 @@
                         <?= csrf_field(); ?>
                         <input type="hidden" id="medical_code" name="medical_code" value="<?= $medical['medical_code'] ?>">
                         <div class="row">
+                            <div class="mb-3">
+                                <label for="medgal_disease">Indikasi Dalam Foto</label>
+                                <input type="text" class="form-control" id="medgal_disease" name="medgal_disease">
+                            </div>
                             <div class="mb-3">
                                 <label for="name">Tambah foto</label>
                                 <input type="file" class="form-control" id="images" name="images[]" onchange="preview_images();" accept=".jpg,.jpeg,.png" multiple/>

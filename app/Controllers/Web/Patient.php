@@ -209,31 +209,31 @@ class Patient extends BaseController
         if ($this->request->isAJAX()) {
             $validation = \Config\Services::validation();
             $rules = [
-                'patient_name'      => 'required',
-                'patient_gender'    => 'required',
-                'patient_birth'     => 'required',
-                'patient_type'      => 'required',
-                'user_email'        => 'required',
-                'user_phone'        => 'required',
+                'edit_patient_name'      => 'required',
+                'edit_patient_gender'    => 'required',
+                'edit_patient_birth'     => 'required',
+                'edit_patient_type'      => 'required',
+                'edit_user_email'        => 'required',
+                'edit_user_phone'        => 'required',
             ];
     
             $errors = [
-                'patient_name' => [
+                'edit_patient_name' => [
                     'required'    => 'Nama Pasien harus diisi.',
                 ],
-                'patient_gender' => [
+                'edit_patient_gender' => [
                     'required'   => 'Jenis Kelamin harus dipilih.',
                 ],
-                'patient_birth' => [
+                'edit_patient_birth' => [
                     'required'   => 'Tgl Lahir harus diisi.',
                 ],
-                'patient_type' => [
+                'edit_patient_type' => [
                     'required'   => 'Kategori Pasien harus dipilih.',
                 ],
-                'user_email' => [
+                'edit_user_email' => [
                     'required'   => 'Email harus diisi.',
                 ],
-                'user_phone' => [
+                'edit_user_phone' => [
                     'required'   => 'No. WA harus diisi.',
                 ],
             ];
@@ -241,28 +241,28 @@ class Patient extends BaseController
             if (!$valid) {
                 $response = [
                     'error' => [
-                        'patient_name'      => $validation->getError('patient_name'),
-                        'patient_gender'    => $validation->getError('patient_gender'),
-                        'patient_birth'     => $validation->getError('patient_birth'),
-                        'patient_type'      => $validation->getError('patient_type'),
-                        'user_email'        => $validation->getError('user_email'),
-                        'user_phone'        => $validation->getError('user_phone'),
+                        'edit_patient_name'      => $validation->getError('edit_patient_name'),
+                        'edit_patient_gender'    => $validation->getError('edit_patient_gender'),
+                        'edit_patient_birth'     => $validation->getError('edit_patient_birth'),
+                        'edit_patient_type'      => $validation->getError('edit_patient_type'),
+                        'edit_user_email'        => $validation->getError('edit_user_email'),
+                        'edit_user_phone'        => $validation->getError('edit_user_phone'),
                     ]
                 ];
             } else {
                 $patient_code = $this->request->getVar('patient_code');
                 $updatePatient = [
-                    'patient_name'         => $this->request->getVar('patient_name'),
-                    'patient_gender'       => $this->request->getVar('patient_gender'),
-                    'patient_type'         => $this->request->getVar('patient_type'),
-                    'patient_birth'        => $this->request->getVar('patient_birth'),
-                    'patient_phone'        => $this->request->getVar('patient_phone'),
-                    'patient_address'      => $this->request->getVar('patient_address'),
-                    'patient_other'        => $this->request->getVar('patient_other'),
+                    'patient_name'         => $this->request->getVar('edit_patient_name'),
+                    'patient_gender'       => $this->request->getVar('edit_patient_gender'),
+                    'patient_type'         => $this->request->getVar('edit_patient_type'),
+                    'patient_birth'        => $this->request->getVar('edit_patient_birth'),
+                    'patient_phone'        => $this->request->getVar('edit_patient_phone'),
+                    'patient_address'      => $this->request->getVar('edit_patient_address'),
+                    'patient_other'        => $this->request->getVar('edit_patient_other'),
                     'patient_edit'         => date('Y-m-d H:i:s'),
                 ];
                 
-                $userPhoto      = $this->request->getFile('user_photo');
+                $userPhoto      = $this->request->getFile('edit_user_photo');
                 $user_photo_old = $this->request->getVar('user_photo_old');
                 if ($userPhoto->getName()!= NULL) {
                     //Get Datetime now
@@ -286,10 +286,10 @@ class Patient extends BaseController
                 $updateUser = [
                     'user_edit'          => date('Y-m-d H:i:s'),
                     'user_photo'         => $user_photo,
-                    'user_name'          => $this->request->getVar('patient_name'),
-                    'user_email'         => $this->request->getVar('user_email'),
-                    'user_phone'         => $this->request->getVar('user_phone'),
-                    'user_nik'           => $this->request->getVar('user_nik'),
+                    'user_name'          => $this->request->getVar('edit_patient_name'),
+                    'user_email'         => $this->request->getVar('edit_user_email'),
+                    'user_phone'         => $this->request->getVar('edit_user_phone'),
+                    'user_nik'           => $this->request->getVar('edit_user_nik'),
                 ];
 
                 $this->db->transStart();

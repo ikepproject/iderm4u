@@ -38,8 +38,8 @@
                     <button type="button" class="btn btn-warning mb-2" onclick="edit('<?= $data['product_code'] ?>')">
                         <i class="bx bx-edit"></i>
                     </button>
-                    <button type="button" class="btn btn-primary mb-2" onclick="detail('<?= $data['product_code'] ?>')">
-                        <i class="bx bx-detail"></i>
+                    <button type="button" class="btn btn-primary mb-2" onclick="stock('<?= $data['product_code'] ?>')">
+                        <i class="bx bx-package"></i>
                     </button>
                 </td>
             </tr>
@@ -47,7 +47,8 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-
+<div class="stockmodal"></div>
+<div class="editmodal"></div>
 <script>
 $(document).ready(function () {
     //product Table
@@ -80,6 +81,21 @@ function edit(product_code) {
         success: function(response) {
             $('.editmodal').html(response.data).show();
             $('#modaledit').modal('show');
+        }
+    });
+}
+
+function stock(product_code) {
+    $.ajax({
+        type: "post",
+        url: "product/formstock",
+        data: {
+            product_code: product_code
+        },
+        dataType: "json",
+        success: function(response) {
+            $('.stockmodal').html(response.data).show();
+            $('#modalstock').modal('show');
         }
     });
 }

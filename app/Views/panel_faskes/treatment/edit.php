@@ -21,7 +21,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="treatment_price" class="form-label">Harga Treatment<code>*</code></label>
-                        <input type="text" class="form-control" id="treatment_price" name="treatment_price" value="<?= $treatment['treatment_price'] ?>" >
+                        <input type="text" class="form-control price" id="treatment_price" name="treatment_price" value="<?= $treatment['treatment_price'] ?>" >
                         <div class="invalid-feedback error_treatment_price"></div>
                     </div>
                     <div class="mb-3">
@@ -54,7 +54,7 @@
     $(document).ready(function () {
         $('#treatment_description').val("<?= $treatment['treatment_description'] ?>");
 
-        $('#treatment_price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});
+        $('.price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});
 
         $(".formupdate").submit(function (e) {
         e.preventDefault();

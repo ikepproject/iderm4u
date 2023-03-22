@@ -18,7 +18,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="product_price" class="form-label">Harga product<code>*</code></label>
-                            <input type="text" class="form-control" id="product_price" name="product_price" placeholder="Masukan harga produk..." >
+                            <input type="text" class="form-control price" id="product_price" name="product_price" placeholder="Masukan harga produk..." >
                             <div class="invalid-feedback error_product_price"></div>
                         </div>
                         <div class="mb-3">
@@ -61,7 +61,7 @@
 <script>
     $(document).ready(function () {
 
-        $('#product_price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});
+        $('.price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});
 
         $(".formadd").submit(function (e) {
         e.preventDefault();

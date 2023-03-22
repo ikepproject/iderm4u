@@ -25,6 +25,7 @@ use App\Models\Model_Medprod;
 use App\Models\Model_Medtreat;
 use App\Models\Model_Patient;
 use App\Models\Model_Product;
+use App\Models\Model_Product_Stock;
 use App\Models\Model_Role;
 use App\Models\Model_Treatment;
 use App\Models\Model_User;
@@ -70,6 +71,7 @@ class BaseController extends Controller
 		$this->medoth 		= new Model_Medoth;
 		$this->medgal 		= new Model_Medgal;
 		$this->invoice 		= new Model_Invoice;
+		$this->product_stock= new Model_Product_Stock();
 		$this->db 			= \Config\Database::connect();
 	}
 

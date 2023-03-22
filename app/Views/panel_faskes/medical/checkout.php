@@ -48,7 +48,7 @@
                                 <address>
                                     <strong>Kepada:</strong><br>
                                     <?= $patient['patient_name'] ?><br>
-                                    <?= $patient['patient_phone'] ?><br>
+                                    <?= $user_patient['user_phone'] ?><br>
                                     <?= $patient['patient_address'] ?>
                                 </address>
                             </div>
