@@ -12,4 +12,20 @@ class Landing extends BaseController
 		];
         return view('index', $data);
     }
+
+    public function privacy()
+    {
+        $data = [
+			'title' => 'Privacy Policy iDerm4U',
+		];
+        return view('page_privacy', $data);
+    }
+
+    public function toc()
+    {
+        $data = [
+			'title' => 'Terms and Conditions iDerm4U',
+		];
+        return view('page_tos', $data);
+    }
 }

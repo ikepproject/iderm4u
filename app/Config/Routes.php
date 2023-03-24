@@ -87,6 +87,8 @@ $routes->get('patient/tes', 'Web\Patient::tes');
 
 //Web Admin Access Frontend
 $routes->get('/', 'Web\Landing::index');									        //Landing Front Page
+$routes->get('/privacy', 'Web\Landing::privacy');									//Privacy Page
+$routes->get('/terms-and-conditions', 'Web\Landing::toc');							//TOC Page
 $routes->get('login', 'Web\Auth::login');  									        //Login Page
 $routes->get('register', 'Web\Auth::register');  							        //Register Page
 $routes->get('dashboard', 'Web\Dashboard::index', ["filter" => "authweb"]);         //Dashboard Page
