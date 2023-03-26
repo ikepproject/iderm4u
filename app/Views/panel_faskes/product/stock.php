@@ -105,13 +105,18 @@
 
         $(".formrestock").submit(function (e) {
         e.preventDefault();
-        var form_data = new FormData($('form')[0]);
+        // var form_data = new FormData($('form')[0]);
         $.ajax({
         type: "post",
         url: $(this).attr("action"),
-        data: form_data,
-        processData: false,
-        contentType: false,
+        data: {
+            product_code: $('input#product_code').val(),
+            stock_type: $('select#stock_type').val(),
+            stock_qty: $('input#stock_qty').val(),
+            stock_description: $('textarea#stock_description').val(),
+        },
+        // processData: false,
+        // contentType: false,
         dataType: "json",
         beforeSend: function () {
             $("#restock").attr("disabled", true);

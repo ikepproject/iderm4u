@@ -47,8 +47,9 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-<div class="stockmodal"></div>
 <div class="editmodal"></div>
+<div class="stockmodal"></div>
+
 <script>
 $(document).ready(function () {
     //product Table

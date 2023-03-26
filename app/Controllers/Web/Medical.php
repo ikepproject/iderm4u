@@ -52,6 +52,8 @@ class Medical extends BaseController
             $medical      = $this->medical->find($medical_code);
             $user_id      = $medical['medical_user'];
             $user         = $this->user->find($user_id);
+            $faskes_id    = $user['user_faskes'];
+            $faskes_user  = $this->faskes->find($faskes_id); 
             $patient_code = $user['user_patient'];
             $patient      = $this->patient->find($patient_code);
 
@@ -71,7 +73,8 @@ class Medical extends BaseController
                 'medoth'    => $medoth,
                 'medgal'    => $medgal,
                 'invoice'   => $invoice,
-                'faskes'    => $this->faskes->list_faskes()
+                'faskes_user'=> $faskes_user, 
+                'faskes_list'=> $this->faskes->list_faskes()
             ];
             $response = [
                 'data' => view('panel_faskes/medical/detail', $data)

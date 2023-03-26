@@ -80,6 +80,8 @@ $routes->post('medical/deletegallery', 'Web\Medical::deletegallery', ["filter" =
 $routes->post('medical/cancel', 'Web\Medical::cancel', ["filter" => "authweb"]);                        //Medical Cancel Action
 $routes->get('api/web/patient/get', 'Api\WebPatient::get', ["filter" => "authweb"]);
 
+$routes->post('refer/create', 'Web\Refer::create', ["filter" => "authweb"]);
+
 $routes->post('transaction/cash', 'Web\Transaction::cash', ["filter" => "authweb"]);                    //Cash Pay Confirmation
 $routes->post('medicalrefer/create', 'Web\MedicalRefer::create', ["filter" => "authweb"]);              //Medical Refer Create
 

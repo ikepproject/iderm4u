@@ -65,13 +65,21 @@
 
         $(".formupdate").submit(function (e) {
         e.preventDefault();
-        var form_data = new FormData($('form')[0]);
+        // var form_data = new FormData($('form')[0]);
         $.ajax({
         type: "post",
         url: $(this).attr("action"),
-        data: form_data,
-        processData: false,
-        contentType: false,
+        data: {
+            product_code: $('input#product_code').val(),
+            product_name: $('input#product_name').val(),
+            product_price: $('input#product_price').val(),
+            product_qty: $('input#product_qty').val(),
+            product_unit: $('input#product_unit').val(),
+            product_status: $('select#product_status').val(),
+            product_description: $('textarea#product_description').val(),
+        },
+        // processData: false,
+        // contentType: false,
         dataType: "json",
         beforeSend: function () {
             $("#save").attr("disabled", true);
