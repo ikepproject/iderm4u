@@ -40,8 +40,8 @@
     </tbody>
 </table>
 
-<div class="detailmodal"></div>
 <div class="editmodal"></div>
+<div class="detailmodal"></div>
 
 <script>
 $(document).ready(function () {
