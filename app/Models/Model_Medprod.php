@@ -8,7 +8,7 @@ class Model_Medprod extends Model
 {
     protected $table      = 'tb_medical_product';
     protected $primaryKey = 'medprod_id';
-    protected $allowedFields = ['medprod_medical', 'medprod_product', 'medprod_qty', 'medprod_description', 'medprod_discount'];
+    protected $allowedFields = ['medprod_medical', 'medprod_product', 'medprod_qty', 'medprod_description', 'medprod_price', 'medprod_name'];
 
     public function find_medical($medical_code)
     {

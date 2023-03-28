@@ -42,9 +42,10 @@ class Refer extends BaseController
                 $faskes_initial     = $faskes['faskes_initial'];
                 $faskes_refer_price = $faskes['faskes_refer_price'];
 
+                $refer_type         = $this->request->getVar('medical_refer_type');
                 $amount             = $faskes_refer_price; 
                 $medical_code       = $this->generate_medical_code_rujukan($faskes_code, $faskes_initial);
-                var_dump($medical_code);
+                $appointment_code   = $this->generate_appointment_code_rujukan($faskes_code, $faskes_initial);
 
                 $newMedical = [
                     'medical_code'         => $medical_code,
@@ -54,30 +55,46 @@ class Refer extends BaseController
                     'medical_create'       => date('Y-m-d H:i:s'),
                     'medical_status'       => 'Proses',
                     'medical_creator_type' => 'Admin',
-                    'medical_refer_type'   => $this->request->getVar('medical_refer_type'),
+                    'medical_refer_type'   => $refer_type,
                     'medical_refer_origin' => $user['user_faskes'],
                     'medical_refer_code'   => $this->request->getVar('medical_refer_code'),
                 ];
 
-                // $newAppointment = [
-                //     'appointment_code' => generate code
-                //     appointment_faskes => faskes RS dituju
-                //     appointment_user => user_id pasien
-                //     appointment_status => Diajukan
-                //     appointment_create => Y-m-d H:i:s
-                //     appointment_date_expect  (timestamp) => NULL
-                //     appointment_date_fix     (timestamp) => NULL
-                //     appointment_type => Kunjungan
-                //     appointment_medical => from medical code above
-                //     appointment_link => NULL
-                //     appointment_note_user => ekspektasi tanggal
-                //     appointment_note_faskes => NULL
-                // ];
+                $newAppointment = [
+                    'appointment_code'     => $appointment_code,
+                    'appointment_faskes'   => $faskes_code,
+                    'appointment_user'     => $this->request->getVar('medical_user'),
+                    'appointment_status'   => 'Diajukan',
+                    'appointment_create'   => date('Y-m-d H:i:s'),
+                    'appointment_type'     => $refer_type,
+                    'appointment_medical'  => $medical_code,
+                    'appointment_note_user'=> $this->request->getVar('appointment_note_user'),
+                ];
 
-                $this->db->transStart();
-                // $this->appointment->insert($newAppointment);
-                $this->medical->insert($newMedical);
-                $this->db->transComplete();
+                if ($refer_type == 'Kunjungan') {
+                    $this->db->transStart();
+                    $this->appointment->insert($newAppointment);
+                    $this->medical->insert($newMedical);
+                    $this->db->transComplete();
+                } elseif ($refer_type == 'Teledermatologi') {
+                    $invoice_admin_fee = 3500;
+                    $amount            = $amount + $invoice_admin_fee;
+                    $invoice_code      = 'INV-' . $faskes_initial . '-'  . $this->request->getVar('medical_user') .date('YmdHis');
+                    $newInvoice = [
+                        'invoice_code'      => $invoice_code,
+                        'invoice_medical'   => $medical_code,
+                        'invoice_amount'    => $amount,
+                        'invoice_method'    => 'Flip',
+                        'invoice_status'    => 'PENDING',
+                        'invoice_admin_fee' => $invoice_admin_fee,
+                    ];
+                    
+                    $this->db->transStart();
+                    $this->appointment->insert($newAppointment);
+                    $this->medical->insert($newMedical);
+                    $this->invoice->insert($newInvoice);
+                    $this->db->transComplete();
+                }
 
                 $response = [
                     'success' => 'Data Berhasil Dirujuk',

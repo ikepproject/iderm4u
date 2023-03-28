@@ -94,6 +94,8 @@ $routes->get('/terms-and-conditions', 'Web\Landing::toc');							//TOC Page
 $routes->get('login', 'Web\Auth::login');  									        //Login Page
 $routes->get('register', 'Web\Auth::register');  							        //Register Page
 $routes->get('dashboard', 'Web\Dashboard::index', ["filter" => "authweb"]);         //Dashboard Page
+$routes->get('/test_purchase', 'Web\Landing::test_pruchase');						//Untuk test verifikasi dari midtrans
+$routes->get('/test_checkout', 'Web\Landing::test_checkout');	
 
 $routes->get('patient', 'Web\Patient::index', ["filter" => "authweb"]);                     //Pasien Page
 $routes->get('patient/formadd', 'Web\Patient::formadd', ["filter" => "authweb"]);           //Pasien Add Modal
