@@ -51,8 +51,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="stock_description" class="form-label">Keterangan Restcok</label>
-                                        <textarea class="form-control" id="stock_description" name="stock_description">
-                                        </textarea>
+                                        <textarea class="form-control" id="stock_description" name="stock_description"></textarea>
                                     </div>
                             </div>
                             <div class="modal-footer">

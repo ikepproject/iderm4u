@@ -42,8 +42,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="product_description" class="form-label">Keterangan product</label>
-                            <textarea class="form-control" id="product_description" name="product_description">
-                            </textarea>
+                            <textarea class="form-control" id="product_description" name="product_description"></textarea>
                         </div>
                 </div>
                 <div class="modal-footer">

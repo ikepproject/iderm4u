@@ -233,7 +233,7 @@
                         <input type="hidden" id="medical_code" name="medical_code" value="<?= $medical['medical_code'] ?>">
                         <div class="row">
                             <div class="mb-3">
-                                <label for="medgal_disease">Indikasi Dalam Foto</label>
+                                <label for="medgal_disease">Indikasi Dalam Foto (Jika lebih dari 1 indikasi pisah dengan tanda -)</label>
                                 <input type="text" class="form-control" id="medgal_disease" name="medgal_disease">
                             </div>
                             <div class="mb-3">
@@ -306,12 +306,20 @@
                             <div class="row">
                                 <div class="mb-3">
                                     <label for="medical_refer_type">Pilih Tipe Rujukan <code>*</code></label>
-                                    <select class="form-control" name="medical_refer_type" id="medical_refer_type">
+                                    <select class="form-control" name="medical_refer_type" id="medical_refer_type" onchange="showDiv(this)">
                                         <option selected disabled>Pilih...</option>
                                         <option value="Kunjungan">Rujuk Kunjungan</option>
                                         <option value="Teledermatologi">Rujuk Teledermatologi (ada biaya awal yg harus dibayarkan)</option>
                                     </select>
                                     <div class="invalid-feedback error_medical_refer_type"></div>
+                                </div>
+                                <div class="mb-3" id="hidden_bayar" style="display: none;">
+                                    <label class="form-label">Cara Bayar<code>*</code></label>
+                                    <select class="form-control" name="invoice_method" id="invoice_method">
+                                        <option value="QR">QRIS (+ 0.7%)</option>
+                                        <option value="VA">Virtual Account (+ Rp 4.000)</option>
+                                        <option value="E-WALLET">GoPay (+ 2%)</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -360,6 +368,14 @@ function preview_images() {
         $('#image_preview').append("<img style='object-fit:scale-down;width:150px;height:150px; margin-right:10px;' class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'>");
     }
 };
+
+function showDiv(select){
+    if(select.value=="Teledermatologi"){
+        document.getElementById('hidden_bayar').style.display = "block";
+        } else{
+        document.getElementById('hidden_bayar').style.display = "none";
+    }
+} 
 
 $(document).ready(function () {
     $(".formadd").submit(function (e) {

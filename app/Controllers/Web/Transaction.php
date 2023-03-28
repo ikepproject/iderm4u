@@ -72,9 +72,10 @@ class Transaction extends BaseController
             $updateMedical = [
                 'medical_status' => 'Selesai',
             ];
+            $this->db->transStart();
             $this->invoice->update($invoice_id, $updateInvoice);
             $this->medical->update($medical_code, $updateMedical);
-
+            $this->db->transComplete();
             $response = [
                 'success' => 'Data Berhasil Disimpan',
             ];

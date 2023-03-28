@@ -129,7 +129,7 @@ class Medical extends BaseController
                     'medical_user'         => $this->request->getVar('medical_user'),
                     'medical_employee'     => $user_name,
                     'medical_type'         => $this->request->getVar('medical_type'),
-                    'medical_description'  => $this->request->getVar('medical_description'),
+                    'medical_description'  => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('medical_description'))),
                     'medical_create'       => $medical_create,
                     'medical_status'       => 'Proses',
                     'medical_creator_type' => 'Admin',

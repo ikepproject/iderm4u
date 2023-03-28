@@ -7,6 +7,7 @@ class Refer extends BaseController
 {
     public function create()
     {
+
         if ($this->request->isAJAX()) {
             $validation = \Config\Services::validation();
             $rules = [
@@ -71,30 +72,40 @@ class Refer extends BaseController
                     'appointment_note_user'=> $this->request->getVar('appointment_note_user'),
                 ];
 
-                if ($refer_type == 'Kunjungan') {
-                    $this->db->transStart();
-                    $this->appointment->insert($newAppointment);
-                    $this->medical->insert($newMedical);
-                    $this->db->transComplete();
-                } elseif ($refer_type == 'Teledermatologi') {
-                    $invoice_admin_fee = 3500;
+                //Transaction Start
+                $this->db->transStart();
+                $this->medical->insert($newMedical);
+                $this->appointment->insert($newAppointment);
+                if ($refer_type == 'Teledermatologi') {
+
+                    $invoice_method = $this->request->getVar('invoice_method');
+
+                    if ($invoice_method == 'VA') {
+                        $invoice_admin_fee = 4000;
+                    } elseif ($invoice_method == 'E-WALLET') {
+                        $invoice_admin_fee = $amount * 0.02;
+                    } elseif ($invoice_method == 'QR') {
+                        $invoice_admin_fee = $amount * 0.007;
+                    } elseif ($invoice_method == NULL) {
+                        $invoice_method == 'QR';
+                        $invoice_admin_fee = $amount * 0.007;
+                    }
+
                     $amount            = $amount + $invoice_admin_fee;
                     $invoice_code      = 'INV-' . $faskes_initial . '-'  . $this->request->getVar('medical_user') .date('YmdHis');
+                    $invoice_method    = 
                     $newInvoice = [
                         'invoice_code'      => $invoice_code,
                         'invoice_medical'   => $medical_code,
                         'invoice_amount'    => $amount,
-                        'invoice_method'    => 'Flip',
+                        'invoice_method'    => $invoice_method,
                         'invoice_status'    => 'PENDING',
                         'invoice_admin_fee' => $invoice_admin_fee,
                     ];
-                    
-                    $this->db->transStart();
-                    $this->appointment->insert($newAppointment);
-                    $this->medical->insert($newMedical);
                     $this->invoice->insert($newInvoice);
-                    $this->db->transComplete();
                 }
+                $this->db->transComplete();
+                //Transaction Complete
 
                 $response = [
                     'success' => 'Data Berhasil Dirujuk',

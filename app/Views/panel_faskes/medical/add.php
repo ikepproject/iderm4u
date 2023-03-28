@@ -49,7 +49,7 @@
                             <option selected disabled>Pilih...</option>
                             <option value="Cash">Cash</option>
                             <option value="VA">Virtual Account (+ Rp 4.000)</option>
-                            <option value="E-WALLET">GoPay/ShopeePay (+ 2%)</option>
+                            <option value="E-WALLET">GoPay (+ 2%)</option>
                             <option value="QR">QRIS (+ 0.7%)</option>
                           </select>
                           <div class="invalid-feedback error_invoice_method"></div>
@@ -163,7 +163,7 @@
                             <input id="inp-krajee-explorer-fa6-1" name="inp-krajee-explorer-fa6-1" type="file" multiple accept="image">
                         </div> -->
                         <div class="mb-3">
-                          <label for="medgal_disease">Indikasi Dalam Foto</label>
+                          <label for="medgal_disease">Indikasi Dalam Foto (Jika lebih dari 1 indikasi pisah dengan tanda -)</label>
                           <input type="text" class="form-control" id="medgal_disease" name="medgal_disease">
                         </div>
                         <div class="mb-3">

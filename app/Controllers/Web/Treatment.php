@@ -116,7 +116,7 @@ class Treatment extends BaseController
                     'treatment_code'        => $treatment_code,
                     'treatment_name'        => $this->request->getVar('treatment_name'),
                     'treatment_price'       => $treatment_price,
-                    'treatment_description' => $this->request->getVar('treatment_description'),
+                    'treatment_description' => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('treatment_description'))),
                     'treatment_faskes'      => $user_faskes,
                     'treatment_create'      => date('Y-m-d H:i:s'),
                     'treatment_status'      => $this->request->getVar('treatment_status'),
@@ -168,7 +168,7 @@ class Treatment extends BaseController
                 $update = [
                     'treatment_name'        => $this->request->getVar('treatment_name'),
                     'treatment_price'       => $treatment_price,
-                    'treatment_description' => $this->request->getVar('treatment_description'),
+                    'treatment_description' => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('treatment_description'))),
                     'treatment_edit'        => date('Y-m-d H:i:s'),
                     'treatment_status'      => $this->request->getVar('treatment_status'),
                 ];

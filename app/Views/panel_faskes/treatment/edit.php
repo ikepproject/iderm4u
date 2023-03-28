@@ -34,8 +34,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="treatment_description" class="form-label">Keterangan Treatment</label>
-                        <textarea class="form-control" id="treatment_description" name="treatment_description">
-                        </textarea>
+                        <textarea class="form-control" id="treatment_description" name="treatment_description"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -59,13 +59,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="patient_address" class="form-label">Alamat</label>
-                            <textarea class="form-control" id="patient_address" name="patient_address">
-                            </textarea>
+                            <textarea class="form-control" id="patient_address" name="patient_address"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="patient_other" class="form-label">Keterangan Lain</label>
-                            <textarea class="form-control" id="patient_other" name="patient_other">
-                            </textarea>
+                            <textarea class="form-control" id="patient_other" name="patient_other"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="user_photo" class="form-label">Foto</label>
