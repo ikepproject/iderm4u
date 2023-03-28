@@ -41,9 +41,8 @@
                           <select class="form-control" name="invoice_method" id="invoice_method">
                             <option selected disabled>Pilih...</option>
                             <option value="Cash">Cash</option>
-                            <option value="VA" disabled>Virtual Account (+ Rp 3.500) <code>*dev process</code></option>
-                            <option value="EWALLET" disabled>Gopay / ShopeePay (+ 2%) <code>*dev process</code></option>
-                            <option value="QR" disabled>QRIS (+ 0.7%) <code>*dev process</code></option>
+                            <option value="VA" disabled>Virtual Account (+ Rp 3.500)</option>
+                            <option value="E-WALLET" disabled>GoPay/ShopeePay (+ 2%)</option>
                           </select>
                           <div class="invalid-feedback error_invoice_method"></div>
                         </div>

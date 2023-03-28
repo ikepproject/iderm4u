@@ -115,8 +115,8 @@
                                         $nomor++; ?>
                                         <tr>
                                             <td><?= $nomor ?></td>
-                                            <td>TR - <?= $treatment['treatment_name'] ?></td>
-                                            <td class="text-end">Rp <?= rupiah($treatment['treatment_price']) ?></td>
+                                            <td>TR - <?= $treatment['medtreat_name'] ?></td>
+                                            <td class="text-end">Rp <?= rupiah($treatment['medtreat_price']) ?></td>
                                         </tr>
                                         <?php endforeach; ?>
                                         <?php } ?>
@@ -126,8 +126,8 @@
                                         $nomor++; ?>
                                         <tr>
                                             <td><?= $nomor ?></td>
-                                            <td>PR - <?= $product['product_name'] ?> (<?= $product['medprod_qty'] ?>) @<?= rupiah($product['product_price']) ?></td>
-                                            <td class="text-end">Rp <?= rupiah($product['product_price']*$product['medprod_qty']) ?></td>
+                                            <td>PR - <?= $product['medprod_name'] ?> (<?= $product['medprod_qty'] ?>) @<?= rupiah($product['medprod_price']) ?></td>
+                                            <td class="text-end">Rp <?= rupiah($product['medprod_price']*$product['medprod_qty']) ?></td>
                                         </tr>
                                         <?php endforeach; ?>
                                         <?php } ?>
