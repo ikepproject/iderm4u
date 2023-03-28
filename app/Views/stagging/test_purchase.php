@@ -153,6 +153,11 @@
             <div class="mb-3">
               <button type="button" class="btn btn-primary" onclick="cash('')"><i class="bx bx-dollar mr-2"></i> Checkout</button>
             </div>
+            <div class="mb-3">
+              <a href="<?= base_url() ?>terms-and-conditions">Baca syarat dan ketnetuan kami</a> <br>
+              <a href="<?= base_url() ?>privacy">Baca privacy policy kami</a> <br>
+              <a href="tel:031-5927547"><i class="bx bx-phone-call"></i> Kontak kami</a> <br>
+            </div>
             
         </div>
         <?= form_close() ?>
