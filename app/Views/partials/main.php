@@ -138,8 +138,8 @@
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img class="rounded-circle header-profile-user" src="<?= base_url()?>/public/assets/images/users/<?= $user['user_photo'] ?>"
                                 alt="Header Avatar">
-                            <span class="d-none d-xl-inline-block ms-1" key="t-henry"><?= $user['user_name'] ?></span>
-                            <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                            <span class="d-xl-inline-block ms-1"><?= $user['user_name'] ?></span>
+                            <i class="mdi mdi-chevron-down d-xl-inline-block"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
                             <!-- item-->
@@ -364,7 +364,7 @@
         <footer class="footer">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 text-center">
                         <script>document.write(new Date().getFullYear())</script> © iDerm4U.
                     </div>
                 </div>

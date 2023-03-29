@@ -2,8 +2,8 @@
     <thead>
         <tr class="table-secondary">
             <th width="2%">#</th>
-            <th width="6%">ID</th>
             <th width="11%">Pasien</th>
+            <th width="6%">ID</th>
             <th width="7%">Status</th>
             <th width="10%">Jenis</th>
             <th width="8%">Waktu</th>
@@ -17,8 +17,8 @@
             $nomor++; ?>
             <tr>
                 <td><?= $nomor ?></td>
-                <td><?= $data['medical_code'] ?></td>
                 <td><?= $data['patient_name'] ?></td>
+                <td><?= $data['medical_code'] ?></td>
                 <td>
                     <?php if ($data['medical_status'] == 'Selesai') { ?> 
                         <span class="badge rounded-pill bg-success">Selesai</span>
