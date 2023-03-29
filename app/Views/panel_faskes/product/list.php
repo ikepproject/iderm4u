@@ -1,4 +1,4 @@
-<table id="datatable-product" class="table table-striped table-bordered dt-responsive nowrap w-100 ">
+<table id="datatable-product" class="table table-striped table-bordered dt-responsive wrap w-100 ">
     <thead>
         <tr class="table-secondary">
             <th width="2%">#</th>
