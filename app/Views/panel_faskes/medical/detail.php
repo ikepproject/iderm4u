@@ -347,7 +347,7 @@
                             <?= form_close() ?>
                         <?php } ?> 
                         <?php if ($medical['medical_refer_type'] != NULL) { ?> 
-                            <p>Data Kunjungan ini sudah dirujuk.</p>
+                            <h5 class="text-center">Data Kunjungan ini sudah dirujuk.</h5>
                         <?php } ?> 
                     </div>
                 </div>

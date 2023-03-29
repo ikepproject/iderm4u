@@ -194,9 +194,9 @@
                         </li>
 
                         <li>
-                            <a href="<?= site_url('medicalrefer') ?>" class="waves-effect">
+                            <a href="<?= site_url('refer') ?>" class="waves-effect">
                                 <i class="bx bx-task"></i>
-                                <span key="t-medicalrefer">Rujukan</span>
+                                <span key="t-refer">Rujukan</span>
                             </a>
                         </li>
 

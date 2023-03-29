@@ -16,13 +16,6 @@
                         <div class="dataMedical">
                         </div>
 
-                        <div class="detailmodal">
-                        </div>
-
-                        <div class="editmodal">
-                        </div>
-
-                        
                     </div>
                 </div>
             </div> <!-- end col -->

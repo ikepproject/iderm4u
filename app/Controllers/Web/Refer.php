@@ -5,6 +5,49 @@ use App\Controllers\BaseController;
 
 class Refer extends BaseController
 {
+    public function index()
+	{
+		$user = $this->userauth(); //Return array
+		$data = [
+			'title'  => 'Rujukan',
+			'user'   => $user,
+		];
+		return view('panel_faskes/refer/index', $data);
+	}
+
+    public function getdata()
+    {
+        if ($this->request->isAJAX()) {
+            $user        = $this->userauth(); //Return array
+            $user_faskes = $user['user_faskes'];
+            $faskes      = $this->faskes->find($user_faskes);
+            $faskes_type = $faskes['faskes_type'];
+            if ($faskes_type == "Klinik") {
+                $list    = $this->medical->list_refer_klinik($user_faskes);
+            } elseif ($faskes_type == "Rumah Sakit") {
+                $list    = $this->medical->list_refer_rs($user_faskes);
+            }
+            
+            $data = [
+                'list' => $list,
+            ];
+
+            if ($faskes_type == "Klinik") {
+
+                $response = [
+                    'data' => view('panel_faskes/refer/list_klinik', $data)
+                ];
+
+            } elseif ($faskes_type == "Rumah Sakit") {
+                $response = [
+                    'data' => view('panel_faskes/refer/list_rs', $data)
+                ];
+            }
+            
+            echo json_encode($response);
+        }
+    }
+
     public function create()
     {
 
@@ -48,6 +91,10 @@ class Refer extends BaseController
                 $medical_code       = $this->generate_medical_code_rujukan($faskes_code, $faskes_initial);
                 $appointment_code   = $this->generate_appointment_code_rujukan($faskes_code, $faskes_initial);
 
+                $updateMedical = [
+                    'medical_refer_type'   => $refer_type,
+                ];
+
                 $newMedical = [
                     'medical_code'         => $medical_code,
                     'medical_faskes'       => $faskes_code,
@@ -74,6 +121,7 @@ class Refer extends BaseController
 
                 //Transaction Start
                 $this->db->transStart();
+                $this->medical->update($this->request->getVar('medical_refer_code'), $updateMedical);
                 $this->medical->insert($newMedical);
                 $this->appointment->insert($newAppointment);
                 if ($refer_type == 'Teledermatologi') {

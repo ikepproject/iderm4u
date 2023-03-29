@@ -40,6 +40,9 @@
                     <?php if ($data['medical_type'] == 'Lainnya') { ?> 
                         <span class="badge bg-warning">Lainnya</span>
                     <?php } ?> 
+                    <?php if ($data['medical_refer_type'] != NULL && $data['medical_refer_code'] == NULL) { ?> 
+                        <span class="badge bg-danger">Dirujuk</span>
+                    <?php } ?>
                 </td>
                 <td><?= longdate_indo(substr($data['medical_create'],0,10)) ?></td>
                 <td><?= $data['medical_description'] ?></td>
@@ -67,6 +70,8 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<div class="detailmodal"></div>
 
 <script>
 $(document).ready(function () {

@@ -20,8 +20,17 @@ class Medical extends BaseController
         if ($this->request->isAJAX()) {
             $user        = $this->userauth(); //Return array
             $user_faskes = $user['user_faskes'];
+            $faskes      = $this->faskes->find($user_faskes);
+            $faskes_type = $faskes['faskes_type'];
+
+            if ($faskes_type == "Klinik") {
+                $list    = $this->medical->list($user_faskes);
+            } elseif ($faskes_type == "Rumah Sakit") {
+                $list    = $this->medical->list_rs($user_faskes);
+            }
+            
             $data = [
-                'list' => $this->medical->list($user_faskes)
+                'list' => $list
             ];
             $response = [
                 'data' => view('panel_faskes/medical/list', $data)
