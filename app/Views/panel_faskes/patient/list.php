@@ -49,6 +49,10 @@ $(document).ready(function () {
     var table_patient = $("#datatable-patient").DataTable({
     stateSave: true,
     lengthChange: true,
+    processing: true,
+    language: {
+        processing: '<i class="fa fa-spinner fa-spin"></i> Loading...'
+    },
     lengthMenu: [
         [25, 70, 100, -1],
         [25, 70, 100, "All"],
