@@ -34,6 +34,7 @@ class Model_Invoice extends Model
             ->join('tb_medical', 'tb_medical.medical_code = tb_invoice.invoice_medical')
             ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
             ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->orderBy('medical_create', 'DESC')
             ->get()->getResultArray();
     }
 }
