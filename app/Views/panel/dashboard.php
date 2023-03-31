@@ -64,26 +64,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="card mini-stats-wid">
-                                    <div class="card-body">
-                                        <div class="d-flex">
-                                            <div class="flex-grow-1">
-                                                <p class="text-muted fw-medium">Pendapatan <?= date('F Y') ?></p>
-                                                <h4 class="mb-0">Rp <?= rupiah($sum_current_month) ?></h4>
-                                            </div>
-
-                                            <div class="flex-shrink-0 align-self-center">
-                                                <div class="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
-                                                    <span class="avatar-title rounded-circle bg-primary">
-                                                        <i class="bx bx-purchase-tag-alt font-size-24"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
                         <!-- end row -->
                     <?php } ?>
