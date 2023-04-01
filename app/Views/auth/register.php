@@ -91,11 +91,16 @@
                                         <input type="password" class="form-control" id="confirm_password" placeholder="Masukan ulang password..." name="confirm_password">
                                         <div class="invalid-feedback error_confirm_password"></div>
                                     </div>
+                                    
+                                    <label class="form-label">Konfirmasi capctha dibawah <code>*</code></label>
+                                    <div class="g-recaptcha mb-3 required" data-sitekey="<?= $site_key ?>"></div>
 
                                     <div class="mb-3">
-                                        <button type="button" class="btn btn-link waves-effect" data-bs-toggle="modal" data-bs-target="#TermAndCondition">
+                                        <!-- <button type="button" class="btn btn-link waves-effect" data-bs-toggle="modal" data-bs-target="#TermAndCondition">
                                         Baca Syarat & Ketentuan Penggunaan.
-                                        </button>
+                                        </button> -->
+                                        <a href="terms-and-conditions">Baca Syarat & Ketentuan Penggunaan.</a> <br>
+                                        <a href="privacy">Baca Kebijakan Privacy.</a>
                                     </div>
 
                                     <div class="mt-2 form-check">
@@ -143,6 +148,7 @@
             </div>
         </div>
 
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
     // Register - Checked TOC
     $("#toc").click(function () {
@@ -221,11 +227,12 @@
                     $("#confirm_password").removeClass("is-invalid");
                     $(".error_confirm_password").html("");
                 }
+
                 } else {
                 Swal.fire({
-                    title: "Success!",
-                    text: "Berhasil daftar, Redirect...",
-                    icon: "success",
+                    title: response.title,
+                    text: response.message,
+                    icon: response.icon,
                     showConfirmButton: false,
                     timer: 1250,
                 }).then(function () {

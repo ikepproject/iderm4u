@@ -13,6 +13,7 @@ class Auth extends BaseController
         if (!get_cookie('gem')) {
 			$data = [
 				'title' => 'Login',
+                'site_key' 	=> getenv('recaptchaKey'),
 			];
 			return view('auth/login',$data);
 		} else {
@@ -23,7 +24,8 @@ class Auth extends BaseController
 			{
 				delete_cookie('gem');
 				$data = [
-					'title' => 'Login',
+					'title'     => 'Login',
+                    'site_key' 	=> getenv('recaptchaKey'),
 				];
 				return view('auth/login',$data);
 				
@@ -51,9 +53,26 @@ class Auth extends BaseController
 		$user       = $this->user->where('user_username', $this->request->getVar('user_username'))->first();
 		if( $user )
 		{
-			if( password_verify($this->request->getVar('user_password'), $user['user_password']) )
+            $recaptchaResponse = trim($this->request->getVar('g-recaptcha-response'));
+            $secret            = getenv('recaptchaSecret');
+            $credential        = array(
+                'secret' => $secret,
+                'response' => $recaptchaResponse
+            );
+
+            $verify = curl_init();
+            curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+            curl_setopt($verify, CURLOPT_POST, true);
+            curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($credential));
+            curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($verify);
+
+            $status_captcha = json_decode($response, true);
+
+			if( password_verify($this->request->getVar('user_password'), $user['user_password']) && $status_captcha["success"])
 			{
-                if ($user['user_active'] == 'f') {
+                if ($user['user_active'] == 'f' && $status_captcha["success"]) {
                     return $this->response->setJSON( 
                         [
                             'success' => false,
@@ -61,7 +80,7 @@ class Auth extends BaseController
                             'data'    => null, 
                             'message' => 'Akun Belum Aktif.', 
                         ]);
-                }  else  {
+                }  elseif($user['user_active'] == 't' && $status_captcha["success"])  {
                     $uid        = $user['user_id'];
                     $rle        = $user['user_role'];
                     $fsk        = $user['user_faskes'];
@@ -84,6 +103,14 @@ class Auth extends BaseController
                             ], 
                             'message' => 'Berhasil, Redirect...',  
                         ]);
+                } else {
+                    return $this->response->setJSON( 
+                        [
+                            'success' => false,
+                            'code'    => '403',
+                            'data'    => null, 
+                            'message' => 'Konfirmasi Capctcha Diperlukan.', 
+                        ]);
                 }
                 
                 
@@ -93,7 +120,7 @@ class Auth extends BaseController
                         'success' => false,
                         'code'    => '403',
                         'data'    => null, 
-                        'message' => 'Username atau Password Salah.', 
+                        'message' => 'Username atau Password Salah & Konfirmasi Capctcha Diperlukan.', 
                     ]);
             }
 		}else{
@@ -118,6 +145,7 @@ class Auth extends BaseController
 			$data = [
 				'title' 	=> 'Register',
 				'faskes'	=> $faskes,
+                'site_key' 	=> getenv('recaptchaKey'),
 			];
 			return view('auth/register',$data);
 		} else {
@@ -130,6 +158,7 @@ class Auth extends BaseController
 				$data = [
 					'title' 	=> 'Register',
 					'faskes'	=> $faskes,
+                    'site_key' 	=> getenv('recaptchaKey'),
 				];
 				return view('auth/register',$data);
 				
@@ -195,37 +224,72 @@ class Auth extends BaseController
 
 				$patient_code		= $this->generate_patient_code();
 
-				$this->db->transStart();
-				$newPatient = [
-					'patient_code' 		 => $patient_code
-				];
-				$this->patient->insert($newPatient);
-                $newUser = [
-                    'user_email'         => strtolower($this->request->getVar('user_email')),
-                    'user_password'      => password_hash($this->request->getVar('user_password'), PASSWORD_BCRYPT),
-                    'user_role'          => 1011,
-                    'user_faskes'        => $this->request->getVar('user_faskes'),
-					'user_patient'		 => $patient_code,
-                    'user_create'        => date('Y-m-d H:i:s'),
-                    'user_active'        => 'f',
-                    'user_photo'         => 'default.png',
-                    'user_name'          => $this->request->getVar('user_name'),
-					'user_phone'		 => $this->request->getVar('user_phone'),
-					'user_otp' 			 => rand(1000, 9999),
-					'user_otp_active'    => date('Y-m-d H:i:s', strtotime('+2 minutes', strtotime(date('Y-m-d H:i:s')))),
-					'user_username' 	 => $patient_code
-                ];
-                $this->user->insert($newUser);
-				$this->db->transComplete();
+                $recaptchaResponse = trim($this->request->getVar('g-recaptcha-response'));
+                $secret            = getenv('recaptchaSecret');
+                $credential        = array(
+                    'secret' => $secret,
+                    'response' => $recaptchaResponse
+                );
 
-                $response = [
-                    'success' => true,
-                    'code'    => '200',
-                    'data'    => [
-                        'link' => 'login'
-                    ], 
-                    'message' => 'Berhasil, Redirect...', 
-                ];
+                $verify = curl_init();
+                curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+                curl_setopt($verify, CURLOPT_POST, true);
+                curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($credential));
+                curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+                $response = curl_exec($verify);
+
+                $status_captcha = json_decode($response, true);
+
+                if ($status_captcha['success']) {
+                    $this->db->transStart();
+                    $newPatient = [
+                        'patient_code' 		 => $patient_code
+                    ];
+                    $this->patient->insert($newPatient);
+                    $newUser = [
+                        'user_email'         => strtolower($this->request->getVar('user_email')),
+                        'user_password'      => password_hash($this->request->getVar('user_password'), PASSWORD_BCRYPT),
+                        'user_role'          => 1011,
+                        'user_faskes'        => $this->request->getVar('user_faskes'),
+                        'user_patient'		 => $patient_code,
+                        'user_create'        => date('Y-m-d H:i:s'),
+                        'user_active'        => 'f',
+                        'user_photo'         => 'default.png',
+                        'user_name'          => $this->request->getVar('user_name'),
+                        'user_phone'		 => $this->request->getVar('user_phone'),
+                        'user_otp' 			 => rand(1000, 9999),
+                        'user_otp_active'    => date('Y-m-d H:i:s', strtotime('+3 minutes', strtotime(date('Y-m-d H:i:s')))),
+                        'user_username' 	 => $patient_code
+                    ];
+                    $this->user->insert($newUser);
+                    $this->db->transComplete();
+
+                    $response = [
+                        'success' => true,
+                        'code'    => '200',
+                        'title'   => 'Success!',
+                        'icon'    => 'success',
+                        'data'    => [
+                            'link' => 'login'
+                        ], 
+                        'message' => 'Berhasil, Redirect...', 
+                    ];
+                } else {
+                    $response = [
+                        'success' => true,
+                        'code'    => '200',
+                        'title'   => 'Error!',
+                        'icon'    => 'error',
+                        'data'    => [
+                            'link' => 'register'
+                        ], 
+                        'message' => 'Konfirmasi Captcha Diperlukan.', 
+                    ];
+                }
+                
+
+				
             }
             echo json_encode($response);
         }
