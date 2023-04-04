@@ -130,7 +130,13 @@ $routes->get('order', 'Web\Product_Order::index', ["filter" => "authweb"]);     
 
 $routes->get('appointment', 'Web\Appointment::index', ["filter" => "authweb"]);                          //Appointment Page
 
-$routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);  //Pay & Invoice Transaction Page
+$routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);  //Pay & Invoice 
+
+// $routes->get('transaction2/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);  //Pay & Invoice 
+$routes->post('transaction/token', 'Web\Midtrans::token', ["filter" => "authweb"]);  
+$routes->post('transaction/finish', 'Web\Midtrans::finish'); 
+
+$routes->post('transaction/formpayinfo', 'Web\Transaction::formpayinfo', ["filter" => "authweb"]);         //Cash Checkout Modal
 // $routes->post('transaction/formcash', 'Web\Transaction::formcash', ["filter" => "authweb"]);         //Cash Checkout Modal
 
 //Mobile API Endpoint Group Example

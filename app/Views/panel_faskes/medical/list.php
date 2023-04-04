@@ -51,9 +51,13 @@
                         <i class="bx bx-detail"></i>
                     </button>
                     <?php if ($data['medical_status'] == 'Proses') { ?> 
-                        <button type="button" class="btn btn-danger mb-2" onclick="cancel('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>')">
+
+                        <?php if ($data['invoice_midtrans'] == NULL) { ?> 
+                            <button type="button" class="btn btn-danger mb-2" onclick="cancel('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>')">
                             <i class="bx bx-x"></i>
-                        </button>
+                            </button>
+                        <?php } ?> 
+
                         <a type="button" class="btn btn-success mb-2" href="<?= base_url('transaction/checkout/' . $data['medical_code']) ?>">
                             <i class="bx bx-check"></i>
                         </a>
@@ -132,7 +136,8 @@ function cancel(medical_code, patient_name) {
                 type: "post",
                 dataType: "json",
                 data: {
-                    medical_code: medical_code
+                    medical_code: medical_code,
+                    modul: 'Lokal'
                 },
                 success: function(response) {
                     if (response.success) {

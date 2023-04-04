@@ -246,15 +246,9 @@ class Medical extends BaseController
                 }
 
                 $invoice_method = $this->request->getVar('invoice_method');
-                if ($invoice_method == 'VA') {
-                    $invoice_admin_fee = 4000;
-                } elseif ($invoice_method == 'E-WALLET') {
-                    $invoice_admin_fee = $amount * 0.02;
-                } elseif ($invoice_method == 'QR') {
-                    $invoice_admin_fee = $amount * 0.007;
-                } else {
-                    $invoice_admin_fee = 0;
-                }
+                
+                $invoice_admin_fee = $this->transaction_fee($invoice_method, $amount);
+
                 $amount = $amount + $invoice_admin_fee;
                 $invoice_code = 'INV-' . $initial . '-'  . $this->request->getVar('medical_user') .date('YmdHis');
                 $newInvoice = [
@@ -345,11 +339,14 @@ class Medical extends BaseController
         if ($this->request->isAJAX()) {
 
             $medical_code = $this->request->getVar('medical_code');
+            $modul        = $this->request->getVar('modul');                // Kunjungan atau Rujukan
+
             $medtreat     = $this->medtreat->find_medical($medical_code);
             $medprod      = $this->medprod->find_medical($medical_code);
             $medoth       = $this->medoth->find_medical($medical_code);
             $medgal       = $this->medgal->find_medical($medical_code);
             $invoice      = $this->invoice->find_medical($medical_code);
+            $appointment  = $this->appointment->find_medical($medical_code);
 
             $this->db->transStart();
             if (count($medtreat) != 0) {
@@ -383,8 +380,24 @@ class Medical extends BaseController
                     $this->medgal->delete($gallery['medgal_id']);
                 }
             }
-
-            $this->invoice->delete($invoice['invoice_id']);
+            
+            if ($modul == 'Lokal') {
+                $this->invoice->delete($invoice['invoice_id']);
+            } elseif ($modul != 'Lokal') {
+                $this->appointment->delete($appointment['appointment_id']);
+                $medical = $this->medical->find($medical_code);
+                $medical_refer_code = $medical['medical_refer_code'];
+                $updateOrigin = [
+                    'medical_refer_type'   => NULL,
+                    'medical_refer_origin' => NULL,
+                    'medical_refer_code' => NULL
+                ];
+                $this->medical->update($medical_refer_code, $updateOrigin);
+                if ($modul == 'Teledermatologi') {
+                    $this->invoice->delete($invoice['invoice_id']);
+                }
+            }
+            
             $this->medical->delete($medical_code);
             $this->db->transComplete();
 

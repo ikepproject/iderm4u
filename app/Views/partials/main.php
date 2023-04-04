@@ -377,10 +377,8 @@
 
         <footer class="footer">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-6 text-center">
-                        <script>document.write(new Date().getFullYear())</script> © iDerm4U.
-                    </div>
+                <div class="text-center">
+                    <script>document.write(new Date().getFullYear())</script> © iDerm4U.
                 </div>
             </div>
         </footer>

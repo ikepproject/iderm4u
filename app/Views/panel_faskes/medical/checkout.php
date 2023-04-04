@@ -3,17 +3,18 @@
 <!-- Plugins css -->
 <div class="page-content">
     <div class="container-fluid">
+        <a style="margin-left: 0px !important;" class="btn btn-primary waves-effect waves-light mb-3" href="<?= base_url('medical') ?>"> <i class="bx bx-left-arrow-alt"></i> Kembali</a>
+        
         <div class="row">
           <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-              <h4 class="mb-sm-0 font-size-18">
-              <a class="btn btn-primary waves-effect waves-light mb-3" href="<?= site_url('medical') ?>"> <i class="bx bx-arrow-back"></i> Kembali</a> <br>
+            <h4 class="mb-sm-0 font-size-18">
                 <?php if ($modul == 'checkout') { ?> 
                     <i>Checkout</i>
                 <?php } ?> 
                 <?php if ($modul == 'invoice') { ?> 
                     <i>Invoice</i>
                 <?php } ?> 
-              </h4>
+            </h4>
 
               <div class="page-title-right">
                   <ol class="breadcrumb m-0">
@@ -31,6 +32,18 @@
 
           </div>
         </div>
+        
+        <?php
+        if (session()->getFlashdata('pesan')) { 
+            echo'<div class="row">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="mdi mdi-check-all me-2"></i>
+                        Pembayaran via Payment Gateway sedang diproses. Lakukan pembayaran segera jika anda belum melakukan pembayaran!
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>';
+        }
+        ?>
 
         <div class="row">
             <div class="col-lg-12">
@@ -161,18 +174,44 @@
                             </table>
                         </div>
                         <div class="d-print-none">
-                            <div class="float-end">
-                                <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light me-1"><i class="fa fa-print"></i></a>
-                                <?php if ($modul == 'checkout') { ?> 
-                                    <?php if ($invoice['invoice_method'] == 'Cash') { ?> 
-                                        <!-- <button type="button" class="btn btn-primary w-md waves-effect waves-light" onclick="cash('<?= $medical['medical_code'] ?>', '<?= $invoice['invoice_code'] ?>')"><i class="bx bx-dollar mr-2"></i> Bayar Tunai</button> -->
-                                        <button type="button" class="btn btn-primary mb-2 mt-1" onclick="cash('<?= rupiah($invoice['invoice_amount']) ?>', '<?= $invoice['invoice_amount'] ?>','<?= $invoice['invoice_id'] ?>', '<?= $medical['medical_code'] ?>')"><i class="bx bx-dollar mr-2"></i> Bayar Tunai
-                                        </button>
-                                    <?php } ?>
-                                    <?php if ($invoice['invoice_method'] != 'Cash') { ?> 
-                                        <a href="#" class="btn btn-primary w-md waves-effect waves-light"><i class="bx bxs-credit-card mr-2"></i> Payment Gateway</a>
+                            <div class="d-flex flex-row-reverse">
+                                <div class="p-2">
+                                    <a href="javascript:window.print()" class="btn btn-success waves-effect waves-light me-1"><i class="fa fa-print"></i></a>
+                                </div>
+                                <div class="p-2">
+                                    <?php if ($modul == 'checkout') { ?> 
+                                        <?php if ($invoice['invoice_method'] == 'Cash') { ?> 
+                                            <!-- <button type="button" class="btn btn-primary w-md waves-effect waves-light" onclick="cash('<?= $medical['medical_code'] ?>', '<?= $invoice['invoice_code'] ?>')"><i class="bx bx-dollar mr-2"></i> Bayar Tunai</button> -->
+                                            <button type="button" class="btn btn-primary mb-2 mt-1" onclick="cash('<?= rupiah($invoice['invoice_amount']) ?>', '<?= $invoice['invoice_amount'] ?>','<?= $invoice['invoice_id'] ?>', '<?= $medical['medical_code'] ?>')"><i class="bx bx-dollar mr-2"></i> Bayar Tunai
+                                            </button>
+                                        <?php } ?>
+                                        <?php if ($invoice['invoice_method'] != 'Cash') { ?> 
+                                            <?php if ($invoice['invoice_midtrans'] == NULL) { ?> 
+                                                <form action="<?= base_url('transaction/finish') ?>" method="post" id="payment-form">
+                                                    <input type="hidden" id="medical_code" name="medical_code" value="<?= $medical['medical_code'] ?>">
+                                                    <input type="hidden" id="invoice_id" name="invoice_id" value="<?= $invoice['invoice_id'] ?>">
+                                                    <input type="hidden" id="invoice_code" name="invoice_code" value="<?= $invoice['invoice_code'] ?>">
+                                                    <input type="hidden" id="invoice_method" name="invoice_method" value="<?= $invoice['invoice_method'] ?>">
+                                                    <input type="hidden" id="patient_name" name="patient_name" value="<?= $patient['patient_name'] ?>">
+                                                    <input type="hidden" id="email" name="email" value="<?= $user_patient['user_email'] ?>">
+                                                    <input type="hidden" id="phone" name="phone" value="<?= $user_patient['user_phone'] ?>">
+                                                    <input type="hidden" id="address" name="address" value="<?= $patient['patient_address'] ?>">
+                                                    <input type="hidden" id="amount"  name="amount" value="<?= $invoice['invoice_amount'] ?>">
+
+
+                                                    <input type="hidden" name="result_type" id="result-type" value="">
+                                                    <input type="hidden" name="result_data" id="result-data" value="">
+
+                                                    <button type="submit" id="pay-button" class="btn btn-primary w-md waves-effect waves-light"><i class="bx bxs-credit-card mr-2"></i> Payment Gateway</button>
+                                                </form>
+                                            <?php } ?>
+                                            <?php if ($invoice['invoice_midtrans'] != NULL) { ?> 
+                                                <button type="button" class="btn btn-info w-md waves-effect waves-light" onclick="payinfo('<?= $invoice['invoice_id'] ?>')"><i class="bx bx-credit-card mr-2"></i> Payment Info</button>
+                                            <?php } ?>
+                                        <?php } ?> 
                                     <?php } ?> 
-                                <?php } ?> 
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -186,6 +225,80 @@
 <!-- End Page-content -->
 
 <div class="cashmodal"></div>
+<div class="payinfomodal"></div>
+
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-1Q4ylPz1Yq_OD2ZG"></script>
+<script type="text/javascript">
+    $('#pay-button').click(function(e) {
+        e.preventDefault();
+        $(this).attr("disabled", "disabled");
+
+        const medical_code  = $('#medical_code').val();
+        const invoice_id    = $('#invoice_id').val();
+        const invoice_code  = $('#invoice_code').val();
+        const invoice_method= $('#invoice_method').val();
+        const patient_name  = $('#patient_name').val();
+        const email         = $('#email').val();
+        const address       = $('#address').val();
+        const phone         = $('#phone').val();
+        const amount        = $('#amount').val();
+
+        $.ajax({
+            url: '<?= base_url('transaction/token') ?>',
+            type: "POST",
+            data: {
+                medical_code: medical_code,
+                invoice_id: invoice_id,
+                invoice_code: invoice_code,
+                invoice_method: invoice_method,
+                patient_name: patient_name,
+                email: email,
+                address: address,
+                phone: phone,
+                amount: amount
+            },
+            cache: false,
+
+            success: function(data) {
+                //location = data;
+                console.log(data);
+                console.log('token = ' + data);
+                $('#pay-button').removeAttr('disabled');
+
+                var resultType = document.getElementById('result-type');
+                var resultData = document.getElementById('result-data');
+
+                function changeResult(type, data) {
+                    $("#result-type").val(type);
+                    $("#result-data").val(JSON.stringify(data));
+                    //resultType.innerHTML = type;
+                    //resultData.innerHTML = JSON.stringify(data);
+                }
+
+                snap.pay(data, {
+                    onSuccess: function(result) {
+                        changeResult('success', result);
+                        console.log(result.status_message);
+                        console.log(result);
+                        $("#payment-form").submit();
+
+                    },
+                    onPending: function(result) {
+                        changeResult('pending', result);
+                        console.log(result.status_message);
+                        $("#payment-form").submit();
+
+                    },
+                    onError: function(result) {
+                        changeResult('error', result);
+                        console.log(result.status_message);
+                        $("#payment-form").submit();
+                    }
+                });
+            }
+        });
+    })
+</script>
 
 <script>
 // function cash(medical_code, invoice_code) {
@@ -242,6 +355,21 @@ function cash(invoice_amount_view, invoice_amount, invoice_id, medical_code) {
             });
         }
     })
+}
+
+function payinfo(invoice_id) {
+    $.ajax({
+        type: "post",
+        url: "<?= site_url('transaction/formpayinfo') ?>",
+        data: {
+            invoice_id: invoice_id
+        },
+        dataType: "json",
+        success: function(response) {
+            $('.payinfomodal').html(response.data).show();
+            $('#modalpayinfo').modal('show');
+        }
+    });
 }
 </script>
 

@@ -48,8 +48,8 @@
                           <select class="form-control" name="invoice_method" id="invoice_method">
                             <option selected disabled>Pilih...</option>
                             <option value="Cash">Cash</option>
-                            <option value="VA">Virtual Account (+ Rp 4.000)</option>
-                            <option value="E-WALLET">GoPay (+ 2%)</option>
+                            <option value="VA">Virtual Account (+ Rp 4.440)</option>
+                            <!-- <option value="E-WALLET">GoPay (+ 2%)</option> -->
                             <option value="QR">QRIS (+ 0.7%)</option>
                           </select>
                           <div class="invalid-feedback error_invoice_method"></div>

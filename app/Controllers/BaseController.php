@@ -32,6 +32,7 @@ use App\Models\Model_Treatment;
 use App\Models\Model_User;
 use App\Models\Model_Visitor;
 use App\Models\Model_Appointment;
+use App\Models\Model_Midtrans;
 use CodeIgniter\Model;
 
 class BaseController extends Controller
@@ -73,8 +74,9 @@ class BaseController extends Controller
 		$this->medoth 		= new Model_Medoth;
 		$this->medgal 		= new Model_Medgal;
 		$this->invoice 		= new Model_Invoice;
-		$this->product_stock= new Model_Product_Stock();
-		$this->appointment	= new Model_Appointment();
+		$this->product_stock= new Model_Product_Stock;
+		$this->appointment	= new Model_Appointment;
+        $this->midtrans     = new Model_Midtrans;
 		$this->db 			= \Config\Database::connect();
 	}
 
@@ -85,6 +87,26 @@ class BaseController extends Controller
 		$user_id = $user->uid;
 		$userdata= $this->user->find($user_id);
 		return $userdata;
+	}
+
+    public function transaction_fee($invoice_method, $amount){
+		if ($invoice_method == 'Cash') {
+            $invoice_admin_fee = 0;
+        } elseif ($invoice_method == 'VA') {
+            $midtrans_va_fee = 4000;
+            $ppn             = 0.11;
+            $vat             = $midtrans_va_fee * $ppn;
+            $invoice_admin_fee = $midtrans_va_fee + $vat;
+        } elseif ($invoice_method == 'E-WALLET') {
+            $invoice_admin_fee = $amount * 0.02;
+        } elseif ($invoice_method == 'QR') {
+            $invoice_admin_fee = $amount * 0.007;
+        } elseif ($invoice_method == NULL) {
+            $invoice_method == 'QR';
+            $invoice_admin_fee = $amount * 0.007;
+        }
+
+        return $invoice_admin_fee;
 	}
 
 	public function generate_patient_code()

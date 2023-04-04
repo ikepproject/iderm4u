@@ -39,12 +39,11 @@
                             </div>
                         </div>
                         <h4 class="mt-5">iDerm4u in Development</h4>
-                        <p class="text-muted">Kami segera menjumpai anda <i class="bx bx-wink-smile
-"></i></p>
+                        <p class="text-muted">Kami segera menjumpai anda <i class="bx bx-wink-smile"></i></p>
 
                         <div class="row justify-content-center mt-5">
                             <div class="col-md-8">
-                                <div data-countdown="2023/04/1" class="counter-number"></div>
+                                <div data-countdown="2023/05/1" class="counter-number"></div>
                             </div> <!-- end col-->
                         </div> <!-- end row-->
                     </div>

@@ -11,7 +11,7 @@
     </thead>
     <tbody>
     <?php $nomor = 0;
-        foreach ($list as $data) :
+        foreach ($list_teledermatologi as $data) :
             $nomor++; ?>
             <tr>
                 <td><?= $nomor ?></td>
@@ -42,6 +42,55 @@
                     <?php } ?>
                 </td>
                 <td>
+                    <?php if ($data['invoice_midtrans'] == NULL) { ?> 
+                        <button type="button" class="btn btn-danger mb-2" onclick="cancel('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>', '<?= $data['appointment_type'] ?>')">
+                        <i class="bx bx-x"></i>
+                        </button>
+                    <?php } ?>
+                    
+                    <a type="button" class="btn btn-success mb-2" href="<?= base_url('transaction/checkout/' . $data['medical_code']) ?>">
+                        <i class="bx bx-dollar"></i>
+                    </a> 
+                </td>
+            </tr>
+
+        <?php endforeach; ?>
+        
+        <?php foreach ($list_kunjungan as $data) : 
+            $nomor++; ?>
+            <tr>
+                <td><?= $nomor ?></td>
+                <td><?= $data['patient_name'] ?></td>
+                <td>
+                    <?php if ($data['medical_status'] == 'Selesai') { ?> 
+                        <span class="badge rounded-pill bg-success">Selesai</span>
+                    <?php } ?>
+                    <?php if ($data['medical_status'] == 'Proses') { ?> 
+                        <span class="badge rounded-pill bg-secondary">Proses</span>
+                    <?php } ?> 
+                </td>
+                <td>
+                    <?php if ($data['appointment_type'] == 'Kunjungan') { ?> 
+                        <span class="badge bg-success">Kunjungan</span>
+                    <?php } ?>
+                    <?php if ($data['appointment_type'] == 'Teledermatologi') { ?> 
+                        <span class="badge bg-primary">Teledermatologi</span>
+                    <?php } ?>  
+                </td>
+                <td>
+                    <?php if ($data['appointment_date_fix'] == NULL) { ?> 
+                        <span class="badge bg-secondary">Diajukan</span>
+                    <?php } ?>
+                    <?php if ($data['appointment_date_fix'] != NULL) { ?> 
+                        <span class="badge bg-success">Dijadwalkan</span>
+                        <?= longdate_indo(substr($data['appointment_date_fix'],0,10)) ?>, <?= substr($data['appointment_date_fix'],12,16)?>WIB
+                    <?php } ?>
+                </td>
+                <td>
+                    <?php if ($data['appointment_date_fix'] != NULL) { ?> 
+                        <button type="button" class="btn btn-danger mb-2" onclick="cancel('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>', '<?= $data['appointment_type'] ?>')"><i class="bx bx-x"></i>
+                        </button> 
+                    <?php } ?>
                 </td>
             </tr>
 
@@ -72,4 +121,41 @@ $(document).ready(function () {
     $(".dataTables_length select").addClass("form-select form-select-sm");
 });
 
+function cancel(medical_code, patient_name, appointment_type) {
+    Swal.fire({
+        title: 'Batalkan data rujukan?',
+        text: `Apakah anda yakin membatalkan data rujukan ${patient_name}? `,
+        icon: 'warning',
+        allowOutsideClick: false,
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "medical/cancel",
+                type: "post",
+                dataType: "json",
+                data: {
+                    medical_code: medical_code,
+                    modul: appointment_type
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Berhasil!",
+                            text: response.success,
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        datatable_refer();
+                    }
+                }
+            });
+        }
+    })
+}
 </script>

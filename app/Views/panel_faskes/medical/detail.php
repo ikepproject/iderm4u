@@ -317,8 +317,8 @@
                                     <label class="form-label">Cara Bayar<code>*</code></label>
                                     <select class="form-control" name="invoice_method" id="invoice_method">
                                         <option value="QR">QRIS (+ 0.7%)</option>
-                                        <option value="VA">Virtual Account (+ Rp 4.000)</option>
-                                        <option value="E-WALLET">GoPay (+ 2%)</option>
+                                        <option value="VA">Virtual Account (+ Rp 4.440)</option>
+                                        <!-- <option value="E-WALLET">GoPay (+ 2%)</option> -->
                                     </select>
                                 </div>
                             </div>

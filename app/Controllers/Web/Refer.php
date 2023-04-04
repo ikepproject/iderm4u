@@ -23,22 +23,25 @@ class Refer extends BaseController
             $faskes      = $this->faskes->find($user_faskes);
             $faskes_type = $faskes['faskes_type'];
             if ($faskes_type == "Klinik") {
-                $list    = $this->medical->list_refer_klinik($user_faskes);
+                $list_kunjungan         = $this->medical->list_refer_klinik_kunjungan($user_faskes);
+                $list_teledermatologi   = $this->medical->list_refer_klinik_teledermatologi($user_faskes);
             } elseif ($faskes_type == "Rumah Sakit") {
                 $list    = $this->medical->list_refer_rs($user_faskes);
             }
             
-            $data = [
-                'list' => $list,
-            ];
-
             if ($faskes_type == "Klinik") {
-
+                $data = [
+                    'list_kunjungan'       => $list_kunjungan,
+                    'list_teledermatologi' => $list_teledermatologi,
+                ];
                 $response = [
                     'data' => view('panel_faskes/refer/list_klinik', $data)
                 ];
 
             } elseif ($faskes_type == "Rumah Sakit") {
+                $data = [
+                    'list' => $list,
+                ];
                 $response = [
                     'data' => view('panel_faskes/refer/list_rs', $data)
                 ];
@@ -128,16 +131,7 @@ class Refer extends BaseController
 
                     $invoice_method = $this->request->getVar('invoice_method');
 
-                    if ($invoice_method == 'VA') {
-                        $invoice_admin_fee = 4000;
-                    } elseif ($invoice_method == 'E-WALLET') {
-                        $invoice_admin_fee = $amount * 0.02;
-                    } elseif ($invoice_method == 'QR') {
-                        $invoice_admin_fee = $amount * 0.007;
-                    } elseif ($invoice_method == NULL) {
-                        $invoice_method == 'QR';
-                        $invoice_admin_fee = $amount * 0.007;
-                    }
+                    $invoice_admin_fee = $this->transaction_fee($invoice_method, $amount);
 
                     $amount            = $amount + $invoice_admin_fee;
                     $invoice_code      = 'INV-' . $faskes_initial . '-'  . $this->request->getVar('medical_user') .date('YmdHis');
@@ -151,6 +145,15 @@ class Refer extends BaseController
                         'invoice_admin_fee' => $invoice_admin_fee,
                     ];
                     $this->invoice->insert($newInvoice);
+
+                    $newMedoth = [
+                        'medoth_medical'  => $medical_code,
+                        'medoth_name'     => 'Teledermatologi',
+                        'medoth_qty'      => 1,
+                        'medoth_price'    => $faskes_refer_price
+                    ];
+                    $this->medoth->insert($newMedoth);
+                    
                 }
                 $this->db->transComplete();
                 //Transaction Complete

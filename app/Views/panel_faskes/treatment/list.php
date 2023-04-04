@@ -6,8 +6,10 @@
             <th width="10%">ID</th>
             <th width="10%">Status</th>
             <th width="10%">Harga</th>
+            <th width="10%">Diskon</th>
+            <th width="10%">Harga Setelah Diskon</th>
             <!-- <th width="10%">Create/Edit</th> -->
-            <th width="20%">Keterangan</th>
+            <th width="20%">Harga Diskon</th>
             <th width="5%"></th>
         </tr>
     </thead>
@@ -28,6 +30,9 @@
                     <?php } ?>    
                 </td>
                 <td>Rp <?= rupiah($data['treatment_price']) ?></td>
+                <td>
+                    Aktif, 50%</td>
+                <td>Rp. 50.000</td>
                 <!-- <td><?= $data['treatment_create'] ?>/ <br> <?= $data['treatment_edit'] ?></td> -->
                 <td><?= $data['treatment_description'] ?></td>
                 <td>

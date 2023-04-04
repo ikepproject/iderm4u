@@ -20,6 +20,7 @@ class Model_Medical extends Model
             ->orderBy('medical_create', 'DESC')
             ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
             ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->join('tb_invoice', 'tb_invoice.invoice_medical = tb_medical.medical_code')
             ->get()->getResultArray();
     }
 
@@ -48,15 +49,31 @@ class Model_Medical extends Model
             ->get()->getResultArray();
     }
 
-    //Refer - getData (Klinik)
-    public function list_refer_klinik($user_faskes)
+    //Refer - getData (Klinik Rujuk Kunjungan)
+    public function list_refer_klinik_kunjungan($user_faskes)
     {
         return $this->table('tb_medical')
             ->where('medical_refer_origin', $user_faskes)
             ->where('medical_creator_type', 'Admin')
+            ->where('medical_refer_type', 'Kunjungan')
             ->orderBy('medical_create', 'DESC')
             ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
             ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->join('tb_appointment', 'tb_appointment.appointment_medical = tb_medical.medical_code')
+            ->get()->getResultArray();
+    }
+
+    //Refer - getData (Klinik Rujuk Teledermatologi)
+    public function list_refer_klinik_teledermatologi($user_faskes)
+    {
+        return $this->table('tb_medical')
+            ->where('medical_refer_origin', $user_faskes)
+            ->where('medical_creator_type', 'Admin')
+            ->where('medical_refer_type', 'Teledermatologi')
+            ->orderBy('medical_create', 'DESC')
+            ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
+            ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->join('tb_invoice', 'tb_invoice.invoice_medical = tb_medical.medical_code')
             ->join('tb_appointment', 'tb_appointment.appointment_medical = tb_medical.medical_code')
             ->get()->getResultArray();
     }
@@ -71,6 +88,7 @@ class Model_Medical extends Model
             ->orderBy('medical_create', 'DESC')
             ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
             ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->join('tb_faskes', 'tb_faskes.faskes_code = tb_medical.medical_refer_origin')
             ->join('tb_appointment', 'tb_appointment.appointment_medical = tb_medical.medical_code')
             ->get()->getResultArray();
     }

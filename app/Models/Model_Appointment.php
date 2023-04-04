@@ -18,4 +18,11 @@ class Model_Appointment extends Model
             ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
             ->get()->getResultArray();
     }
+
+    public function find_medical($medical_code)
+    {
+        return $this->table('tb_appointment')
+            ->where('appointment_medical', $medical_code)
+            ->get()->getRowArray();
+    }
 }

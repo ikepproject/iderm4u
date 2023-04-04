@@ -8,7 +8,7 @@ class Model_Invoice extends Model
 {
     protected $table      = 'tb_invoice';
     protected $primaryKey = 'invoice_id';
-    protected $allowedFields = ['invoice_code', 'invoice_medical', 'invoice_amount', 'invoice_method', 'invoice_status', 'invoice_req', 'invoice_admin_fee', 'invoice_pay'];
+    protected $allowedFields = ['invoice_code', 'invoice_medical', 'invoice_amount', 'invoice_method', 'invoice_status', 'invoice_admin_fee', 'invoice_pay', 'invoice_midtrans', 'invoice_snap_token'];
 
     public function find_medical($medical_code)
     {
