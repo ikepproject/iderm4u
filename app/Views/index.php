@@ -38,8 +38,8 @@
                                 </div>
                             </div>
                         </div>
-                        <h4 class="mt-5">iDerm4u in Development</h4>
-                        <p class="text-muted">Kami segera menjumpai anda <i class="bx bx-wink-smile
+                        <h4 class="mt-5">iDerm4u Staging Website</h4>
+                        <p class="text-muted">Go to iderm4u.com for Production <i class="bx bx-wink-smile
 "></i></p>
 
                         <div class="row justify-content-center mt-5">
