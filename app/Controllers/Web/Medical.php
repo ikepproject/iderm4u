@@ -151,14 +151,22 @@ class Medical extends BaseController
                 if ($medtreat_items != NULL) {
                     foreach ($medtreat_items as $medtreat) {
                         $medtreat_treatment           = $medtreat['medtreat_treatment'];
-                        $treatmentData = $this->treatment->find($medtreat_treatment);
-                        $treatmentName= $treatmentData['treatment_name'];
-                        $treatmentPrice= $treatmentData['treatment_price'];
+                        $treatmentData  = $this->treatment->find($medtreat_treatment);
+
+                        if ($treatmentData['treatment_discount'] == 't') {
+                            $discount       = round((($treatmentData['treatment_price']-$treatmentData['treatment_discount_price'])/$treatmentData['treatment_price'])*100,2);
+                            $treatmentName  = 'PROMO '. $discount . '% - '. $treatmentData['treatment_name'];
+                            $treatmentPrice = $treatmentData['treatment_discount_price'];
+                        } else {
+                            $treatmentName  = $treatmentData['treatment_name'];
+                            $treatmentPrice = $treatmentData['treatment_price'];
+                        }
+                        
                         $newMedtreat = [
                             'medtreat_medical'        => $medical_code,
                             'medtreat_treatment'      => $medtreat_treatment,
                             'medtreat_name'           => $treatmentName,
-                            'medtreat_price'           => $treatmentPrice,
+                            'medtreat_price'          => $treatmentPrice,
                         ];
                         $amount        = $amount + $treatmentPrice; 
                         $this->medtreat->insert($newMedtreat);

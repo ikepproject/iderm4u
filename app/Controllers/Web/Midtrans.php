@@ -117,15 +117,14 @@ class Midtrans extends BaseController
                 'transaction_id'    => $result['transaction_id'],
                 'status_code'       => $result['status_code'],
                 'status_message'    => $result['status_message'],
-                'gross_amount'      => $result['gross_amount'],
-                'payment_type'      => 'bank transfer',
+                'gross_amount'      => strtok($result['gross_amount'], '.'),
+                'payment_type'      => $result['payment_type'],
                 'transaction_time'  => $result['transaction_time'],
                 'transaction_status'=> $result['transaction_status'],
                 'fraud_status'      => $result['fraud_status'],
                 'bank'              => 'mandiri',
                 'va_number'         => $result['bill_key'],
-                'pdf_url'           => $result['pdf_url'],
-                
+                'code'              => $result['biller_code'],    
             ];
         } elseif (isset($result['permata_va_number'])) {
             $saveMidtrans = [
@@ -133,14 +132,14 @@ class Midtrans extends BaseController
                 'transaction_id'    => $result['transaction_id'],
                 'status_code'       => $result['status_code'],
                 'status_message'    => $result['status_message'],
-                'gross_amount'      => $result['gross_amount'],
-                'payment_type'      => 'bank transfer',
+                'gross_amount'      => strtok($result['gross_amount'], '.'),
+                'payment_type'      => $result['payment_type'],
                 'transaction_time'  => $result['transaction_time'],
                 'transaction_status'=> $result['transaction_status'],
                 'fraud_status'      => $result['fraud_status'],
                 'bank'              => 'permata',
                 'va_number'         => $result['permata_va_number'],
-                'pdf_url'           => $result['pdf_url'],
+                
             ];
         } elseif ($result['payment_type'] == 'gopay' || $result['payment_type'] == 'qris') {
             $saveMidtrans = [
@@ -148,7 +147,7 @@ class Midtrans extends BaseController
                 'transaction_id'    => $result['transaction_id'],
                 'status_code'       => $result['status_code'],
                 'status_message'    => $result['status_message'],
-                'gross_amount'      => $result['gross_amount'],
+                'gross_amount'      => strtok($result['gross_amount'], '.'),
                 'payment_type'      => $result['payment_type'],
                 'transaction_time'  => $result['transaction_time'],
                 'transaction_status'=> $result['transaction_status'],
@@ -160,14 +159,13 @@ class Midtrans extends BaseController
                 'transaction_id'    => $result['transaction_id'],
                 'status_code'       => $result['status_code'],
                 'status_message'    => $result['status_message'],
-                'gross_amount'      => $result['gross_amount'],
+                'gross_amount'      => strtok($result['gross_amount'], '.'),
                 'payment_type'      => $result['payment_type'],
                 'transaction_time'  => $result['transaction_time'],
                 'transaction_status'=> $result['transaction_status'],
                 'fraud_status'      => $result['fraud_status'],
                 'bank'              => $result['va_numbers'][0]['bank'],
                 'va_number'         => $result['va_numbers'][0]['va_number'],
-                'pdf_url'           => $result['pdf_url'],
                 
             ];
         }

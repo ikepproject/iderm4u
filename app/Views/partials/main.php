@@ -13,38 +13,47 @@
 
 
     <!-- Bootstrap Css -->
-    <link href="<?= base_url()?>/public/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
-    <!-- Icons Css -->
-    <link href="<?= base_url()?>/public/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <!-- App Css-->
-    <link href="<?= base_url()?>/public/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+    <link href="<?= base_url()?>public/assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
 
-    <link href="<?= base_url()?>/public/assets/css/main.css" rel="stylesheet" type="text/css" />
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha512-OvBgP9A2JBgiRad/mM36mkzXSXaJE9BEIENnVEmeZdITvwT09xnxLtT4twkCa8m/loMbPHsvPl0T8lRGVBwjlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <!-- Icons Css -->
+    <link href="<?= base_url()?>public/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="<?= base_url()?>public/assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+
+    <link href="<?= base_url()?>public/assets/css/main.css" rel="stylesheet" type="text/css" />
     
     <!-- Custom Css-->
-    <link href="<?= base_url()?>/public/assets/css/custom.css" rel="stylesheet" type="text/css" />
+    <link href="<?= base_url()?>public/assets/css/custom.css" rel="stylesheet" type="text/css" />
 
     <!-- JQuery -->
-    <script src="<?= base_url()?>/public/assets/libs/jquery/jquery.min.js"></script>
+    <!-- <script src="<?= base_url()?>public/assets/libs/jquery/jquery.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha512-bnIvzh6FU75ZKxp0GXLH9bewza/OIw6dLVh9ICg0gogclmYGguQJWl8U30WpbsGTqbIiAwxTsbe76DErLq5EDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- Select2 -->
-    <link href="<?= base_url() ?>/public/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
-    <script src="<?= base_url() ?>/public/assets/libs/select2/js/select2.min.js"></script>
+    <!-- <link href="<?= base_url() ?>public/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <script src="<?= base_url() ?>public/assets/libs/select2/js/select2.min.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- Mask Money JS - Format Input Rupiah JS-->
-    <script src="<?= base_url() ?>/public/assets/js/jquery/jquery.maskMoney.min.js"></script>
+    <!-- <script src="<?= base_url() ?>public/assets/js/jquery/jquery.maskMoney.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js" integrity="sha512-Rdk63VC+1UYzGSgd3u2iadi0joUrcwX0IWp2rTh6KXFoAmgOjRS99Vynz1lJPT8dLjvo6JZOqpAHJyfCEZ5KoA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
     <!-- Bootstrap-fileinput Krajee Kratik-->
-    <link href="<?= base_url()?>/public/assets/css/fileinput.min.css" rel="stylesheet">
+    <!-- <link href="<?= base_url()?>public/assets/css/fileinput.min.css" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v6.1.1/css/all.css" rel="stylesheet">
-    <link href="<?= base_url()?>/public/assets/css/explorer-fa6-theme.css" rel="stylesheet">
+    <link href="<?= base_url()?>public/assets/css/explorer-fa6-theme.css" rel="stylesheet"> -->
 
     <!-- DataTables -->
-    <link href="<?= base_url()?>/public/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-    <link href="<?= base_url()?>/public/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="<?= base_url()?>public/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?= base_url()?>public/assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap4.min.css" integrity="sha512-PT0RvABaDhDQugEbpNMwgYBCnGCiTZMh9yOzUsJHDgl/dMhD9yjHAwoumnUk3JydV3QTcIkNDuN40CJxik5+WQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-buttons-bs4/2.3.6/buttons.bootstrap4.min.css" integrity="sha512-LVJxdX5sTNFz8G8zJhpf8Sz/6MPnF0KiOTZHKjun7BDq5LEYJv+k1D0uNIaz3Irdu0g7biVfL6a8qkbOBjaWbg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Responsive datatable examples -->
-    <link href="<?= base_url()?>/public/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- <link href="<?= base_url()?>public/assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-responsive-bs/2.4.1/responsive.bootstrap.min.css" integrity="sha512-lC7CsBqS9byAEsS32hb1hbptYmqxRoPc+kIKOydGHfpUXHywskhQHlIQj69/S5egtqEqsEsFwjc5x5HHx/T14Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -387,36 +396,54 @@
 </body>
 
 <!-- JAVASCRIPT -->
-<script src="<?= base_url()?>/public/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="<?= base_url()?>/public/assets/libs/metismenu/metisMenu.min.js"></script>
-<script src="<?= base_url()?>/public/assets/libs/simplebar/simplebar.min.js"></script>
-<script src="<?= base_url()?>/public/assets/libs/node-waves/waves.min.js"></script>
+<!-- <script src="<?= base_url()?>public/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js" integrity="sha512-pax4MlgXjHEPfCwcJLQhigY7+N8rt6bVvWLFyUMuxShv170X53TRzGPmPkZmGBhk+jikR8WBM4yl7A9WMHHqvg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- <script src="<?= base_url()?>public/assets/libs/metismenu/metisMenu.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.7/metisMenu.min.js" integrity="sha512-o36qZrjup13zLM13tqxvZTaXMXs+5i4TL5UWaDCsmbp5qUcijtdCFuW9a/3qnHGfWzFHBAln8ODjf7AnUNebVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- <script src="<?= base_url()?>public/assets/libs/simplebar/simplebar.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplebar/6.2.4/simplebar.min.js" integrity="sha512-K//QeDiscFFAs5yljnbZCuoAmzv5KdtVY0W70WLQZ+BFCxi4PotspvxZwpaGJOao2l4oIQhgsHX5tHxyRe+YYw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- <script src="<?= base_url()?>public/assets/libs/node-waves/waves.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/node-waves/0.7.6/waves.min.js" integrity="sha512-MzXgHd+o6pUd/tm8ZgPkxya3QUCiHVMQolnY3IZqhsrOWQaBfax600esAw3XbBucYB15hZLOF0sKMHsTPdjLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <!-- App js -->
-<script src="<?= base_url()?>/public/assets/js/app.min.js"></script>
+<script src="<?= base_url()?>public/assets/js/app.min.js"></script>
 <!-- Sweetalert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js"></script>
 <!-- Select2 -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <!-- Required datatable js -->
-<script src="<?= base_url() ?>/public/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="<?= base_url() ?>/public/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<!-- <script src="<?= base_url() ?>public/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="<?= base_url() ?>public/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js" integrity="sha512-OQlawZneA7zzfI6B1n1tjUuo3C5mtYuAWpQdg+iI9mkDoo7iFzTqnQHf+K5ThOWNJ9AbXL4+ZDwH7ykySPQc+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <!-- Buttons examples -->
-<script src="<?= base_url() ?>/public/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-<script src="<?= base_url() ?>/public/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
-<script src="<?= base_url() ?>/public/assets/libs/jszip/jszip.min.js"></script>
-<script src="<?= base_url() ?>/public/assets/libs/pdfmake/build/pdfmake.min.js"></script>
-<script src="<?= base_url() ?>/public/assets/libs/pdfmake/build/vfs_fonts.js"></script>
-<script src="<?= base_url() ?>/public/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
-<script src="<?= base_url() ?>/public/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
-<script src="<?= base_url() ?>/public/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+<!-- <script src="<?= base_url() ?>public/assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="<?= base_url() ?>public/assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+<script src="<?= base_url() ?>public/assets/libs/jszip/jszip.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables-buttons/2.3.6/js/dataTables.buttons.min.js" integrity="sha512-hPELv/uqaT+ZbHiKMWXHNV15N6SPTB80TXb9/idOejUqAJZmeLjITlt3Fts8RtCshL/v2kfw7mIKpZnFilDEnA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-buttons-bs4/2.3.6/buttons.bootstrap4.min.js" integrity="sha512-IXfjiOXWYBQMr7Vkddfu4IB6WFMS2mc+Qb39MuON+hO+L/Jyy3cdpnh1u8UJb5UlP/HWiipq0uaKo2vWbtOXcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- <script src="<?= base_url() ?>public/assets/libs/pdfmake/build/pdfmake.min.js"></script>
+<script src="<?= base_url() ?>public/assets/libs/pdfmake/build/vfs_fonts.js"></script> -->
+
+<script src="<?= base_url() ?>public/assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="<?= base_url() ?>public/assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="<?= base_url() ?>public/assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
 
 <!-- Responsive examples -->
-<script src="<?= base_url() ?>/public/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="<?= base_url() ?>/public/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+<!-- <script src="<?= base_url() ?>public/assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?= base_url() ?>public/assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables-responsive/2.4.1/dataTables.responsive.min.js" integrity="sha512-9BgeOjT7sU+CPMlXJrq1Shzkx2spfWhhxEnUJ7Ab9b5bSPGCzT8DaT1a/qUfrTBtgJetJwnI81ilCJkXFZRGPA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-responsive-bs4/2.4.1/responsive.bootstrap4.min.js" integrity="sha512-EukuhT7pSeYUiLk5NV3uhXWMjGq4la8as5kp+2eZkq7wChPoUew8coepf1urhL8bCjSp/efanT5na06sh3pWlg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <!-- Select2 js -->
-<script src="<?= base_url() ?>/public/assets/libs/select2/js/select2.min.js"></script>
+<!-- <script src="<?= base_url() ?>public/assets/libs/select2/js/select2.min.js"></script> -->
 
 <script>
     //Logout

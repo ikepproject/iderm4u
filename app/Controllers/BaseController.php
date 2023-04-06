@@ -33,6 +33,7 @@ use App\Models\Model_User;
 use App\Models\Model_Visitor;
 use App\Models\Model_Appointment;
 use App\Models\Model_Midtrans;
+use App\Models\Model_Treatment_Discount;
 use CodeIgniter\Model;
 
 class BaseController extends Controller
@@ -77,6 +78,7 @@ class BaseController extends Controller
 		$this->product_stock= new Model_Product_Stock;
 		$this->appointment	= new Model_Appointment;
         $this->midtrans     = new Model_Midtrans;
+        $this->discount     = new Model_Treatment_Discount;
 		$this->db 			= \Config\Database::connect();
 	}
 

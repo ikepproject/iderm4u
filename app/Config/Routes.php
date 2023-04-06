@@ -65,6 +65,7 @@ $routes->post('patient/delete', 'Web\Patient::delete', ["filter" => "authweb"]);
 $routes->get('treatment/getdata', 'Web\Treatment::getdata', ["filter" => "authweb"]); 
 $routes->post('treatment/create', 'Web\Treatment::create', ["filter" => "authweb"]);
 $routes->post('treatment/update', 'Web\Treatment::update', ["filter" => "authweb"]);
+$routes->post('treatment/discount', 'Web\Treatment::discount', ["filter" => "authweb"]);
 
 $routes->get('product/getdata', 'Web\Product::getdata', ["filter" => "authweb"]); 
 $routes->post('product/create', 'Web\Product::create', ["filter" => "authweb"]);
@@ -112,6 +113,7 @@ $routes->post('patient/formedit', 'Web\Patient::formedit', ["filter" => "authweb
 $routes->get('treatment', 'Web\Treatment::index', ["filter" => "authweb"]);                //Treatment Page
 $routes->get('treatment/formadd', 'Web\Treatment::formadd', ["filter" => "authweb"]);      //Treatment Add Modal
 $routes->post('treatment/formedit', 'Web\Treatment::formedit', ["filter" => "authweb"]);   //Treatment Edit Modal
+$routes->post('treatment/formdiscount', 'Web\Treatment::formdiscount', ["filter" => "authweb"]);   //Treatment Discount Modal
 
 $routes->get('product', 'Web\Product::index', ["filter" => "authweb"]);                 //Product Page
 $routes->get('product/formadd', 'Web\Product::formadd', ["filter" => "authweb"]);       //Product Add Modal
@@ -136,7 +138,7 @@ $routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["f
 $routes->post('transaction/token', 'Web\Midtrans::token', ["filter" => "authweb"]);  
 $routes->post('transaction/finish', 'Web\Midtrans::finish'); 
 
-$routes->post('transaction/formpayinfo', 'Web\Transaction::formpayinfo', ["filter" => "authweb"]);         //Cash Checkout Modal
+$routes->post('transaction/formpayinfo', 'Web\Transaction::formpayinfo', ["filter" => "authweb"]);       //Cash Checkout Modal
 // $routes->post('transaction/formcash', 'Web\Transaction::formcash', ["filter" => "authweb"]);         //Cash Checkout Modal
 
 //Mobile API Endpoint Group Example

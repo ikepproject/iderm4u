@@ -24,7 +24,7 @@
 
     <div class="my-5 pt-sm-5">
         <div class="container">
-        <a class="btn btn-primary waves-effect waves-light mb-3" href="javascript:window.history.go(-1);"> <i class="bx bx-left-arrow"></i> Kembali</a>
+        <a class="btn btn-primary waves-effect waves-light mb-3" href="javascript:window.history.go(-1);"> <i class="bx bx-left-arrow-alt"></i> Kembali</a>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-left">

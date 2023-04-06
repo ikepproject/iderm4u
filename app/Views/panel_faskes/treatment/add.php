@@ -17,6 +17,11 @@
                             <div class="invalid-feedback error_treatment_name"></div>
                         </div>
                         <div class="mb-3">
+                            <label for="treatment_type" class="form-label">Tipe Treatment<code>*</code></label>
+                            <input type="text" class="form-control" id="treatment_type" name="treatment_type" placeholder="Masukan tipe treatment..." >
+                            <div class="invalid-feedback error_treatment_type"></div>
+                        </div>
+                        <div class="mb-3">
                             <label for="treatment_price" class="form-label">Harga Treatment<code>*</code></label>
                             <input type="text" class="form-control price" id="treatment_price" name="treatment_price" placeholder="Masukan harga treatment..." >
                             <div class="invalid-feedback error_treatment_price"></div>
@@ -80,6 +85,14 @@
             } else {
                 $("#treatment_name").removeClass("is-invalid");
                 $(".error_treatment_name").html("");
+            }
+
+            if (response.error.treatment_type) {
+                $("#treatment_type").addClass("is-invalid");
+                $(".error_treatment_type").html(response.error.treatment_type);
+            } else {
+                $("#treatment_type").removeClass("is-invalid");
+                $(".error_treatment_type").html("");
             }
 
             if (response.error.treatment_price) {

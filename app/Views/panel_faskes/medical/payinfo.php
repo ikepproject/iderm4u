@@ -24,16 +24,21 @@
                                             <td><b>Nomor VA :</b></td>
                                             <td><?= $midtrans['va_number'] ?></td>
                                         </tr>
-                                        <?php if ($midtrans['payment_type'] == 'echannel') { ?> 
+                                        
                                         <tr>
                                             <td><b>Kode :</b></td>
-                                            <td>70012</td>
+                                            <td>
+                                                <?php if ($midtrans['bank'] == 'mandiri') { ?> 
+                                                    <?= $midtrans['code'] ?>
+                                                <?php } ?>
+                                            </td>
                                         </tr>
-                                        <?php } ?>
                                         <tr>
                                             <td><b>Sisa Waktu Bayar :</b></td>
                                             <td>
-                                                <p id="demo"></p>
+                                                <?php if ($midtrans['transaction_status'] != 'settlement') { ?>
+                                                    <p id="demo"></p>
+                                                <?php } ?>
                                             </td>
                                         </tr>
                                     </tbody>

@@ -9,7 +9,7 @@ class Model_Treatment extends Model
     protected $table      = 'tb_treatment';
     protected $primaryKey = 'treatment_code';
     protected $useAutoIncrement = false;
-    protected $allowedFields = ['treatment_code', 'treatment_name', 'treatment_price', 'treatment_description', 'treatment_faskes', 'treatment_create', 'treatment_edit', 'treatment_status'];
+    protected $allowedFields = ['treatment_code', 'treatment_name', 'treatment_price', 'treatment_description', 'treatment_faskes', 'treatment_create', 'treatment_edit', 'treatment_status', 'treatment_discount', 'treatment_discount_price', 'treatment_type'];
 
     public function list($user_faskes)
     {

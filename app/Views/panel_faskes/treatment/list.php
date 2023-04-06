@@ -2,15 +2,13 @@
     <thead>
         <tr class="table-secondary">
             <th width="2%">#</th>
-            <th width="15%">Nama</th>
+            <th width="22%">Nama</th>
+            <th width="7%">Tipe</th>
             <th width="10%">ID</th>
             <th width="10%">Status</th>
             <th width="10%">Harga</th>
-            <th width="10%">Diskon</th>
-            <th width="10%">Harga Setelah Diskon</th>
-            <!-- <th width="10%">Create/Edit</th> -->
-            <th width="20%">Harga Diskon</th>
-            <th width="5%"></th>
+            <th width="20%">Keterangan</th>
+            <th width="10%"></th>
         </tr>
     </thead>
     <tbody>
@@ -20,6 +18,7 @@
             <tr>
                 <td><?= $nomor ?></td>
                 <td><?= $data['treatment_name'] ?></td>
+                <td><?= $data['treatment_type'] ?></td>
                 <td><?= $data['treatment_code'] ?></td>
                 <td>
                     <?php if ($data['treatment_status'] == 't') { ?> 
@@ -29,15 +28,17 @@
                         <span class="badge rounded-pill bg-secondary">Nonaktif</span>
                     <?php } ?>    
                 </td>
-                <td>Rp <?= rupiah($data['treatment_price']) ?></td>
                 <td>
-                    Aktif, 50%</td>
-                <td>Rp. 50.000</td>
-                <!-- <td><?= $data['treatment_create'] ?>/ <br> <?= $data['treatment_edit'] ?></td> -->
+                    <?php if ($data['treatment_discount'] == 'f' || $data['treatment_discount'] == NULL) { ?> Rp <?= rupiah( $data['treatment_price']) ?> <?php } ?>
+                    <?php if ($data['treatment_discount'] == 't') { ?> <s>Rp <?= rupiah($data['treatment_price']) ?></s> -> <br> Rp <?= rupiah($data['treatment_discount_price']) ?> <br> <i class="bx bxs-offer"></i> <?= round((($data['treatment_price']-$data['treatment_discount_price'])/$data['treatment_price'])*100,2) ?> % <?php } ?>
+                </td>
                 <td><?= $data['treatment_description'] ?></td>
                 <td>
                     <button type="button" class="btn btn-warning mb-2" onclick="edit('<?= $data['treatment_code'] ?>')">
                         <i class="bx bx-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-primary mb-2" onclick="discount('<?= $data['treatment_code'] ?>')">
+                        <i class="bx bxs-offer"></i>
                     </button>
                 </td>
             </tr>
@@ -45,7 +46,8 @@
         <?php endforeach; ?>
     </tbody>
 </table>
- <div class="editmodal"></div>
+<div class="editmodal"></div>
+<div class="discountmodal"></div>
 <script>
 $(document).ready(function () {
     //treatment Table
@@ -78,6 +80,21 @@ function edit(treatment_code) {
         success: function(response) {
             $('.editmodal').html(response.data).show();
             $('#modaledit').modal('show');
+        }
+    });
+}
+
+function discount(treatment_code) {
+    $.ajax({
+        type: "post",
+        url: "treatment/formdiscount",
+        data: {
+            treatment_code: treatment_code
+        },
+        dataType: "json",
+        success: function(response) {
+            $('.discountmodal').html(response.data).show();
+            $('#modaldiscount').modal('show');
         }
     });
 }

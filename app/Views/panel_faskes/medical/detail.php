@@ -21,6 +21,12 @@
                             <span class="d-none d-md-block"><i class="far fa-images mr-2"></i> Foto</span>   
                         </a>
                     </li>
+                    <li class="nav-item waves-effect waves-light">
+                        <a class="nav-link" data-bs-toggle="tab" href="#gejala-1" role="tab">
+                            <span class="d-block d-md-none"><i class="bx bx-map-pin"></i></span>
+                            <span class="d-none d-md-block"><i class="bx bx-map-pin mr-2"></i> Area Gejala</span>   
+                        </a>
+                    </li>
                     <?php if ($medical['medical_status'] == 'Selesai' && $faskes_user['faskes_type'] == 'Klinik') { ?> 
                     <li class="nav-item waves-effect waves-light">
                         <a class="nav-link" data-bs-toggle="tab" href="#refer-1" role="tab">
@@ -273,6 +279,49 @@
                             </div>
                         </div>
                         <?php endforeach; ?>
+                    </div>
+                    <div class="tab-pane" id="gejala-1" role="tabpanel">
+
+                        <p><i class="bx bx-info-circle"></i> Lihat kode area terjadinya gejala pada setiap bagian memilik kode yg berbeda.</p>
+                        <p><i class="bx bx-info-circle"></i> Klik tombol dibawah agar illustrasi area gejala muncul.</p>
+                        
+                        <div class="d-flex bd-highlight mb-3">
+                            <div class="p-2 bd-highlight">
+                            <a class="btn btn-success btn-sm mb-3" data-bs-toggle="collapse" href="#face" aria-expanded="true" aria-controls="face">
+                                <i class="bx bx-face mr-2"></i> Area Wajah
+                            </a>
+                            </div>
+                            <div class="p-2 bd-highlight">
+                            <a class="btn btn-primary btn-sm mb-3" data-bs-toggle="collapse" href="#body" aria-expanded="true" aria-controls="body">
+                                <i class="bx bx-body mr-2"></i> Area Tubuh
+                            </a>
+                            </div>
+                        </div>
+
+                        <div class="collapse" id="face">
+                            <div class="row">
+                                <div class="card border border-primary shadow-lg text-left">
+                                    <div class="card-body">
+                                        <div class="product-img position-relative">
+                                            <img src="<?= base_url() ?>public/assets/images/mapping/face.png" alt="" class="img-fluid mx-auto d-block">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="collapse" id="body">
+                            <div class="row">
+                                <div class="card border border-primary shadow-lg text-left">
+                                    <div class="card-body">
+                                        <div class="product-img position-relative">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="tab-pane" id="refer-1" role="tabpanel">
                         <?php if ($medical['medical_refer_type'] == NULL) { ?>
