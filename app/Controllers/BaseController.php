@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 use App\Libraries\JWTCI4;
+
 /**
  * Class BaseController
  *
@@ -30,6 +31,9 @@ use App\Models\Model_Role;
 use App\Models\Model_Treatment;
 use App\Models\Model_User;
 use App\Models\Model_Visitor;
+use App\Models\Model_Appointment;
+use App\Models\Model_Midtrans;
+use App\Models\Model_Treatment_Discount;
 use CodeIgniter\Model;
 
 class BaseController extends Controller
@@ -71,7 +75,10 @@ class BaseController extends Controller
 		$this->medoth 		= new Model_Medoth;
 		$this->medgal 		= new Model_Medgal;
 		$this->invoice 		= new Model_Invoice;
-		$this->product_stock= new Model_Product_Stock();
+		$this->product_stock= new Model_Product_Stock;
+		$this->appointment	= new Model_Appointment;
+        $this->midtrans     = new Model_Midtrans;
+        $this->discount     = new Model_Treatment_Discount;
 		$this->db 			= \Config\Database::connect();
 	}
 
@@ -82,6 +89,26 @@ class BaseController extends Controller
 		$user_id = $user->uid;
 		$userdata= $this->user->find($user_id);
 		return $userdata;
+	}
+
+    public function transaction_fee($invoice_method, $amount){
+		if ($invoice_method == 'Cash') {
+            $invoice_admin_fee = 0;
+        } elseif ($invoice_method == 'VA') {
+            $midtrans_va_fee = 4000;
+            $ppn             = 0.11;
+            $vat             = $midtrans_va_fee * $ppn;
+            $invoice_admin_fee = $midtrans_va_fee + $vat;
+        } elseif ($invoice_method == 'E-WALLET') {
+            $invoice_admin_fee = $amount * 0.02;
+        } elseif ($invoice_method == 'QR') {
+            $invoice_admin_fee = $amount * 0.007;
+        } elseif ($invoice_method == NULL) {
+            $invoice_method == 'QR';
+            $invoice_admin_fee = $amount * 0.007;
+        }
+
+        return $invoice_admin_fee;
 	}
 
 	public function generate_patient_code()
@@ -121,6 +148,44 @@ class BaseController extends Controller
             $code1          = substr($last,0, 7); // get 7 first char
             $code2          = $code0 + 1;
             $code2          = str_pad($code2,7,"0",STR_PAD_LEFT);
+            $medical_code   = $code1 . $code2;
+        }
+        return $medical_code;
+    }
+
+	public function generate_medical_code_rujukan($faskes_code, $faskes_initial)
+    {
+        $initial            = $faskes_initial;
+        $last               = $this->medical->where('medical_faskes', $faskes_code )->orderBy('medical_code', 'desc')->first();
+        
+        if ($last == NULL) {
+            $last           = '0000001';
+            $medical_code   = 'MED-' . $initial . '-'  . $last;
+        } else {
+            $last           = $last['medical_code'];
+            $code0          = substr($last, -7); // get last 7 char
+            $code1          = substr($last,0, 7); // get 7 first char
+            $code2          = $code0 + 1;
+            $code2          = str_pad($code2,7,"0",STR_PAD_LEFT);
+            $medical_code   = $code1 . $code2;
+        }
+        return $medical_code;
+    }
+
+	public function generate_appointment_code_rujukan($faskes_code, $faskes_initial)
+    {
+        $initial            = $faskes_initial;
+        $last               = $this->medical->where('medical_faskes', $faskes_code )->orderBy('medical_code', 'desc')->first();
+        
+        if ($last == NULL) {
+            $last           = '00001';
+            $medical_code   = 'AP-' . $initial . '-'  . $last;
+        } else {
+            $last           = $last['medical_code'];
+            $code0          = substr($last, -5); // get last 5 char
+            $code1          = substr($last,0, 6); // get 6 first char
+            $code2          = $code0 + 1;
+            $code2          = str_pad($code2,5,"0",STR_PAD_LEFT);
             $medical_code   = $code1 . $code2;
         }
         return $medical_code;

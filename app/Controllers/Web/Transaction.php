@@ -72,13 +72,37 @@ class Transaction extends BaseController
             $updateMedical = [
                 'medical_status' => 'Selesai',
             ];
+            $this->db->transStart();
             $this->invoice->update($invoice_id, $updateInvoice);
             $this->medical->update($medical_code, $updateMedical);
-
+            $this->db->transComplete();
             $response = [
                 'success' => 'Data Berhasil Disimpan',
             ];
 
+            echo json_encode($response);
+        }
+    }
+
+    public function formpayinfo()
+    {
+        if ($this->request->isAJAX()) {
+            $invoice_id = $this->request->getVar('invoice_id');
+            $invoice    = $this->invoice->find($invoice_id);
+
+            $order_id    = $invoice['invoice_midtrans'];
+            $midtrans   = $this->midtrans->find($order_id);
+
+            $exp        = '"'. date('Y-m-d H:i:s', strtotime('+60 minutes', strtotime($midtrans['transaction_time']))) . '"';
+
+            $data = [
+                'title'     => 'Payment Info',
+                'midtrans'   => $midtrans,
+                'exp'       => $exp
+            ];
+            $response = [
+                'data' => view('panel_faskes/medical/payinfo', $data)
+            ];
             echo json_encode($response);
         }
     }

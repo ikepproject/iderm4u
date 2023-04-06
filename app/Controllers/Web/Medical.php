@@ -20,8 +20,17 @@ class Medical extends BaseController
         if ($this->request->isAJAX()) {
             $user        = $this->userauth(); //Return array
             $user_faskes = $user['user_faskes'];
+            $faskes      = $this->faskes->find($user_faskes);
+            $faskes_type = $faskes['faskes_type'];
+
+            if ($faskes_type == "Klinik") {
+                $list    = $this->medical->list($user_faskes);
+            } elseif ($faskes_type == "Rumah Sakit") {
+                $list    = $this->medical->list_rs($user_faskes);
+            }
+            
             $data = [
-                'list' => $this->medical->list($user_faskes)
+                'list' => $list
             ];
             $response = [
                 'data' => view('panel_faskes/medical/list', $data)
@@ -52,6 +61,8 @@ class Medical extends BaseController
             $medical      = $this->medical->find($medical_code);
             $user_id      = $medical['medical_user'];
             $user         = $this->user->find($user_id);
+            $faskes_id    = $user['user_faskes'];
+            $faskes_user  = $this->faskes->find($faskes_id); 
             $patient_code = $user['user_patient'];
             $patient      = $this->patient->find($patient_code);
 
@@ -71,7 +82,8 @@ class Medical extends BaseController
                 'medoth'    => $medoth,
                 'medgal'    => $medgal,
                 'invoice'   => $invoice,
-                'faskes'    => $this->faskes->list_faskes()
+                'faskes_user'=> $faskes_user, 
+                'faskes_list'=> $this->faskes->list_faskes()
             ];
             $response = [
                 'data' => view('panel_faskes/medical/detail', $data)
@@ -126,26 +138,38 @@ class Medical extends BaseController
                     'medical_user'         => $this->request->getVar('medical_user'),
                     'medical_employee'     => $user_name,
                     'medical_type'         => $this->request->getVar('medical_type'),
-                    'medical_description'  => $this->request->getVar('medical_description'),
+                    'medical_description'  => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('medical_description'))),
                     'medical_create'       => $medical_create,
                     'medical_status'       => 'Proses',
                     'medical_creator_type' => 'Admin',
                 ];
+                //Transaction Start
+                $this->db->transStart();
                 $this->medical->insert($new);
 
                 $medtreat_items     = $this->request->getPost('group-medtreat[][medtreat_treatment]');
                 if ($medtreat_items != NULL) {
                     foreach ($medtreat_items as $medtreat) {
                         $medtreat_treatment           = $medtreat['medtreat_treatment'];
+                        $treatmentData  = $this->treatment->find($medtreat_treatment);
+
+                        if ($treatmentData['treatment_discount'] == 't') {
+                            $discount       = round((($treatmentData['treatment_price']-$treatmentData['treatment_discount_price'])/$treatmentData['treatment_price'])*100,2);
+                            $treatmentName  = 'PROMO '. $discount . '% - '. $treatmentData['treatment_name'];
+                            $treatmentPrice = $treatmentData['treatment_discount_price'];
+                        } else {
+                            $treatmentName  = $treatmentData['treatment_name'];
+                            $treatmentPrice = $treatmentData['treatment_price'];
+                        }
+                        
                         $newMedtreat = [
                             'medtreat_medical'        => $medical_code,
-                            'medtreat_treatment'      => $medtreat_treatment
+                            'medtreat_treatment'      => $medtreat_treatment,
+                            'medtreat_name'           => $treatmentName,
+                            'medtreat_price'          => $treatmentPrice,
                         ];
-                        $treatmentData = $this->treatment->find($medtreat_treatment);
-                        $treatmentPrice= $treatmentData['treatment_price'];
                         $amount        = $amount + $treatmentPrice; 
                         $this->medtreat->insert($newMedtreat);
-                        // $tes1[] = $medtreat_treatment;
                     }
                 }
                 
@@ -154,23 +178,30 @@ class Medical extends BaseController
                     foreach ($medprod_items as $medprod ) {
                         $medprod_product       = $medprod['medprod_product'];
                         $medprod_qty           = $medprod['medprod_qty'];
+                        if ($medprod_qty == NULL) {
+                            $medprod_qty = 1;
+                        }
+                        $productData           = $this->product->find($medprod_product);
+                        $productName           = $productData['product_name'];
+                        $productPrice          = $productData['product_price'] * $medprod_qty;
                         $newMedprod = [
                             'medprod_medical'  => $medical_code,
                             'medprod_product'  => $medprod_product,
-                            'medprod_qty'      => $medprod_qty
+                            'medprod_qty'      => $medprod_qty,
+                            'medprod_price'    => $productPrice,
+                            'medprod_name'     => $productName
                         ];
-                        $productData = $this->product->find($medprod_product);
-                        $productPrice= $productData['product_price'] * $medprod_qty;
+                        
                         $amount      = $amount + $productPrice; 
-
+                        
                         $productQty  = $productData['product_qty'] - $medprod_qty;
                         $updateProduct = [
                             'product_qty' => $productQty
                         ];
-                        $this->db->transStart();
+                        
                         $this->medprod->insert($newMedprod);
                         $this->product->update($medprod_product, $updateProduct);
-                        $this->db->transComplete();
+                        
                     }
                 }
 
@@ -179,6 +210,9 @@ class Medical extends BaseController
                     foreach ($medoth_items as $medoth) {
                         $medoth_name         = $medoth['medoth_name'];
                         $medoth_qty          = $medoth['medoth_qty'];
+                        if ($medoth_qty == NULL) {
+                            $medoth_qty = 1;
+                        }
                         $medoth_price        = str_replace(str_split('Rp. .'), '', $medoth['medoth_price']);
                         $newMedoth = [
                             'medoth_medical'  => $medical_code,
@@ -220,13 +254,9 @@ class Medical extends BaseController
                 }
 
                 $invoice_method = $this->request->getVar('invoice_method');
-                if ($invoice_method == 'VA') {
-                    $invoice_admin_fee = 3500;
-                } elseif ($invoice_method == 'QR') {
-                    $invoice_admin_fee = $amount * 0.007;
-                } else {
-                    $invoice_admin_fee = 0;
-                }
+                
+                $invoice_admin_fee = $this->transaction_fee($invoice_method, $amount);
+
                 $amount = $amount + $invoice_admin_fee;
                 $invoice_code = 'INV-' . $initial . '-'  . $this->request->getVar('medical_user') .date('YmdHis');
                 $newInvoice = [
@@ -238,6 +268,9 @@ class Medical extends BaseController
                     'invoice_admin_fee' => $invoice_admin_fee,
                 ];
                 $this->invoice->insert($newInvoice);
+
+                $this->db->transComplete();
+                //Transaction End
 
                 $response = [
                     'success' => 'Data Berhasil Disimpan',
@@ -314,11 +347,14 @@ class Medical extends BaseController
         if ($this->request->isAJAX()) {
 
             $medical_code = $this->request->getVar('medical_code');
+            $modul        = $this->request->getVar('modul');                // Kunjungan atau Rujukan
+
             $medtreat     = $this->medtreat->find_medical($medical_code);
             $medprod      = $this->medprod->find_medical($medical_code);
             $medoth       = $this->medoth->find_medical($medical_code);
             $medgal       = $this->medgal->find_medical($medical_code);
             $invoice      = $this->invoice->find_medical($medical_code);
+            $appointment  = $this->appointment->find_medical($medical_code);
 
             $this->db->transStart();
             if (count($medtreat) != 0) {
@@ -352,8 +388,24 @@ class Medical extends BaseController
                     $this->medgal->delete($gallery['medgal_id']);
                 }
             }
-
-            $this->invoice->delete($invoice['invoice_id']);
+            
+            if ($modul == 'Lokal') {
+                $this->invoice->delete($invoice['invoice_id']);
+            } elseif ($modul != 'Lokal') {
+                $this->appointment->delete($appointment['appointment_id']);
+                $medical = $this->medical->find($medical_code);
+                $medical_refer_code = $medical['medical_refer_code'];
+                $updateOrigin = [
+                    'medical_refer_type'   => NULL,
+                    'medical_refer_origin' => NULL,
+                    'medical_refer_code' => NULL
+                ];
+                $this->medical->update($medical_refer_code, $updateOrigin);
+                if ($modul == 'Teledermatologi') {
+                    $this->invoice->delete($invoice['invoice_id']);
+                }
+            }
+            
             $this->medical->delete($medical_code);
             $this->db->transComplete();
 

@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="modaladd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-modal="true" style="display: block;">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle"><?= $title ?></h5>
@@ -59,13 +59,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="patient_address" class="form-label">Alamat</label>
-                            <textarea class="form-control" id="patient_address" name="patient_address">
-                            </textarea>
+                            <textarea class="form-control" id="patient_address" name="patient_address"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="patient_other" class="form-label">Keterangan Lain</label>
-                            <textarea class="form-control" id="patient_other" name="patient_other">
-                            </textarea>
+                            <textarea class="form-control" id="patient_other" name="patient_other"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="user_photo" class="form-label">Foto</label>

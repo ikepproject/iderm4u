@@ -1,9 +1,9 @@
-<table id="datatable-product" class="table table-striped table-bordered dt-responsive nowrap w-100 ">
+<table id="datatable-product" class="table table-striped table-bordered dt-responsive wrap w-100 ">
     <thead>
         <tr class="table-secondary">
             <th width="2%">#</th>
-            <th width="10%">ID</th>
             <th width="15%">Nama</th>
+            <th width="10%">ID</th>
             <th width="10%">Status</th>
             <th width="10%">Harga</th>
             <th width="10%">Qty</th>
@@ -19,8 +19,8 @@
             $nomor++; ?>
             <tr>
                 <td><?= $nomor ?></td>
-                <td><?= $data['product_code'] ?></td>
                 <td><?= $data['product_name'] ?></td>
+                <td><?= $data['product_code'] ?></td>
                 <td>
                     <?php if ($data['product_status'] == 't') { ?> 
                         <span class="badge rounded-pill bg-success">Aktif</span>
@@ -47,8 +47,9 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-<div class="stockmodal"></div>
 <div class="editmodal"></div>
+<div class="stockmodal"></div>
+
 <script>
 $(document).ready(function () {
     //product Table

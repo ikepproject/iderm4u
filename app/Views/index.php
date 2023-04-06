@@ -44,7 +44,7 @@
 
                         <div class="row justify-content-center mt-5">
                             <div class="col-md-8">
-                                <div data-countdown="2023/04/1" class="counter-number"></div>
+                                <div data-countdown="2023/05/1" class="counter-number"></div>
                             </div> <!-- end col-->
                         </div> <!-- end row-->
                     </div>

@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="modaladd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-modal="true" style="display: block;">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle"><?= $title ?></h5>
@@ -42,8 +42,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="product_description" class="form-label">Keterangan product</label>
-                            <textarea class="form-control" id="product_description" name="product_description">
-                            </textarea>
+                            <textarea class="form-control" id="product_description" name="product_description"></textarea>
                         </div>
                 </div>
                 <div class="modal-footer">

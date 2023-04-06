@@ -40,19 +40,22 @@
                             <form class="form-horizontal">
 
                                 <div class="mb-3">
-                                    <label for="user_username" class="form-label">Username</label>
+                                    <label for="user_username" class="form-label">Username <code>*</code></label>
                                     <input type="text" class="form-control" name="user_username" placeholder="Masukan username anda...">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Password</label>
+                                    <label class="form-label">Password <code>*</code></label>
                                     <div class="input-group auth-pass-inputgroup">
                                         <input type="password" class="form-control" placeholder="Masukan password anda..." aria-label="Password" aria-describedby="password-addon" name="user_password">
                                         <button class="btn btn-light " type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
                                     </div>
                                 </div>
+                                
+                                <label class="form-label">Konfirmasi captcha dibawah <code>*</code></label>
+                                <div class="g-recaptcha mb-3" data-sitekey="<?= $site_key ?>"></div>
 
-                                <div class="form-check">
+                                <div class="form-check mb-3">
                                     <input class="form-check-input" type="checkbox" value="1" id="remember">
                                     <label class="form-check-label" for="remember">
                                         Ingat saya
@@ -85,7 +88,7 @@
             </div>
         </div>
     </div>
-
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
     $(document).ready(function () {
     // Login

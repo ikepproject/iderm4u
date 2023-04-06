@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="modaledit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-modal="true" style="display: block;">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle"><?= $title ?></h5>
@@ -41,8 +41,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="product_description" class="form-label">Keterangan Produk</label>
-                        <textarea class="form-control" id="product_description" name="product_description">
-                        </textarea>
+                        <textarea class="form-control" id="product_description" name="product_description"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -65,13 +64,21 @@
 
         $(".formupdate").submit(function (e) {
         e.preventDefault();
-        var form_data = new FormData($('form')[0]);
+        // var form_data = new FormData($('form')[0]);
         $.ajax({
         type: "post",
         url: $(this).attr("action"),
-        data: form_data,
-        processData: false,
-        contentType: false,
+        data: {
+            product_code: $('input#product_code').val(),
+            product_name: $('input#product_name').val(),
+            product_price: $('input#product_price').val(),
+            product_qty: $('input#product_qty').val(),
+            product_unit: $('input#product_unit').val(),
+            product_status: $('select#product_status').val(),
+            product_description: $('textarea#product_description').val(),
+        },
+        // processData: false,
+        // contentType: false,
         dataType: "json",
         beforeSend: function () {
             $("#save").attr("disabled", true);

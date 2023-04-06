@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="modalstock" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-modal="true" style="display: block;">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle"><?= $title ?></h5>
@@ -51,8 +51,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="stock_description" class="form-label">Keterangan Restcok</label>
-                                        <textarea class="form-control" id="stock_description" name="stock_description">
-                                        </textarea>
+                                        <textarea class="form-control" id="stock_description" name="stock_description"></textarea>
                                     </div>
                             </div>
                             <div class="modal-footer">
@@ -105,13 +104,18 @@
 
         $(".formrestock").submit(function (e) {
         e.preventDefault();
-        var form_data = new FormData($('form')[0]);
+        // var form_data = new FormData($('form')[0]);
         $.ajax({
         type: "post",
         url: $(this).attr("action"),
-        data: form_data,
-        processData: false,
-        contentType: false,
+        data: {
+            product_code: $('input#product_code').val(),
+            stock_type: $('select#stock_type').val(),
+            stock_qty: $('input#stock_qty').val(),
+            stock_description: $('textarea#stock_description').val(),
+        },
+        // processData: false,
+        // contentType: false,
         dataType: "json",
         beforeSend: function () {
             $("#restock").attr("disabled", true);

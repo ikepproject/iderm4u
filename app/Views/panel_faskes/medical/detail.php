@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="modaldetail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-modal="true" style="display: block;">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle"><?= $title ?></h5>
@@ -21,6 +21,20 @@
                             <span class="d-none d-md-block"><i class="far fa-images mr-2"></i> Foto</span>   
                         </a>
                     </li>
+                    <li class="nav-item waves-effect waves-light">
+                        <a class="nav-link" data-bs-toggle="tab" href="#gejala-1" role="tab">
+                            <span class="d-block d-md-none"><i class="bx bx-map-pin"></i></span>
+                            <span class="d-none d-md-block"><i class="bx bx-map-pin mr-2"></i> Area Gejala</span>   
+                        </a>
+                    </li>
+                    <?php if ($medical['medical_status'] == 'Selesai' && $faskes_user['faskes_type'] == 'Klinik') { ?> 
+                    <li class="nav-item waves-effect waves-light">
+                        <a class="nav-link" data-bs-toggle="tab" href="#refer-1" role="tab">
+                            <span class="d-block d-md-none"><i class="fas fa-ambulance"></i></span>
+                            <span class="d-none d-md-block"><i class="fas fa-ambulance mr-2"></i> Rujuk</span>   
+                        </a>
+                    </li>
+                    <?php } ?> 
                 </ul>
 
                 <!-- Tab panes -->
@@ -169,8 +183,8 @@
                                                             $nomor++; ?>
                                                             <tr>
                                                                 <td><?= $nomor ?></td>
-                                                                <td>TR - <?= $treatment['treatment_name'] ?></td>
-                                                                <td class="text-end">Rp <?= rupiah($treatment['treatment_price']) ?></td>
+                                                                <td>TR - <?= $treatment['medtreat_name'] ?></td>
+                                                                <td class="text-end">Rp <?= rupiah($treatment['medtreat_price']) ?></td>
                                                             </tr>
                                                             <?php endforeach; ?>
                                                          <?php } ?>
@@ -180,8 +194,8 @@
                                                             $nomor++; ?>
                                                             <tr>
                                                                 <td><?= $nomor ?></td>
-                                                                <td>PR - <?= $product['product_name'] ?> (<?= $product['medprod_qty'] ?>) @<?= rupiah($product['product_price']) ?></td>
-                                                                <td class="text-end">Rp <?= rupiah($product['product_price']*$product['medprod_qty']) ?></td>
+                                                                <td>PR - <?= $product['medprod_name'] ?> (<?= $product['medprod_qty'] ?>) @<?= rupiah($product['medprod_price']) ?></td>
+                                                                <td class="text-end">Rp <?= rupiah($product['medprod_price']*$product['medprod_qty']) ?></td>
                                                             </tr>
                                                             <?php endforeach; ?>
                                                          <?php } ?>
@@ -225,7 +239,7 @@
                         <input type="hidden" id="medical_code" name="medical_code" value="<?= $medical['medical_code'] ?>">
                         <div class="row">
                             <div class="mb-3">
-                                <label for="medgal_disease">Indikasi Dalam Foto</label>
+                                <label for="medgal_disease">Indikasi Dalam Foto (Jika lebih dari 1 indikasi pisah dengan tanda -)</label>
                                 <input type="text" class="form-control" id="medgal_disease" name="medgal_disease">
                             </div>
                             <div class="mb-3">
@@ -266,6 +280,125 @@
                         </div>
                         <?php endforeach; ?>
                     </div>
+                    <div class="tab-pane" id="gejala-1" role="tabpanel">
+
+                        <p><i class="bx bx-info-circle"></i> Lihat kode area terjadinya gejala pada setiap bagian memilik kode yg berbeda.</p>
+                        <p><i class="bx bx-info-circle"></i> Klik tombol dibawah agar illustrasi area gejala muncul.</p>
+                        
+                        <div class="d-flex bd-highlight mb-3">
+                            <div class="p-2 bd-highlight">
+                            <a class="btn btn-success btn-sm mb-3" data-bs-toggle="collapse" href="#face" aria-expanded="true" aria-controls="face">
+                                <i class="bx bx-face mr-2"></i> Area Wajah
+                            </a>
+                            </div>
+                            <div class="p-2 bd-highlight">
+                            <a class="btn btn-primary btn-sm mb-3" data-bs-toggle="collapse" href="#body" aria-expanded="true" aria-controls="body">
+                                <i class="bx bx-body mr-2"></i> Area Tubuh
+                            </a>
+                            </div>
+                        </div>
+
+                        <div class="collapse" id="face">
+                            <div class="row">
+                                <div class="card border border-primary shadow-lg text-left">
+                                    <div class="card-body">
+                                        <div class="product-img position-relative">
+                                            <img src="<?= base_url() ?>public/assets/images/mapping/face.png" alt="" class="img-fluid mx-auto d-block">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="collapse" id="body">
+                            <div class="row">
+                                <div class="card border border-primary shadow-lg text-left">
+                                    <div class="card-body">
+                                        <div class="product-img position-relative">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane" id="refer-1" role="tabpanel">
+                        <?php if ($medical['medical_refer_type'] == NULL) { ?>
+                            <div class="row">
+                                <div class="mb-3 text-center">
+                                    <a class="btn btn-primary btn-sm" data-bs-toggle="collapse" href="#RujukData" aria-expanded="true" aria-controls="patientData">
+                                        <i class="fas fa-expand-alt mr-2"></i> Info Rujukan
+                                    </a>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="collapse" id="RujukData">
+                                        <div class="card border border-primary shadow-lg">
+                                            <div class="card-body">
+                                                <?php foreach ($faskes_list as $key => $data) { ?>
+                                                    <strong><?= $data['faskes_name'] ?></strong> <br>
+                                                    Biaya Rujuk Teledermatologi: Rp <?= rupiah($data['faskes_refer_price']) ?> <br>
+                                                    Note: <?= $data['faskes_refer_note'] ?>
+                                                    <hr>
+                                                <?php } ?>
+                                                <p>Tanggal pasti Rujukan Kunjungan/Teledermatologi akan dikonfirmasi oleh Admin RS terlebih dahulu untuk menyesuaikan dengan jadwal Dokter yang tersedia. Pasien akan mendapatkan informasi lebih lanjut.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            
+                            <?= form_open('refer/create', ['class' => 'formReferAdd']) ?>
+                            <?= csrf_field(); ?>
+                            <input type="hidden" id="medical_refer_code" name="medical_refer_code" value="<?= $medical['medical_code'] ?>">
+                            <input type="hidden" id="medical_user" name="medical_user" value="<?= $medical['medical_user'] ?>">
+                            <div class="row">
+                                <div class="mb-3">
+                                    <label for="medical_refer_type">Pilih Tipe Rujukan <code>*</code></label>
+                                    <select class="form-control" name="medical_refer_type" id="medical_refer_type" onchange="showDiv(this)">
+                                        <option selected disabled>Pilih...</option>
+                                        <option value="Kunjungan">Rujuk Kunjungan</option>
+                                        <option value="Teledermatologi">Rujuk Teledermatologi (ada biaya awal yg harus dibayarkan)</option>
+                                    </select>
+                                    <div class="invalid-feedback error_medical_refer_type"></div>
+                                </div>
+                                <div class="mb-3" id="hidden_bayar" style="display: none;">
+                                    <label class="form-label">Cara Bayar<code>*</code></label>
+                                    <select class="form-control" name="invoice_method" id="invoice_method">
+                                        <option value="QR">QRIS (+ 0.7%)</option>
+                                        <option value="VA">Virtual Account (+ Rp 4.440)</option>
+                                        <!-- <option value="E-WALLET">GoPay (+ 2%)</option> -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3">
+                                    <label for="medical_faskes">Pilih Rumah Sakit Rujukan <code>*</code></label>
+                                    <select class="form-select" id="medical_faskes" name="medical_faskes">
+                                        <option selected disabled>Pilih...</option>
+                                        <?php foreach ($faskes_list as $key => $data) { ?>
+                                            <option value="<?= $data['faskes_code'] ?>"><?= $data['faskes_name'] ?> </option>
+                                        <?php } ?>
+                                    </select>
+                                    <div class="invalid-feedback error_medical_faskes"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Waktu yang Diharapkan dan Catatan Lain <code>*</code></label>
+                                <textarea class="form-control" name="appointment_note_user" id="appointment_note_user" placeholder="Cth: Hari Senin tgl xx-xx-xxx, diagnosisi awal ..."></textarea>
+                                <div class="invalid-feedback error_appointment_note_user"></div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-warning" id="refer" name="refer"><i class="bx bx-transfer-alt"></i> Rujuk</button>
+                                </div>
+                            </div>
+                            <?= form_close() ?>
+                        <?php } ?> 
+                        <?php if ($medical['medical_refer_type'] != NULL) { ?> 
+                            <h5 class="text-center">Data Kunjungan ini sudah dirujuk.</h5>
+                        <?php } ?> 
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -284,6 +417,14 @@ function preview_images() {
         $('#image_preview').append("<img style='object-fit:scale-down;width:150px;height:150px; margin-right:10px;' class='img-responsive' src='"+URL.createObjectURL(event.target.files[i])+"'>");
     }
 };
+
+function showDiv(select){
+    if(select.value=="Teledermatologi"){
+        document.getElementById('hidden_bayar').style.display = "block";
+        } else{
+        document.getElementById('hidden_bayar').style.display = "none";
+    }
+} 
 
 $(document).ready(function () {
     $(".formadd").submit(function (e) {
@@ -308,13 +449,14 @@ $(document).ready(function () {
     },
     success: function (response) {
         if (response.error) {
-        if (response.error.medical_user) {
-            $("#medical_user").addClass("is-invalid");
-            $(".error_medical_user").html(response.error.medical_user);
-        } else {
-            $("#medical_user").removeClass("is-invalid");
-            $(".error_medical_user").html("");
-        }
+
+            if (response.error.medical_user) {
+                $("#medical_user").addClass("is-invalid");
+                $(".error_medical_user").html(response.error.medical_user);
+            } else {
+                $("#medical_user").removeClass("is-invalid");
+                $(".error_medical_user").html("");
+            }
 
         } else {
         if (response.success) {
@@ -322,6 +464,70 @@ $(document).ready(function () {
             title: "Berhasil!",
             text: response.success,
             icon: response.icon,
+            showConfirmButton: false,
+            timer: 1500,
+            }).then(function () {
+                window.location = response.link;
+            });
+        }
+        }
+    },
+    });
+    });
+
+    $(".formReferAdd").submit(function (e) {
+    e.preventDefault();
+    var form_data = new FormData($('form')[1]);
+    $.ajax({
+    type: "post",
+    url: $(this).attr("action"),
+    data: form_data,
+    processData: false,
+    contentType: false,
+    dataType: "json",
+    beforeSend: function () {
+        $("#refer").attr("disabled", true);
+        $("#refer").html(
+        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> <i>Loading...</i>'
+        );
+    },
+    complete: function () {
+        $("#refer").removeAttr("disabled", false);
+        $("#refer").html("Rujuk");
+    },
+    success: function (response) {
+        if (response.error) {
+
+            if (response.error.medical_refer_type) {
+                $("#medical_refer_type").addClass("is-invalid");
+                $(".error_medical_refer_type").html(response.error.medical_refer_type);
+            } else {
+                $("#medical_refer_type").removeClass("is-invalid");
+                $(".error_medical_refer_type").html("");
+            }
+
+            if (response.error.medical_faskes) {
+                $("#medical_faskes").addClass("is-invalid");
+                $(".error_medical_faskes").html(response.error.medical_faskes);
+            } else {
+                $("#medical_faskes").removeClass("is-invalid");
+                $(".error_medical_faskes").html("");
+            }
+
+            if (response.error.appointment_note_user) {
+                $("#appointment_note_user").addClass("is-invalid");
+                $(".error_appointment_note_user").html(response.error.appointment_note_user);
+            } else {
+                $("#appointment_note_user").removeClass("is-invalid");
+                $(".error_appointment_note_user").html("");
+            }
+
+        } else {
+        if (response.success) {
+            Swal.fire({
+            title: "Berhasil!",
+            text: response.success,
+            icon: "success",
             showConfirmButton: false,
             timer: 1500,
             }).then(function () {

@@ -147,7 +147,7 @@ class Product extends BaseController
                     'product_price'       => $product_price,
                     'product_qty'         => $this->request->getVar('product_qty'),
                     'product_unit'        => $this->request->getVar('product_unit'),
-                    'product_description' => $this->request->getVar('product_description'),
+                    'product_description' => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('product_description'))),
                     'product_faskes'      => $user_faskes,
                     'product_create'      => date('Y-m-d H:i:s'),
                     'product_status'      => $this->request->getVar('product_status'),
@@ -205,7 +205,7 @@ class Product extends BaseController
                     'product_name'        => $this->request->getVar('product_name'),
                     'product_price'       => $product_price,
                     'product_unit'        => $this->request->getVar('product_unit'),
-                    'product_description' => $this->request->getVar('product_description'),
+                    'product_description' => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('product_description'))),
                     'product_edit'        => date('Y-m-d H:i:s'),
                     'product_status'      => $this->request->getVar('product_status'),
                 ];
@@ -262,7 +262,7 @@ class Product extends BaseController
                     'stock_type'        => $stock_type,
                     'stock_qty'         => $stock_qty,
                     'stock_create'      => date('Y-m-d H:i:s'),
-                    'stock_description' => trim($this->request->getVar('stock_description'))
+                    'stock_description' => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('stock_description'))),
                 ];
 
                 $updateProduct = [

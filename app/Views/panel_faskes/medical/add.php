@@ -48,8 +48,9 @@
                           <select class="form-control" name="invoice_method" id="invoice_method">
                             <option selected disabled>Pilih...</option>
                             <option value="Cash">Cash</option>
-                            <option value="VA" disabled>Transfer / Virtual Account (+ Rp 3.500)</option>
-                            <option value="QR" disabled>QRIS (+ 0.7%)</option>
+                            <option value="VA">Virtual Account (+ Rp 4.440)</option>
+                            <!-- <option value="E-WALLET">GoPay (+ 2%)</option> -->
+                            <option value="QR">QRIS (+ 0.7%)</option>
                           </select>
                           <div class="invalid-feedback error_invoice_method"></div>
                         </div>
@@ -74,7 +75,10 @@
                                     <select class="form-select select2repeater" id="medtreat_treatment" name="medtreat_treatment">
                                         <option selected disabled>Pilih...</option>
                                         <?php foreach ($treatment as $key => $data) { ?>
-                                            <option value="<?= $data['treatment_code'] ?>"><?= $data['treatment_name'] ?> - Rp <?= rupiah($data['treatment_price']) ?></option>
+                                            <option value="<?= $data['treatment_code'] ?>"><?= $data['treatment_name'] ?> - 
+                                              <?php if ($data['treatment_discount'] == 'f' || $data['treatment_discount'] == NULL) { ?> Rp <?= rupiah( $data['treatment_price']) ?> <?php } ?>
+                                              <?php if ($data['treatment_discount'] == 't') { ?> PROMO<i class="bx bxs-offer"></i> <?= round((($data['treatment_price']-$data['treatment_discount_price'])/$data['treatment_price'])*100,2) ?> % - Rp <?= rupiah($data['treatment_discount_price']) ?> <?php } ?>
+                                            </option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -162,7 +166,14 @@
                             <input id="inp-krajee-explorer-fa6-1" name="inp-krajee-explorer-fa6-1" type="file" multiple accept="image">
                         </div> -->
                         <div class="mb-3">
-                          <label for="medgal_disease">Indikasi Dalam Foto</label>
+                          <label for="medgal_disease">Indikasi Dalam Foto 
+                            <button type="button" class="btn btn-light position-relative p-0 avatar-xs rounded-circle" data-toggle="tooltip" data-placement="top" 
+                            title="Masukan kode letak area gejala dan indikasi gejala yang dialami pasien, jika lebih dari 1 indikasi pisah dengan '-'. Contoh: w1jerawat-w3komedo-dst. "> <span class="avatar-title bg-transparent text-reset"> <i class="bx bxs-info-circle"></i> </span>
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-sm waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#gejalaModal">
+                              <i class="bx bx-map-pin font-size-16 align-middle me-2"></i> Kode Area Gejala
+                            </button>
+                          </label>
                           <input type="text" class="form-control" id="medgal_disease" name="medgal_disease">
                         </div>
                         <div class="mb-3">
@@ -186,6 +197,64 @@
     </div> <!-- container-fluid -->
 </div>
 
+<!-- Modal Kode Area Gejala -->
+<div class="modal fade" id="gejalaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="gejalaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="gejalaModalLabel">Kode Area Gejala</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+      <p><i class="bx bx-info-circle"></i> Lihat kode area terjadinya gejala pada setiap bagian memilik kode yg berbeda.</p>
+      <p><i class="bx bx-info-circle"></i> Klik tombol dibawah agar illustrasi area gejala muncul.</p>
+
+      <div class="d-flex bd-highlight mb-3">
+        <div class="p-2 bd-highlight">
+          <a class="btn btn-success btn-sm mb-3" data-bs-toggle="collapse" href="#face" aria-expanded="true" aria-controls="face">
+              <i class="bx bx-face mr-2"></i> Area Wajah
+          </a>
+        </div>
+        <div class="p-2 bd-highlight">
+          <a class="btn btn-primary btn-sm mb-3" data-bs-toggle="collapse" href="#body" aria-expanded="true" aria-controls="body">
+              <i class="bx bx-body mr-2"></i> Area Tubuh
+          </a>
+        </div>
+      </div>
+
+        <div class="collapse" id="face">
+          <div class="row">
+              <div class="card border border-primary shadow-lg text-left">
+                  <div class="card-body">
+                    <div class="product-img position-relative">
+                        <img src="<?= base_url() ?>public/assets/images/mapping/face.png" alt="" class="img-fluid mx-auto d-block">
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="collapse" id="body">
+          <div class="row">
+              <div class="card border border-primary shadow-lg text-left">
+                  <div class="card-body">
+                    <div class="product-img position-relative">
+                        
+                    </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- End Page-content -->
 <!-- form repeater js -->
 <script src="<?= base_url() ?>/public/assets/libs/jquery.repeater/jquery.repeater.min.js"></script>
@@ -203,6 +272,9 @@ $("#inp-krajee-explorer-fa6-1").fileinput({
 });
 </script> -->
 <script>
+$(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+  });
 function preview_images() 
 {
   var total_file=document.getElementById("images").files.length;

@@ -171,8 +171,8 @@ class Patient extends BaseController
                     'patient_gender'       => $this->request->getVar('patient_gender'),
                     'patient_type'         => $this->request->getVar('patient_type'),
                     'patient_birth'        => $this->request->getVar('patient_birth'),
-                    'patient_address'      => trim($this->request->getVar('patient_address')),
-                    'patient_other'        => trim($this->request->getVar('patient_other')),
+                    'patient_address'      => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('patient_address'))) ,
+                    'patient_other'        => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('patient_other'))),
                     'patient_create'       => date('Y-m-d H:i:s'),
                 ];
 
@@ -257,8 +257,8 @@ class Patient extends BaseController
                     'patient_type'         => $this->request->getVar('edit_patient_type'),
                     'patient_birth'        => $this->request->getVar('edit_patient_birth'),
                     'patient_phone'        => $this->request->getVar('edit_patient_phone'),
-                    'patient_address'      => $this->request->getVar('edit_patient_address'),
-                    'patient_other'        => $this->request->getVar('edit_patient_other'),
+                    'patient_address'      => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('edit_patient_address'))),
+                    'patient_other'        => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('edit_patient_other'))),
                     'patient_edit'         => date('Y-m-d H:i:s'),
                 ];
                 

@@ -2,8 +2,8 @@
     <thead>
         <tr class="table-secondary">
             <th width="2%">#</th>
-            <th width="6%">ID</th>
             <th width="11%">Pasien</th>
+            <th width="6%">ID</th>
             <th width="7%">Status</th>
             <th width="10%">Jenis</th>
             <th width="8%">Waktu</th>
@@ -17,8 +17,8 @@
             $nomor++; ?>
             <tr>
                 <td><?= $nomor ?></td>
-                <td><?= $data['medical_code'] ?></td>
                 <td><?= $data['patient_name'] ?></td>
+                <td><?= $data['medical_code'] ?></td>
                 <td>
                     <?php if ($data['medical_status'] == 'Selesai') { ?> 
                         <span class="badge rounded-pill bg-success">Selesai</span>
@@ -40,6 +40,9 @@
                     <?php if ($data['medical_type'] == 'Lainnya') { ?> 
                         <span class="badge bg-warning">Lainnya</span>
                     <?php } ?> 
+                    <?php if ($data['medical_refer_type'] != NULL && $data['medical_refer_code'] == NULL) { ?> 
+                        <span class="badge bg-danger">Dirujuk</span>
+                    <?php } ?>
                 </td>
                 <td><?= longdate_indo(substr($data['medical_create'],0,10)) ?></td>
                 <td><?= $data['medical_description'] ?></td>
@@ -48,9 +51,13 @@
                         <i class="bx bx-detail"></i>
                     </button>
                     <?php if ($data['medical_status'] == 'Proses') { ?> 
-                        <button type="button" class="btn btn-danger mb-2" onclick="cancel('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>')">
+
+                        <?php if ($data['invoice_midtrans'] == NULL) { ?> 
+                            <button type="button" class="btn btn-danger mb-2" onclick="cancel('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>')">
                             <i class="bx bx-x"></i>
-                        </button>
+                            </button>
+                        <?php } ?> 
+
                         <a type="button" class="btn btn-success mb-2" href="<?= base_url('transaction/checkout/' . $data['medical_code']) ?>">
                             <i class="bx bx-check"></i>
                         </a>
@@ -68,12 +75,18 @@
     </tbody>
 </table>
 
+<div class="detailmodal"></div>
+
 <script>
 $(document).ready(function () {
     //Patient Table
     var table_medical = $("#datatable-medical").DataTable({
     stateSave: true,
     lengthChange: true,
+    processing: true,
+    language: {
+        processing: '<i class="fa fa-spinner fa-spin"></i> Loading...'
+    },
     lengthMenu: [
         [25, 70, 100, -1],
         [25, 70, 100, "All"],
@@ -123,7 +136,8 @@ function cancel(medical_code, patient_name) {
                 type: "post",
                 dataType: "json",
                 data: {
-                    medical_code: medical_code
+                    medical_code: medical_code,
+                    modul: 'Lokal'
                 },
                 success: function(response) {
                     if (response.success) {

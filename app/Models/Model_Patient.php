@@ -11,6 +11,7 @@ class Model_Patient extends Model
     protected $useAutoIncrement = false;
     protected $allowedFields = ['patient_code', 'patient_name', 'patient_gender', 'patient_type', 'patient_birth', 'patient_address', 'patient_other', 'patient_create', 'patient_edit'];
 
+    //Patient - getData
     public function list()
     {
         return $this->table('tb_patient')

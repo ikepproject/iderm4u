@@ -63,4 +63,14 @@ class Model_User extends Model
             ->orderBy('patient_code', 'desc')
             ->get()->getFirstRow('array');
     }
+
+    //Dashboard - Total Patient
+    public function total_patient($user_faskes)
+    {
+        return $this->table('tb_user')
+            ->select('user_id')
+            ->where('user_faskes', $user_faskes)
+            ->where('user_role', 1011)
+            ->countAllResults();
+    }
 }
