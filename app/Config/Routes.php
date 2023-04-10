@@ -137,7 +137,7 @@ $routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["f
 // $routes->get('transaction2/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);  //Pay & Invoice 
 $routes->post('transaction/token', 'Web\Midtrans::token', ["filter" => "authweb"]);  
 $routes->post('transaction/finish', 'Web\Midtrans::finish'); 
-$routes->post('transaction/hook2', 'Web\Midtrans::hook2');
+$routes->post('transaction/hook', 'Web\Midtrans::hook');
 
 $routes->post('transaction/formpayinfo', 'Web\Transaction::formpayinfo', ["filter" => "authweb"]);       //Cash Checkout Modal
 // $routes->post('transaction/formcash', 'Web\Transaction::formcash', ["filter" => "authweb"]);         //Cash Checkout Modal

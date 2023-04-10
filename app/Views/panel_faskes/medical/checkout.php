@@ -205,8 +205,9 @@
                                                     <button type="submit" id="pay-button" class="btn btn-primary w-md waves-effect waves-light"><i class="bx bxs-credit-card mr-2"></i> Payment Gateway</button>
                                                 </form>
                                             <?php } ?>
-                                            <?php if ($invoice['invoice_midtrans'] != NULL) { ?> 
-                                                <button type="button" class="btn btn-info w-md waves-effect waves-light" onclick="payinfo('<?= $invoice['invoice_id'] ?>')"><i class="bx bx-credit-card mr-2"></i> Payment Info</button>
+                                            <?php if ($invoice['invoice_midtrans'] != NULL && $invoice['invoice_status'] != 'SUCCEEDED') { ?> 
+                                                <!-- <button type="button" class="btn btn-info w-md waves-effect waves-light" onclick="payinfo('<?= $invoice['invoice_id'] ?>')"><i class="bx bx-credit-card mr-2"></i> Payment Info</button> -->
+                                                <button id="pay-button2" class="btn btn-info w-md waves-effect waves-light">Proceed to Payment</button>
                                             <?php } ?>
                                         <?php } ?> 
                                     <?php } ?> 
@@ -357,20 +358,53 @@ function cash(invoice_amount_view, invoice_amount, invoice_id, medical_code) {
     })
 }
 
-function payinfo(invoice_id) {
-    $.ajax({
-        type: "post",
-        url: "<?= site_url('transaction/formpayinfo') ?>",
-        data: {
-            invoice_id: invoice_id
-        },
-        dataType: "json",
-        success: function(response) {
-            $('.payinfomodal').html(response.data).show();
-            $('#modalpayinfo').modal('show');
-        }
+// function payinfo(invoice_id) {
+//     $.ajax({
+//         type: "post",
+//         url: "<?= site_url('transaction/formpayinfo') ?>",
+//         data: {
+//             invoice_id: invoice_id
+//         },
+//         dataType: "json",
+//         success: function(response) {
+//             $('.payinfomodal').html(response.data).show();
+//             $('#modalpayinfo').modal('show');
+//         }
+//     });
+// }
+
+var payButton2 = document.getElementById('pay-button2');
+payButton2.onclick = function (event) {
+snap.show()
+var token = "<?= $invoice['invoice_snap_token'] ?>";
+var redirectUrl = null;
+if (token == null) {
+    window.location.href = redirectUrl;
+} else {
+    snap.pay(token, {
+    // Optional
+    onSuccess: function(result){
+        /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+        console.log("OnSuccess : "+ JSON.stringify(result, null, 2));
+    },
+    // Optional
+    onPending: function(result){
+        /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+        console.log("OnPending : "+ JSON.stringify(result, null, 2));
+    },
+    // Optional
+    onError: function(result){
+        /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+    },
+    onClose: function (result) {
+        console.log("OnClose : "+ JSON.stringify(result, null, 2));
+    },
+    language: "ID"
     });
+    return false;
 }
+};
+
 </script>
 
 <?= $this->endSection('isi') ?>
