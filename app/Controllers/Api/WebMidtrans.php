@@ -34,9 +34,9 @@ class WebMidtrans extends ResourceController
 
     public function hook()
     {
-        $tb_invoice     = new \App\Models\Model_Invoice();
-        $tb_midtrans    = new \App\Models\Model_Midtrans();
-        $tb_medical     = new \App\Models\Model_Medical();
+        // $tb_invoice     = new \App\Models\Model_Invoice();
+        // $tb_midtrans    = new \App\Models\Model_Midtrans();
+        // $tb_medical     = new \App\Models\Model_Medical();
         // $db 	        = \Config\Database::connect();
 
         $notif          = new \Midtrans\Notification();
@@ -57,29 +57,29 @@ class WebMidtrans extends ResourceController
             $transaction_status = $notif->transaction_status;
 
             if ($transaction_status == 'settlement') {
-                $invoice_id     = strtok($order_id, '-');
-                $invoice        = $tb_invoice->find($invoice_id);
+                // $invoice_id     = strtok($order_id, '-');
+                // $invoice        = $tb_invoice->find($invoice_id);
 
-                $updateMidtrans  = [
-                    'status_code'       => $notif->status_code,
-                    'status_message'    => $notif->status_message,
-                    'gross_amount'      => strtok($notif->gross_amount, '.'),
-                    'transaction_status'=> $notif->transaction_status,
-                ];
+                // $updateMidtrans  = [
+                //     'status_code'       => $notif->status_code,
+                //     'status_message'    => $notif->status_message,
+                //     'gross_amount'      => strtok($notif->gross_amount, '.'),
+                //     'transaction_status'=> $notif->transaction_status,
+                // ];
 
-                $updateInvoice  = [
-                    'invoice_pay'      => strtok($notif->gross_amount, '.'),
-                    'invoice_status'   => 'SUCCEEDED',
-                ];
+                // $updateInvoice  = [
+                //     'invoice_pay'      => strtok($notif->gross_amount, '.'),
+                //     'invoice_status'   => 'SUCCEEDED',
+                // ];
                 
-                $updateMedical = [
-                    'medical_status'   => 'Selesai'
-                ];
+                // $updateMedical = [
+                //     'medical_status'   => 'Selesai'
+                // ];
 
-                // $db->transStart();
-                $tb_midtrans->update($order_id, $updateMidtrans);
-                $tb_medical->update($invoice['invoice_medical'], $updateMedical);
-                $tb_invoice->update($invoice_id, $updateInvoice);
+                // // $db->transStart();
+                // $tb_midtrans->update($order_id, $updateMidtrans);
+                // $tb_medical->update($invoice['invoice_medical'], $updateMedical);
+                // $tb_invoice->update($invoice_id, $updateInvoice);
                 // $db->transComplete();
 
                 $data = [
@@ -87,22 +87,22 @@ class WebMidtrans extends ResourceController
                 ];
 
             } elseif ($transaction_status == 'expire') {
-                $invoice_id     = strtok($order_id, '-');
-                $invoice        = $tb_invoice->find($invoice_id);
+                // $invoice_id     = strtok($order_id, '-');
+                // $invoice        = $tb_invoice->find($invoice_id);
 
-                $updateMidtrans  = [
-                    'status_code'       => $notif->status_code,
-                    'status_message'    => $notif->status_message,
-                    'transaction_status'=> $notif->transaction_status,
-                ];
+                // $updateMidtrans  = [
+                //     'status_code'       => $notif->status_code,
+                //     'status_message'    => $notif->status_message,
+                //     'transaction_status'=> $notif->transaction_status,
+                // ];
 
-                $updateInvoice  = [
-                    'invoice_midtrans'   => NULL,
-                ];
+                // $updateInvoice  = [
+                //     'invoice_midtrans'   => NULL,
+                // ];
 
-                // $db->transStart();
-                $tb_midtrans->update($order_id, $updateMidtrans);
-                $tb_invoice->update($invoice_id, $updateInvoice);
+                // // $db->transStart();
+                // $tb_midtrans->update($order_id, $updateMidtrans);
+                // $tb_invoice->update($invoice_id, $updateInvoice);
                 // $db->transComplete();
 
                 $data = [
