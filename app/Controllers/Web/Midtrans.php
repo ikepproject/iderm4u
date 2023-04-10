@@ -4,6 +4,7 @@ namespace App\Controllers\Web;
 
 use App\Controllers\BaseController;
 use Midtrans\Notification;
+use App\Libraries\Veritrans;
 
 class Midtrans extends BaseController
 {
@@ -311,57 +312,39 @@ class Midtrans extends BaseController
 
     public function hook2()
     {
-        $notification = new Notification();
-    
-        // Get the order ID from the notification
-        $orderId = $notification->order_id;
+        $this->veritrans = new Veritrans;
+        echo 'test notification handler';
+		$json_result    = file_get_contents('php://input');
+		$result         = json_decode($json_result);
 
-        // Verify the notification signature
-        $serverKey = 'SB-Mid-server-b-0mbmFYmSeynMwfpQVfusZh';
-        $signature = hash('sha512', $orderId . $notification->status_code . $notification->gross_amount . $serverKey);
-        if ($notification->signature_key != $signature) {
-            // Signature is not valid, abort the processing
-            return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid signature']);
-        }
+		if($result){
+		$notif = $this->veritrans->status($result->order_id);
+		}
 
-        // Process the notification based on the transaction status
-        $transactionStatus = $notification->transaction_status;
-        if ($transactionStatus == 'settlement') {
-            // Payment is settled, update your database accordingly
-            $invoice_id     = strtok($orderId, '-');
-            $invoice        = $this->invoice->find($invoice_id);
+		error_log(print_r($result,TRUE));
 
-            $updateMidtrans  = [
-                'status_code'       => $notification->status_code,
-                'status_message'    => $notification->status_message,
-                // 'gross_amount'      => strtok($notification->gross_amount, '.'),
-                'transaction_status'=> $notification->transaction_status,
+		//notification handler sample
+
+		$transaction = $notif->transaction_status;
+		$type = $notif->payment_type;
+		$order_id = $notif->order_id;
+		$fraud = $notif->fraud_status;
+
+		if ($transaction == 'settlement'){
+		  // TODO set payment status in merchant's database to 'Settlement'
+            $Midtrans  = [
+                'order_id'       => 'Tes-'. time() ,
             ];
-
-            $updateInvoice  = [
-                // 'invoice_pay'      => strtok($result->gross_amount, '.'),
-                'invoice_status'   => 'SUCCEEDED',
-            ];
-            
-            $updateMedical = [
-                'medical_status'   => 'Selesai'
-            ];
-
-            // $this->db->transStart();
-            $this->midtrans->update($orderId, $updateMidtrans);
-            $this->medical->update($invoice['invoice_medical'], $updateMedical);
-            $this->invoice->update($invoice_id, $updateInvoice);
-            // $this->db->transComplete();
-            
-            return $this->response->setJSON(['message' => 'Payment Settled']);
-        } elseif ($transactionStatus == 'expire') {
-            // Payment is expired, update your database accordingly
-            // ...
-        } else {
-            // Payment is not settled yet, ignore the notification
-            return $this->response->setJSON(['message' => 'Payment is not settled yet']);
-        }
-
-        return $this->response->setJSON(['message' => 'Notification processed']);
+            $this->midtrans->insert($Midtrans);
+		  echo "Transaction order_id: " . $order_id ." successfully transfered using " . $type;
+		  } 
+		  else if($transaction == 'pending'){
+		  // TODO set payment status in merchant's database to 'Pending'
+		  echo "Waiting customer to finish transaction order_id: " . $order_id . " using " . $type;
+		  } 
+		  else if ($transaction == 'deny') {
+		  // TODO set payment status in merchant's database to 'Denied'
+		  echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is denied.";
+		}
     }
 }
