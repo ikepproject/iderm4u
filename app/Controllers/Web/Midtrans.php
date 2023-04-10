@@ -314,22 +314,12 @@ class Midtrans extends BaseController
         \Midtrans\Config::$serverKey = 'SB-Mid-server-b-0mbmFYmSeynMwfpQVfusZh';
         $notif = new \Midtrans\Notification();
 
-        $transaction = $notif->transaction_status;
-        $type = $notif->payment_type;
-        $order_id = $notif->order_id;
-        $fraud = $notif->fraud_status;
-        if ($transaction == 'settlement'){
+        $updateMidtrans  = [
+            'order_id'          => 'TES-'.time(),
+        ];
 
-            $updateMidtrans  = [
-                'order_id'          => 'TES-'.time(),
-                'status_code'       => $notif->status_code,
-                'status_message'    =>$order_id . $transaction,
-                'transaction_status'=> $notif->transaction_status,
-            ];
+        $this->midtrans->insert($updateMidtrans);
 
-            $this->midtrans->insert($updateMidtrans);
-
-            return $this->response->setStatusCode(200);
-        }
+        return $this->response->setStatusCode(201);
     }
 }
