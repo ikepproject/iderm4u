@@ -307,4 +307,40 @@ class Midtrans extends BaseController
 
         
     }
+
+    public function hook2()
+    {
+        \Midtrans\Config::$isProduction = false;
+        \Midtrans\Config::$serverKey = 'SB-Mid-server-b-0mbmFYmSeynMwfpQVfusZh';
+        $notif = new \Midtrans\Notification();
+
+        $transaction = $notif->transaction_status;
+        $type = $notif->payment_type;
+        $order_id = $notif->order_id;
+        $fraud = $notif->fraud_status;
+        if ($transaction == 'settlement'){
+            $invoice_id     = strtok($order_id, '-');
+            $invoice        = $this->invoice->find($invoice_id);
+
+            $updateMidtrans  = [
+                'status_code'       => $notif->status_code,
+                'status_message'    => $notif->status_message,
+                // 'gross_amount'      => strtok($notif->gross_amount, '.'),
+                'transaction_status'=> $notif->transaction_status,
+            ];
+
+            $updateInvoice  = [
+                // 'invoice_pay'      => strtok($notif->gross_amount, '.'),
+                'invoice_status'   => 'SUCCEEDED',
+            ];
+            
+            $updateMedical = [
+                'medical_status'   => 'Selesai'
+            ];
+
+            $this->midtrans->update($order_id, $updateMidtrans);
+            $this->medical->update($invoice['invoice_medical'], $updateMedical);
+            $this->invoice->update($invoice_id, $updateInvoice);
+        }
+    }
 }
