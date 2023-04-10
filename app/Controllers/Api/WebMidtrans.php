@@ -34,10 +34,10 @@ class WebMidtrans extends ResourceController
 
     public function hook()
     {
-        $tb_invoice     = new Model_Invoice;
-        $tb_midtrans    = new Model_Midtrans;
-        $tb_medical     = new Model_Medical;
-        $db 	        = \Config\Database::connect();
+        $tb_invoice     = new \App\Models\Model_Invoice();
+        $tb_midtrans    = new \App\Models\Model_Midtrans();
+        $tb_medical     = new \App\Models\Model_Medical();
+        // $db 	        = \Config\Database::connect();
 
         $notif          = new \Midtrans\Notification();
 
