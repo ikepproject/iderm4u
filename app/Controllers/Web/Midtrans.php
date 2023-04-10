@@ -3,6 +3,7 @@
 namespace App\Controllers\Web;
 
 use App\Controllers\BaseController;
+use Midtrans\Notification;
 
 class Midtrans extends BaseController
 {
@@ -310,16 +311,33 @@ class Midtrans extends BaseController
 
     public function hook2()
     {
-        \Midtrans\Config::$isProduction = false;
-        \Midtrans\Config::$serverKey = 'SB-Mid-server-b-0mbmFYmSeynMwfpQVfusZh';
-        $notif = new \Midtrans\Notification();
+        $notification = new Notification();
+    
+        // Get the order ID from the notification
+        $orderId = $notification->order_id;
 
-        $updateMidtrans  = [
-            'order_id'          => 'TES-'.time(),
-        ];
+        // Verify the notification signature
+        $serverKey = 'SB-Mid-server-b-0mbmFYmSeynMwfpQVfusZh';
+        $signature = hash('sha512', $orderId . $notification->status_code . $notification->gross_amount . $serverKey);
+        if ($notification->signature_key != $signature) {
+            // Signature is not valid, abort the processing
+            return $this->response->setStatusCode(400)->setJSON(['error' => 'Invalid signature']);
+        }
 
-        $this->midtrans->insert($updateMidtrans);
+        // Process the notification based on the transaction status
+        $transactionStatus = $notification->transaction_status;
+        if ($transactionStatus == 'settlement') {
+            // Payment is settled, update your database accordingly
+            // ...
+            return $this->response->setJSON(['message' => 'Payment Settled']);
+        } elseif ($transactionStatus == 'expire') {
+            // Payment is expired, update your database accordingly
+            // ...
+        } else {
+            // Payment is not settled yet, ignore the notification
+            return $this->response->setJSON(['message' => 'Payment is not settled yet']);
+        }
 
-        return $this->response->setStatusCode(201);
+        return $this->response->setJSON(['message' => 'Notification processed']);
     }
 }
