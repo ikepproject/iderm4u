@@ -95,7 +95,7 @@ $routes->post('medicalrefer/create', 'Web\MedicalRefer::create', ["filter" => "a
 
 $routes->get('patient/tes', 'Web\Patient::tes'); 
 
-$routes->post('api/web/midtrans/hook', 'Api\WebMidtrans::hook');
+$routes->post('api/web/midtrans/hook', 'Web\Midtrans::hook');
 
 //Web Admin Access Frontend
 $routes->get('/', 'Web\Landing::index');									        //Landing Front Page

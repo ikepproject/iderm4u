@@ -218,4 +218,93 @@ class Midtrans extends BaseController
 
         
     }
+
+    public function hook()
+    {
+        $result         =new \Midtrans\Notification();
+
+        $serverKey      = 'SB-Mid-server-b-0mbmFYmSeynMwfpQVfusZh';
+
+        $order_id       = $result->order_id;
+        $status_code    = $result->status_code;
+        $gross_amount   = $result->gross_amount;
+        $signature_key  = $result->signature_key;
+
+        $signature      = hash('sha512', $order_id.$status_code.$gross_amount.$serverKey);
+
+        if ($signature_key != $signature) {
+            $data = [
+                "message" => 'Invalid Signature',
+            ];
+        } else {
+            $transaction_status = $result->transaction_status;
+
+            if ($transaction_status == 'settlement') {
+                $invoice_id     = strtok($order_id, '-');
+                $invoice        = $this->invoice->find($invoice_id);
+
+                $updateMidtrans  = [
+                    'status_code'       => $result->status_code,
+                    'status_message'    => $result->status_message,
+                    'gross_amount'      => strtok($result->gross_amount, '.'),
+                    'transaction_status'=> $result->transaction_status,
+                ];
+
+                $updateInvoice  = [
+                    'invoice_pay'      => strtok($result->gross_amount, '.'),
+                    'invoice_status'   => 'SUCCEEDED',
+                ];
+                
+                $updateMedical = [
+                    'medical_status'   => 'Selesai'
+                ];
+
+                $this->db->transStart();
+                $this->midtrans->update($order_id, $updateMidtrans);
+                $this->medical->update($invoice['invoice_medical'], $updateMedical);
+                $this->invoice->update($invoice_id, $updateInvoice);
+                $this->db->transComplete();
+
+                $data = [
+                    "message" => 'Transaction Paid',
+                ];
+
+            } elseif ($transaction_status == 'expire') {
+                $invoice_id     = strtok($order_id, '-');
+                $invoice        = $this->invoice->find($invoice_id);
+
+                $updateMidtrans  = [
+                    'status_code'       => $result->status_code,
+                    'status_message'    => $result->status_message,
+                    'transaction_status'=> $result->transaction_status,
+                ];
+
+                $updateInvoice  = [
+                    'invoice_midtrans'   => NULL,
+                ];
+
+                $this->db->transStart();
+                $this->midtrans->update($order_id, $updateMidtrans);
+                $this->invoice->update($invoice_id, $updateInvoice);
+                $this->db->transComplete();
+
+                $data = [
+                    "message" => 'Transaction Expired',
+                ];
+
+            } else {
+                $data = [
+                    "message" => 'Transaction Status Unpaid',
+                ];
+            }
+        }
+        
+        error_log(json_encode($data));
+
+        return $this->response->setJSON($data);
+
+        // var_dump($saveMidtrans);
+
+        
+    }
 }
