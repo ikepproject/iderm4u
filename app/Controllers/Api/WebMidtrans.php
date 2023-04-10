@@ -37,7 +37,7 @@ class WebMidtrans extends ResourceController
         $tb_invoice     = new Model_Invoice;
         $tb_midtrans    = new Model_Midtrans;
         $tb_medical     = new Model_Medical;
-        $this->db 	    = \Config\Database::connect();
+        $db 	        = \Config\Database::connect();
 
         $notif          = new \Midtrans\Notification();
 
@@ -76,11 +76,11 @@ class WebMidtrans extends ResourceController
                     'medical_status'   => 'Selesai'
                 ];
 
-                $this->db->transStart();
+                $db->transStart();
                 $tb_midtrans->update($order_id, $updateMidtrans);
                 $tb_medical->update($invoice['invoice_medical'], $updateMedical);
                 $tb_invoice->update($invoice_id, $updateInvoice);
-                $this->db->transComplete();
+                $db->transComplete();
 
                 $data = [
                     "message" => 'Transaction Paid',
@@ -100,10 +100,10 @@ class WebMidtrans extends ResourceController
                     'invoice_midtrans'   => NULL,
                 ];
 
-                $this->db->transStart();
+                $db->transStart();
                 $tb_midtrans->update($order_id, $updateMidtrans);
                 $tb_invoice->update($invoice_id, $updateInvoice);
-                $this->db->transComplete();
+                $db->transComplete();
 
                 $data = [
                     "message" => 'Transaction Expired',
