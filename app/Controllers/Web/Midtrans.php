@@ -170,7 +170,7 @@ class Midtrans extends BaseController
             ];
         }
 
-        $this->db->transStart();
+        // $this->db->transStart();
         if ($result['transaction_status'] == 'pending') {
             $this->midtrans->insert($saveMidtrans);
             $updateInvoice  = [
@@ -208,7 +208,7 @@ class Midtrans extends BaseController
             }
             
         }
-        $this->db->transComplete();
+        // $this->db->transComplete();
 
         $url_redirect = '/transaction/checkout' . '/' . $invoice['invoice_medical'];
         $this->session->setFlashData('pesan', '');

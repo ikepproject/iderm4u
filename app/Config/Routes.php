@@ -95,8 +95,6 @@ $routes->post('medicalrefer/create', 'Web\MedicalRefer::create', ["filter" => "a
 
 $routes->get('patient/tes', 'Web\Patient::tes'); 
 
-$routes->post('api/web/midtrans/hook', 'Web\Midtrans::hook');
-
 //Web Admin Access Frontend
 $routes->get('/', 'Web\Landing::index');									        //Landing Front Page
 $routes->get('/privacy', 'Web\Landing::privacy');									//Privacy Page
@@ -139,6 +137,7 @@ $routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["f
 // $routes->get('transaction2/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);  //Pay & Invoice 
 $routes->post('transaction/token', 'Web\Midtrans::token', ["filter" => "authweb"]);  
 $routes->post('transaction/finish', 'Web\Midtrans::finish'); 
+$routes->post('transaction/hook', 'Web\Midtrans::hook');
 
 $routes->post('transaction/formpayinfo', 'Web\Transaction::formpayinfo', ["filter" => "authweb"]);       //Cash Checkout Modal
 // $routes->post('transaction/formcash', 'Web\Transaction::formcash', ["filter" => "authweb"]);         //Cash Checkout Modal
