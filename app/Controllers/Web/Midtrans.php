@@ -319,28 +319,17 @@ class Midtrans extends BaseController
         $order_id = $notif->order_id;
         $fraud = $notif->fraud_status;
         if ($transaction == 'settlement'){
-            $invoice_id     = strtok($order_id, '-');
-            $invoice        = $this->invoice->find($invoice_id);
 
             $updateMidtrans  = [
+                'order_id'          => 'TES-'.time(),
                 'status_code'       => $notif->status_code,
-                'status_message'    => $notif->status_message,
-                // 'gross_amount'      => strtok($notif->gross_amount, '.'),
+                'status_message'    =>$order_id . $transaction,
                 'transaction_status'=> $notif->transaction_status,
             ];
 
-            $updateInvoice  = [
-                // 'invoice_pay'      => strtok($notif->gross_amount, '.'),
-                'invoice_status'   => 'SUCCEEDED',
-            ];
-            
-            $updateMedical = [
-                'medical_status'   => 'Selesai'
-            ];
+            $this->midtrans->insert($updateMidtrans);
 
-            $this->midtrans->update($order_id, $updateMidtrans);
-            $this->medical->update($invoice['invoice_medical'], $updateMedical);
-            $this->invoice->update($invoice_id, $updateInvoice);
+            return $this->response->setStatusCode(200);
         }
     }
 }
