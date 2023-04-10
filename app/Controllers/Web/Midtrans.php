@@ -328,7 +328,31 @@ class Midtrans extends BaseController
         $transactionStatus = $notification->transaction_status;
         if ($transactionStatus == 'settlement') {
             // Payment is settled, update your database accordingly
-            // ...
+            $invoice_id     = strtok($orderId, '-');
+            $invoice        = $this->invoice->find($invoice_id);
+
+            $updateMidtrans  = [
+                'status_code'       => $notification->status_code,
+                'status_message'    => $notification->status_message,
+                // 'gross_amount'      => strtok($notification->gross_amount, '.'),
+                'transaction_status'=> $notification->transaction_status,
+            ];
+
+            $updateInvoice  = [
+                // 'invoice_pay'      => strtok($result->gross_amount, '.'),
+                'invoice_status'   => 'SUCCEEDED',
+            ];
+            
+            $updateMedical = [
+                'medical_status'   => 'Selesai'
+            ];
+
+            // $this->db->transStart();
+            $this->midtrans->update($orderId, $updateMidtrans);
+            $this->medical->update($invoice['invoice_medical'], $updateMedical);
+            $this->invoice->update($invoice_id, $updateInvoice);
+            // $this->db->transComplete();
+            
             return $this->response->setJSON(['message' => 'Payment Settled']);
         } elseif ($transactionStatus == 'expire') {
             // Payment is expired, update your database accordingly
