@@ -248,12 +248,12 @@ class Midtrans extends BaseController
                 $updateMidtrans  = [
                     'status_code'       => $result->status_code,
                     'status_message'    => $result->status_message,
-                    // 'gross_amount'      => strtok($result->gross_amount, '.'),
+                    'gross_amount'      => strtok($result->gross_amount, '.'),
                     'transaction_status'=> $result->transaction_status,
                 ];
 
                 $updateInvoice  = [
-                    // 'invoice_pay'      => strtok($result->gross_amount, '.'),
+                    'invoice_pay'      => strtok($result->gross_amount, '.'),
                     'invoice_status'   => 'SUCCEEDED',
                 ];
                 
@@ -261,11 +261,11 @@ class Midtrans extends BaseController
                     'medical_status'   => 'Selesai'
                 ];
 
-                // $this->db->transStart();
+                $this->db->transStart();
                 $this->midtrans->update($order_id, $updateMidtrans);
                 $this->medical->update($invoice['invoice_medical'], $updateMedical);
                 $this->invoice->update($invoice_id, $updateInvoice);
-                // $this->db->transComplete();
+                $this->db->transComplete();
 
                 $data = [
                     "message" => 'Transaction Paid',
@@ -285,10 +285,10 @@ class Midtrans extends BaseController
                     'invoice_midtrans'   => NULL,
                 ];
 
-                // $this->db->transStart();
+                $this->db->transStart();
                 $this->midtrans->update($order_id, $updateMidtrans);
                 $this->invoice->update($invoice_id, $updateInvoice);
-                // $this->db->transComplete();
+                $this->db->transComplete();
 
                 $data = [
                     "message" => 'Transaction Expired',
@@ -309,54 +309,5 @@ class Midtrans extends BaseController
         // var_dump($saveMidtrans);
 
         
-    }
-
-    public function hook2()
-    {
-        $this->veritrans = new Veritrans;
-        echo 'test notification handler';
-		$json_result    = file_get_contents('php://input');
-		$result         = json_decode($json_result);
-
-		if($result){
-		$notif = $this->veritrans->status($result->order_id);
-		}
-
-		error_log(print_r($result,TRUE));
-
-		//notification handler sample
-
-		$transaction = $notif->transaction_status;
-		$type = $notif->payment_type;
-		$order_id = $notif->order_id;
-		$fraud = $notif->fraud_status;
-
-		if ($transaction == 'settlement'){
-		  // TODO set payment status in merchant's database to 'Settlement'
-            $Midtrans  = [
-                'order_id'       => 'Tes-'. time() ,
-            ];
-            $this->midtrans->insert($Midtrans);
-            $data = [
-                "message" => "Transaction order_id: " . $order_id ." successfully transfered using " . $type,
-            ];
-            error_log(json_encode($data));
-		  } 
-		  else if($transaction == 'pending'){
-		  // TODO set payment status in merchant's database to 'Pending'
-		  echo "Waiting customer to finish transaction order_id: " . $order_id . " using " . $type;
-            $data = [
-                "message" => "Waiting customer to finish transaction order_id: " . $order_id . " using " . $type,
-            ];
-            error_log(json_encode($data));
-		  } 
-		  else if ($transaction == 'deny') {
-		  // TODO set payment status in merchant's database to 'Denied'
-		  echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is denied.";
-            $data = [
-                "message" => "Payment using " . $type . " for transaction order_id: " . $order_id . " is denied.",
-            ];
-            error_log(json_encode($data));
-		}
     }
 }

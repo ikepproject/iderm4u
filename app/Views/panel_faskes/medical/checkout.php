@@ -207,7 +207,7 @@
                                             <?php } ?>
                                             <?php if ($invoice['invoice_midtrans'] != NULL && $invoice['invoice_status'] != 'SUCCEEDED') { ?> 
                                                 <!-- <button type="button" class="btn btn-info w-md waves-effect waves-light" onclick="payinfo('<?= $invoice['invoice_id'] ?>')"><i class="bx bx-credit-card mr-2"></i> Payment Info</button> -->
-                                                <button id="pay-button2" class="btn btn-info w-md waves-effect waves-light">Proceed to Payment</button>
+                                                <button id="pay-button2" class="btn btn-info w-md waves-effect waves-light"><i class="bx bx-credit-card mr-2"></i> Lanjutkan Pembayaran</button>
                                             <?php } ?>
                                         <?php } ?> 
                                     <?php } ?> 
