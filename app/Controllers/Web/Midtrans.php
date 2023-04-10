@@ -246,12 +246,12 @@ class Midtrans extends BaseController
                 $updateMidtrans  = [
                     'status_code'       => $result->status_code,
                     'status_message'    => $result->status_message,
-                    'gross_amount'      => strtok($result->gross_amount, '.'),
+                    // 'gross_amount'      => strtok($result->gross_amount, '.'),
                     'transaction_status'=> $result->transaction_status,
                 ];
 
                 $updateInvoice  = [
-                    'invoice_pay'      => strtok($result->gross_amount, '.'),
+                    // 'invoice_pay'      => strtok($result->gross_amount, '.'),
                     'invoice_status'   => 'SUCCEEDED',
                 ];
                 
@@ -259,11 +259,11 @@ class Midtrans extends BaseController
                     'medical_status'   => 'Selesai'
                 ];
 
-                $this->db->transStart();
+                // $this->db->transStart();
                 $this->midtrans->update($order_id, $updateMidtrans);
                 $this->medical->update($invoice['invoice_medical'], $updateMedical);
                 $this->invoice->update($invoice_id, $updateInvoice);
-                $this->db->transComplete();
+                // $this->db->transComplete();
 
                 $data = [
                     "message" => 'Transaction Paid',
@@ -283,10 +283,10 @@ class Midtrans extends BaseController
                     'invoice_midtrans'   => NULL,
                 ];
 
-                $this->db->transStart();
+                // $this->db->transStart();
                 $this->midtrans->update($order_id, $updateMidtrans);
                 $this->invoice->update($invoice_id, $updateInvoice);
-                $this->db->transComplete();
+                // $this->db->transComplete();
 
                 $data = [
                     "message" => 'Transaction Expired',
