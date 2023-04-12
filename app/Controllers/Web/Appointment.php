@@ -34,4 +34,74 @@ class Appointment extends BaseController
         }
     }
 
+    public function formaccept()
+    {
+        if ($this->request->isAJAX()) {
+            $medical_code       = $this->request->getVar('medical_code');
+            $medical            = $this->medical->find($medical_code);
+            $medical_refer_type = $medical['medical_refer_type'];
+
+            if ($medical_refer_type == NULL) {
+                $type     = 'Kunjungan Pasien';
+            } elseif($medical_refer_type == 'Kunjungan') {
+                $type     = 'Kunjungan Rujukan';
+            } else {
+                $type     = $medical_refer_type;
+            }
+            
+
+            $data = [
+                'title'         => 'Form Penjadwalan Appointment ' . $type,
+                'type'          => $type,
+                'appointment'   => $this->appointment->find_medical($medical_code),
+
+            ];
+            $response = [
+                'data' => view('panel_faskes/appointment/accept', $data)
+            ];
+            echo json_encode($response);
+        }
+    }
+
+    public function accept()
+    {
+        if ($this->request->isAJAX()) {
+            $validation = \Config\Services::validation();
+            $rules = [
+                'appointment_date_fix'    => 'required',
+            ];
+    
+            $errors = [
+                'appointment_date_fix' => [
+                    'required'   => 'Jadwal Fix harus diisi.',
+                ],
+            ];
+            $valid = $this->validate($rules, $errors);
+            if (!$valid) {
+                $response = [
+                    'error' => [
+                        'appointment_date_fix'      => $validation->getError('appointment_date_fix'),
+                    ]
+                ];
+            } else {
+                $appointment_id = $this->request->getVar('appointment_id');
+                $medical_code   = $this->request->getVar('appointment_medical');
+
+                $update = [
+                    'appointment_status'        => 'Dijadwalkan',
+                    'appointment_date_fix'      => $this->request->getVar('appointment_date_fix'),
+                    'appointment_link'          => $this->request->getVar('appointment_link'),
+                    'appointment_note_faskes'   => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('appointment_note_faskes'))),
+                ];
+
+                $this->appointment->update($appointment_id, $update);
+
+                $response = [
+                    'success' => 'Appointment Dijadwalkan '
+                ];
+            }
+            echo json_encode($response);
+        }
+    }
+
 }

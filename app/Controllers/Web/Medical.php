@@ -92,6 +92,39 @@ class Medical extends BaseController
         }
     }
 
+    public function formdiagnose()
+    {
+        if ($this->request->isAJAX()) {
+            $medical_code       = $this->request->getVar('medical_code');
+            $medical            = $this->medical->find($medical_code);
+            $diagnose_medgal             = $this->medgal->find_medical($medical_code);
+            $patient_user       = $this->user->find($medical['medical_user']);
+            $medical_refer_type = $medical['medical_refer_type'];
+
+            if ($medical_refer_type == NULL) {
+                $type     = 'Kunjungan Pasien';
+            } elseif($medical_refer_type == 'Kunjungan') {
+                $type     = 'Kunjungan Rujukan';
+            } else {
+                $type     = $medical_refer_type;
+            }
+            
+
+            $data = [
+                'title'         => 'Form Diagnose ' . $type,
+                'type'          => $type,
+                'patient_user'  => $patient_user,
+                'medical'       => $medical,
+                'diagnose_medgal'        => $diagnose_medgal
+
+            ];
+            $response = [
+                'data' => view('panel_faskes/medical/diagnose', $data)
+            ];
+            echo json_encode($response);
+        }
+    }
+
     public function create()
     {
         if ($this->request->isAJAX()) {
@@ -413,6 +446,54 @@ class Medical extends BaseController
                 'success' => 'Data Kunjungan Pasien Berhasil Dibatalkan'
             ];
 
+            echo json_encode($response);
+        }
+    }
+
+    public function diagnose()
+    {
+        if ($this->request->isAJAX()) {
+            $validation = \Config\Services::validation();
+            $rules = [
+                'medical_diagnose'    => 'required',
+            ];
+    
+            $errors = [
+                'medical_diagnose' => [
+                    'required'   => 'Harus memasukan diagnosis.',
+                ],
+            ];
+            $valid = $this->validate($rules, $errors);
+            if (!$valid) {
+                $response = [
+                    'error' => [
+                        'medical_diagnose'      => $validation->getError('medical_diagnose'),
+                    ]
+                ];
+            } else {
+                $medical_code       = $this->request->getVar('medical_code');
+                $medical_diagnose   = $this->request->getVar('medical_diagnose');
+
+                if ($medical_diagnose == 'Lain') {
+                    $diagnose = $this->request->getVar('medical_diagnose_other');
+                } else {
+                    $diagnose = $medical_diagnose;
+                }
+                
+
+                $update = [
+                    'medical_status'          => 'Selesai',
+                    'medical_diagnose'        => $diagnose,
+                    'medical_diagnose_create' => date('Y-m-d H:i:s'),
+                    'medical_diagnose_note'   => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('medical_diagnose_note'))),
+                ];
+
+                $this->medical->update($medical_code, $update);
+
+                $response = [
+                    'success' => 'Data Didiagnosis'
+                ];
+            }
             echo json_encode($response);
         }
     }

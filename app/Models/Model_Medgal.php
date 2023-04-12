@@ -8,7 +8,7 @@ class Model_Medgal extends Model
 {
     protected $table      = 'tb_medical_gallery';
     protected $primaryKey = 'medgal_id';
-    protected $allowedFields = ['medgal_medical', 'medgal_create', 'medgal_filename', 'medgal_disease'];
+    protected $allowedFields = ['medgal_medical', 'medgal_create', 'medgal_filename', 'medgal_disease', 'medgal_prediction', 'medgal_prediction_create'];
 
     public function find_medical($medical_code)
     {

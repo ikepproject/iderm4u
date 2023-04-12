@@ -242,8 +242,10 @@ class Midtrans extends BaseController
             $transaction_status = $result->transaction_status;
 
             if ($transaction_status == 'settlement') {
-                $invoice_id     = strtok($order_id, '-');
-                $invoice        = $this->invoice->find($invoice_id);
+                $invoice_id         = strtok($order_id, '-');
+                $invoice            = $this->invoice->find($invoice_id);
+                $medical_code       = $invoice['invoice_medical'];
+                $medical            = $this->medical->find($medical_code);
 
                 $updateMidtrans  = [
                     'status_code'       => $result->status_code,
@@ -256,10 +258,16 @@ class Midtrans extends BaseController
                     'invoice_pay'      => strtok($result->gross_amount, '.'),
                     'invoice_status'   => 'SUCCEEDED',
                 ];
-                
+
                 $updateMedical = [
                     'medical_status'   => 'Selesai'
                 ];
+
+                if($medical['medical_refer_type'] == 'Teledermatologi' && $medical['medical_refer_code'] != NULL){
+                    $updateMedical = [
+                        'medical_status'   => 'Proses'
+                    ];
+                }
 
                 $this->db->transStart();
                 $this->midtrans->update($order_id, $updateMidtrans);

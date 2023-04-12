@@ -24,7 +24,15 @@
                     <?php } ?>
                     <?php if ($data['medical_status'] == 'Proses') { ?> 
                         <span class="badge rounded-pill bg-secondary">Proses</span>
-                    <?php } ?> 
+                    <?php } ?>
+                    <?php if ($data['appointment_type'] == 'Teledermatologi') { ?> 
+                        <?php if ($data['invoice_status'] == 'SUCCEEDED') { ?> 
+                        <br> Pembayaran: <span class="badge rounded-pill bg-success">SUCCEEDED</span>
+                        <?php } ?>
+                        <?php if ($data['invoice_status'] == 'PENDING') { ?> 
+                        <br> Pembayaran: <span class="badge rounded-pill bg-secondary">PENDING</span>
+                        <?php } ?> 
+                    <?php } ?>  
                 </td>
                 <td>
                     <?php if ($data['appointment_type'] == 'Kunjungan') { ?> 
@@ -44,12 +52,12 @@
                     <?php } ?>
                 </td>
                 <td>
-                    <?php if ($data['appointment_date_fix'] == NULL) { ?> 
-                        <button type="button" class="btn btn-danger mb-2" onclick="decline('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>')">
-                        <i class="bx bx-x"></i>
-                        </button>
+                    <button type="button" class="btn btn-primary mb-2" onclick="detail('<?= $data['medical_code'] ?>')">
+                        <i class="bx bx-detail"></i>
+                    </button>
+                    <?php if ($data['appointment_date_fix'] == NULL && $data['invoice_status'] == 'SUCCEEDED') { ?> 
                         <button type="button" class="btn btn-success mb-2" onclick="accept('<?= $data['medical_code'] ?>')">
-                            <i class="bx bx-check"></i>
+                            <i class="bx bx-calendar-check"></i>
                         </button>
                     <?php } ?>
                     <?php if ($data['appointment_date_fix'] != NULL) { ?> 
@@ -59,11 +67,6 @@
                             <i class="bx bx-edit"></i>
                             </button>
                         <?php } ?>
-                        
-                        <button type="button" class="btn btn-primary mb-2" onclick="detail('<?= $data['medical_code'] ?>')">
-                            <i class="bx bx-detail"></i>
-                        </button>
-
                     <?php } ?>
                 </td>
             </tr>
@@ -94,5 +97,18 @@ $(document).ready(function () {
 
     $(".dataTables_length select").addClass("form-select form-select-sm");
 });
-
+function detail(medical_code) {
+    $.ajax({
+        type: "post",
+        url: "medical/formdetail",
+        data: {
+            medical_code: medical_code
+        },
+        dataType: "json",
+        success: function(response) {
+            $('.detailmodal').html(response.data).show();
+            $('#modaldetail').modal('show');
+        }
+    });
+}
 </script>

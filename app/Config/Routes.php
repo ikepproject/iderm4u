@@ -80,8 +80,11 @@ $routes->post('medical/addgallery', 'Web\Medical::addgallery', ["filter" => "aut
 $routes->post('medical/deletegallery', 'Web\Medical::deletegallery', ["filter" => "authweb"]);          //Medical Detail Delete Gallery
 $routes->post('medical/cancel', 'Web\Medical::cancel', ["filter" => "authweb"]);                        //Medical Cancel Action
 $routes->get('api/web/patient/get', 'Api\WebPatient::get', ["filter" => "authweb"]);
+$routes->post('medical/diagnose', 'Web\Medical::diagnose', ["filter" => "authweb"]);                        //Medical Diagnose Action
 
 $routes->get('refer/getdata', 'Web\Refer::getdata', ["filter" => "authweb"]); 
+$routes->get('refer-visit/getdata', 'Web\Refer_Hospital::getdatavisit', ["filter" => "authweb"]);
+$routes->get('refer-teledermatology/getdata', 'Web\Refer_Hospital::getdatatldm', ["filter" => "authweb"]);
 $routes->post('refer/create', 'Web\Refer::create', ["filter" => "authweb"]);
 
 $routes->get('invoice/getdata', 'Web\Invoice::getdata', ["filter" => "authweb"]); 
@@ -89,6 +92,7 @@ $routes->get('invoice/getdata', 'Web\Invoice::getdata', ["filter" => "authweb"])
 $routes->get('order/getdata', 'Web\Product_Order::getdata', ["filter" => "authweb"]);
 
 $routes->get('appointment/getdata', 'Web\Appointment::getdata', ["filter" => "authweb"]);
+$routes->post('appointment/accept', 'Web\Appointment::accept', ["filter" => "authweb"]);
 
 $routes->post('transaction/cash', 'Web\Transaction::cash', ["filter" => "authweb"]);                    //Cash Pay Confirmation
 $routes->post('medicalrefer/create', 'Web\MedicalRefer::create', ["filter" => "authweb"]);              //Medical Refer Create
@@ -123,14 +127,18 @@ $routes->post('product/formstock', 'Web\Product::formstock', ["filter" => "authw
 $routes->get('medical', 'Web\Medical::index', ["filter" => "authweb"]);                                 //Medical Page
 $routes->get('medicalformadd', 'Web\Medical::formadd', ["filter" => "authweb"]);                        //Medical Add Page
 $routes->post('medical/formdetail', 'Web\Medical::formdetail', ["filter" => "authweb"]);                //Medical Detail Modal
+$routes->post('medical/formdiagnose', 'Web\Medical::formdiagnose', ["filter" => "authweb"]);          //Refer Hospital Diagnose Form
 
-$routes->get('refer', 'Web\Refer::index', ["filter" => "authweb"]);                                     //Refer Page
+$routes->get('refer', 'Web\Refer::index', ["filter" => "authweb"]);                                     //Refer Page Clinic
+$routes->get('refer-visit', 'Web\Refer_Hospital::index', ["filter" => "authweb"]);                      //Refer Page Hospital
+$routes->get('refer-teledermatology', 'Web\Refer_Hospital::index', ["filter" => "authweb"]);            //Refer Page Hospital
 
 $routes->get('invoice', 'Web\Invoice::index', ["filter" => "authweb"]);                                 //Invoice Page
 
 $routes->get('order', 'Web\Product_Order::index', ["filter" => "authweb"]);                             //Product_Order Page
 
 $routes->get('appointment', 'Web\Appointment::index', ["filter" => "authweb"]);                          //Appointment Page
+$routes->post('appointment/formaccept', 'Web\Appointment::formaccept', ["filter" => "authweb"]);         //Appointment Form Accept
 
 $routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);  //Pay & Invoice 
 

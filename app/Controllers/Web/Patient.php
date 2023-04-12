@@ -340,50 +340,9 @@ class Patient extends BaseController
         }
     }
 
+    //Function Tes
     public function tes()
     {
-        // $tes = $this->user->orderBy('user_id', 'desc')->first(); // get highest id
-        // $tes = substr('TR-MC-00001', -5); // get last 5 char
-        // $tes2 = substr('TR-MC-00001',0, 6); // get 6 first char
-        // $s = '51';
-        // $p = $tes + 1;
-        // $k = str_pad($p,5,"0",STR_PAD_LEFT); // get 0000X, -> x is result from summary
-        // $n = $tes2 . $k;
-        // $d = date('Ymd');
-        // $f = 'K' . 'MC' . '-' . $d . '-' . $k;
-
-        // $date = date('Y-m-d H:i:s');
-        // $dt = strtok($date, ' '); // get char before space
-        // $dt = explode(' ', $date); // get char use explode, result is array
-        // // $a = $this->treatment->orderBy('treatment_code', 'desc')->first();
         
-        // $config         = new \Config\Encryption();
-        // // $config->driver = 'OpenSSL';
-        // // Your CI3's encryption_key
-        // $config->key            = getenv("encrypt_key");
-        // // $config->rawData = false;
-
-        // // ENCRYPTION
-        // $encrypter = \Config\Services::encrypter($config, false);
-        // $plainText  = 'xnd_development_tc6PAc89hlleb6sGvzLhEO653zJvLXRUgUaXaR4x55qBvR0JUx2LX7LyhVslq';
-        // $enc = $encrypter->encrypt($plainText);
-        // $enc2 = base64_encode($enc);
-        // $dec = $encrypter->decrypt(base64_decode($enc2));
-        // $d1 = [
-        //     'employee_code' => 'tes',
-        // ];
-
-        // // Transaction
-        // $db      = \Config\Database::connect();
-        // $db->transStart();
-        // $this->employee->insert($d1);
-        // $tes = 'ss';
-        // $db->transComplete();
-
-        // $t = date('Y-m-d\TH:i:s.Z\Z', time());
-        
-        //Add time
-        // $convertedTime = date('Y-m-d H:i:s', strtotime('+20 minutes', strtotime(date('Y-m-d H:i:s'))));
-        // var_dump(date($convertedTime));
     }
 }

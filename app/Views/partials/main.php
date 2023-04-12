@@ -195,6 +195,7 @@
                                 <span key="t-dashboards">Dashboard</span>
                             </a>
                         </li>
+                        <!-- Menu Faskes Admin/Dr Klinik, Admin/Dr RS -->
                         <?php if ($user['user_active'] == 't' && ($user['user_role'] == '2020' || $user['user_role'] == '2022' || $user['user_role'] == '5050' || $user['user_role'] == '5055')) { ?>
                         <li class="menu-title" key="t-menu">Menu Faskes</li>
 
@@ -215,13 +216,30 @@
                                 <li><a href="<?= site_url('medicalformadd') ?>" key="t-medicalformadd">Tambah</a></li>
                             </ul>
                         </li>
-
+                        
+                        <!-- Rujuk Klinik -->
+                        <?php if ($user['user_active'] == 't' && ($user['user_role'] == '2020' || $user['user_role'] == '2022')) { ?>
                         <li>
                             <a href="<?= site_url('refer') ?>" class="waves-effect">
                                 <i class="bx bx-task"></i>
                                 <span key="t-refer">Rujukan</span>
                             </a>
                         </li>
+                        <?php } ?>
+
+                        <!-- Rujuk RS -->
+                        <?php if ($user['user_active'] == 't' && ($user['user_role'] == '5050' || $user['user_role'] == '5055')) { ?>
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                <i class="bx bx-task"></i>
+                                <span key="t-refer">Rujukan</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="<?= site_url('refer-visit') ?>" key="t-refer-visit">Kunjungan</a></li>
+                                <li><a href="<?= site_url('refer-teledermatology') ?>" key="t-refer-teledermatology">Teledermatologi</a></li>
+                            </ul>
+                        </li>
+                        <?php } ?>
 
                         <li>
                             <a href="<?= site_url('invoice') ?>" class="waves-effect">
@@ -261,14 +279,14 @@
                         <li>
                             <a href="<?= site_url('promotion') ?>" class="waves-effect">
                                 <i class="bx bx-pin"></i>
-                                <span key="t-promotion">Promosi</span>
+                                <span key="t-promotion">Pengumuman</span>
                             </a>
                         </li>
 
                         <li>
                             <a href="<?= site_url('employee') ?>" class="waves-effect">
                                 <i class="bx bxs-user-badge"></i>
-                                <span key="t-employee">Pegawai</span>
+                                <span key="t-employee">Akun</span>
                             </a>
                         </li>
                         <?php } ?>

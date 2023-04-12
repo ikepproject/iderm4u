@@ -12,7 +12,7 @@ class Refer extends BaseController
 			'title'  => 'Rujukan',
 			'user'   => $user,
 		];
-		return view('panel_faskes/refer/index', $data);
+		return view('panel_faskes/refer_clinic/index', $data);
 	}
 
     public function getdata()
@@ -20,33 +20,18 @@ class Refer extends BaseController
         if ($this->request->isAJAX()) {
             $user        = $this->userauth(); //Return array
             $user_faskes = $user['user_faskes'];
-            $faskes      = $this->faskes->find($user_faskes);
-            $faskes_type = $faskes['faskes_type'];
-            if ($faskes_type == "Klinik") {
-                $list_kunjungan         = $this->medical->list_refer_klinik_kunjungan($user_faskes);
-                $list_teledermatologi   = $this->medical->list_refer_klinik_teledermatologi($user_faskes);
-            } elseif ($faskes_type == "Rumah Sakit") {
-                $list    = $this->medical->list_refer_rs($user_faskes);
-            }
-            
-            if ($faskes_type == "Klinik") {
-                $data = [
-                    'list_kunjungan'       => $list_kunjungan,
-                    'list_teledermatologi' => $list_teledermatologi,
-                ];
-                $response = [
-                    'data' => view('panel_faskes/refer/list_klinik', $data)
-                ];
 
-            } elseif ($faskes_type == "Rumah Sakit") {
-                $data = [
-                    'list' => $list,
-                ];
-                $response = [
-                    'data' => view('panel_faskes/refer/list_rs', $data)
-                ];
-            }
-            
+            $list_kunjungan         = $this->medical->list_refer_klinik_kunjungan($user_faskes);
+            $list_teledermatologi   = $this->medical->list_refer_klinik_teledermatologi($user_faskes);
+
+            $data = [
+                'list_kunjungan'       => $list_kunjungan,
+                'list_teledermatologi' => $list_teledermatologi,
+            ];
+
+            $response = [
+                'data' => view('panel_faskes/refer_clinic/list', $data)
+            ];
             echo json_encode($response);
         }
     }

@@ -9,7 +9,7 @@ class Model_Medical extends Model
     protected $table      = 'tb_medical';
     protected $primaryKey = 'medical_code';
     protected $useAutoIncrement = false;
-    protected $allowedFields = ['medical_code', 'medical_faskes', 'medical_create', 'medical_type', 'medical_description', 'medical_employee', 'medical_user', 'medical_status', 'medical_creator_type', 'medical_refer_type', 'medical_refer_origin', 'medical_refer_code'];
+    protected $allowedFields = ['medical_code', 'medical_faskes', 'medical_create', 'medical_type', 'medical_description', 'medical_employee', 'medical_user', 'medical_status', 'medical_creator_type', 'medical_refer_type', 'medical_refer_origin', 'medical_refer_code', 'medical_diagnose', 'medical_diagnose_create', 'medical_diagnose_note'];
 
     //Medical - getData (Klinik)
     public function list($user_faskes)
@@ -78,17 +78,34 @@ class Model_Medical extends Model
             ->get()->getResultArray();
     }
 
-    //Refer - getData (RS)
-    public function list_refer_rs($user_faskes)
+    //Refer - getData Kunjungan (RS)
+    public function list_refer_visit($user_faskes)
     {
         return $this->table('tb_medical')
             ->where('medical_faskes', $user_faskes)
-            ->where('medical_refer_type !=', NULL)
+            ->where('medical_refer_type', 'Kunjungan')
             ->where('medical_creator_type', 'Admin')
             ->orderBy('medical_create', 'DESC')
             ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
             ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
             ->join('tb_faskes', 'tb_faskes.faskes_code = tb_medical.medical_refer_origin')
+            ->join('tb_invoice', 'tb_invoice.invoice_medical = tb_medical.medical_code')
+            ->join('tb_appointment', 'tb_appointment.appointment_medical = tb_medical.medical_code')
+            ->get()->getResultArray();
+    }
+
+    //Refer - getData Teledermatology (RS)
+    public function list_refer_tldm($user_faskes)
+    {
+        return $this->table('tb_medical')
+            ->where('medical_faskes', $user_faskes)
+            ->where('medical_refer_type', 'Teledermatologi')
+            ->where('medical_creator_type', 'Admin')
+            ->orderBy('medical_create', 'DESC')
+            ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
+            ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->join('tb_faskes', 'tb_faskes.faskes_code = tb_medical.medical_refer_origin')
+            ->join('tb_invoice', 'tb_invoice.invoice_medical = tb_medical.medical_code')
             ->join('tb_appointment', 'tb_appointment.appointment_medical = tb_medical.medical_code')
             ->get()->getResultArray();
     }

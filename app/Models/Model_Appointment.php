@@ -23,6 +23,8 @@ class Model_Appointment extends Model
     {
         return $this->table('tb_appointment')
             ->where('appointment_medical', $medical_code)
+            ->join('tb_user', 'tb_user.user_id = tb_appointment.appointment_user')
+            ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
             ->get()->getRowArray();
     }
 }

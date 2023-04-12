@@ -23,6 +23,14 @@
                     <?php if ($data['medical_status'] == 'Proses') { ?> 
                         <span class="badge rounded-pill bg-secondary">Proses</span>
                     <?php } ?> 
+                    <?php if ($data['appointment_type'] == 'Teledermatologi') { ?> 
+                        <?php if ($data['invoice_status'] == 'SUCCEEDED') { ?> 
+                        <br> Pembayaran: <span class="badge rounded-pill bg-success">SUCCEEDED</span>
+                        <?php } ?>
+                        <?php if ($data['invoice_status'] == 'PENDING') { ?> 
+                        <br> Pembayaran: <span class="badge rounded-pill bg-secondary">PENDING</span>
+                        <?php } ?> 
+                    <?php } ?>  
                 </td>
                 <td>
                     <?php if ($data['appointment_type'] == 'Kunjungan') { ?> 
@@ -46,11 +54,15 @@
                         <button type="button" class="btn btn-danger mb-2" onclick="cancel('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>', '<?= $data['appointment_type'] ?>')">
                         <i class="bx bx-x"></i>
                         </button>
+                        <a type="button" class="btn btn-success mb-2" href="<?= base_url('transaction/checkout/' . $data['medical_code']) ?>">
+                            <i class="bx bx-check"></i>
+                        </a>
                     <?php } ?>
-                    
-                    <a type="button" class="btn btn-success mb-2" href="<?= base_url('transaction/checkout/' . $data['medical_code']) ?>">
-                        <i class="bx bx-dollar"></i>
-                    </a> 
+                    <?php if ($data['invoice_status'] == 'SUCCEEDED') { ?> 
+                        <a type="button" class="btn btn-secondary mb-2" href="<?= base_url('transaction/checkout/' . $data['medical_code']) ?>">
+                            <i class="bx bx-receipt"></i>
+                        </a>
+                    <?php } ?>
                 </td>
             </tr>
 
