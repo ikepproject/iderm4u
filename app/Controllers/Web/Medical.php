@@ -236,7 +236,7 @@ class Medical extends BaseController
                         }
                         $productData           = $this->product->find($medprod_product);
                         $productName           = $productData['product_name'];
-                        $productPrice          = $productData['product_price'] * $medprod_qty;
+                        $productPrice          = $productData['product_price'];
                         $newMedprod = [
                             'medprod_medical'  => $medical_code,
                             'medprod_product'  => $medprod_product,
