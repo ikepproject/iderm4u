@@ -377,11 +377,14 @@
                             <input type="hidden" id="medical_user" name="medical_user" value="<?= $medical['medical_user'] ?>">
                             <div class="row">
                                 <div class="mb-3">
-                                    <label for="medical_refer_type">Pilih Tipe Rujukan <code>*</code></label>
+                                    <label for="medical_refer_type">Pilih Tipe Rujukan <code>*</code></label> 
+                                    <button type="button" class="btn btn-light position-relative p-0 avatar-xs rounded-circle" data-toggle="tooltip" data-placement="top" 
+                                    title="Jika memilih opsi Teledermatologi terdapat biaya yang harus dibayar diawal."> <span class="avatar-title bg-transparent text-reset"> <i class="bx bxs-info-circle"></i> </span>
+                                    </button>
                                     <select class="form-control" name="medical_refer_type" id="medical_refer_type" onchange="showDiv(this)">
                                         <option selected disabled>Pilih...</option>
                                         <option value="Kunjungan">Rujuk Kunjungan</option>
-                                        <option value="Teledermatologi">Rujuk Teledermatologi (ada biaya awal yg harus dibayarkan)</option>
+                                        <option value="Teledermatologi">Rujuk Teledermatologi</option>
                                     </select>
                                     <div class="invalid-feedback error_medical_refer_type"></div>
                                 </div>
@@ -390,7 +393,7 @@
                                     <select class="form-control" name="invoice_method" id="invoice_method">
                                         <option value="QR">QRIS (+ 0.7%)</option>
                                         <option value="VA">Virtual Account (+ Rp 4.440)</option>
-                                        <!-- <option value="E-WALLET">GoPay (+ 2%)</option> -->
+                                        <!-- <option value="Gopay">GoPay (+ 2%)</option> -->
                                     </select>
                                 </div>
                             </div>

@@ -49,7 +49,7 @@
                             <option selected disabled>Pilih...</option>
                             <option value="Cash">Cash</option>
                             <option value="VA">Virtual Account (+ Rp 4.440)</option>
-                            <!-- <option value="E-WALLET">GoPay (+ 2%)</option> -->
+                            <!-- <option value="Gopay">GoPay (+ 2%)</option> -->
                             <option value="QR">QRIS (+ 0.7%)</option>
                           </select>
                           <div class="invalid-feedback error_invoice_method"></div>

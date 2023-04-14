@@ -80,8 +80,10 @@ class Midtrans extends BaseController
 
         if ($invoice_method == 'VA') {
             $enable_payments = array("echannel", "permata_va","bca_va", "bni_va", "bri_va", "other_va");
-        } else{
+        } elseif($invoice_method == 'Gopay'){
             $enable_payments = array("gopay");
+        } elseif($invoice_method == 'QR'){
+            $enable_payments = array("gopay", "other_qris");
         }
 
         // Fill transaction details
