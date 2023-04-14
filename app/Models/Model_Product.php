@@ -9,7 +9,7 @@ class Model_Product extends Model
     protected $table      = 'tb_product';
     protected $primaryKey = 'product_code';
     protected $useAutoIncrement = false;
-    protected $allowedFields = ['product_code', 'product_name', 'product_price', 'product_qty', 'product_unit', 'product_description', 'product_faskes', 'product_create', 'product_edit', 'product_status'];
+    protected $allowedFields = ['product_code', 'product_name', 'product_price', 'product_qty', 'product_unit', 'product_description', 'product_faskes', 'product_create', 'product_edit', 'product_status', 'product_type'];
 
     public function list($user_faskes)
     {

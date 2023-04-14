@@ -8,7 +8,7 @@ class Model_Medtreat extends Model
 {
     protected $table      = 'tb_medical_treatment';
     protected $primaryKey = 'medtreat_id';
-    protected $allowedFields = ['medtreat_medical', 'medtreat_treatment', 'medtreat_description', 'medtreat_price', 'medtreat_name'];
+    protected $allowedFields = ['medtreat_medical', 'medtreat_treatment', 'medtreat_description', 'medtreat_price', 'medtreat_name', 'medtreat_discount', 'medtreat_discount_price'];
 
     public function find_medical($medical_code)
     {

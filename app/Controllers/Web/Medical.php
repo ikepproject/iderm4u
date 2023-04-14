@@ -183,16 +183,20 @@ class Medical extends BaseController
                 $medtreat_items     = $this->request->getPost('group-medtreat[][medtreat_treatment]');
                 if ($medtreat_items != NULL) {
                     foreach ($medtreat_items as $medtreat) {
-                        $medtreat_treatment           = $medtreat['medtreat_treatment'];
-                        $treatmentData  = $this->treatment->find($medtreat_treatment);
+                        $medtreat_treatment = $medtreat['medtreat_treatment'];
+                        $treatmentData      = $this->treatment->find($medtreat_treatment);
 
                         if ($treatmentData['treatment_discount'] == 't') {
-                            $discount       = round((($treatmentData['treatment_price']-$treatmentData['treatment_discount_price'])/$treatmentData['treatment_price'])*100,2);
-                            $treatmentName  = 'PROMO '. $discount . '% - '. $treatmentData['treatment_name'];
-                            $treatmentPrice = $treatmentData['treatment_discount_price'];
+                            $discount           = round((($treatmentData['treatment_price']-$treatmentData['treatment_discount_price'])/$treatmentData['treatment_price'])*100,2);
+                            $treatmentName      = $treatmentData['treatment_name'];
+                            $treatmentDiscount  = 'PROMO '. $discount . '%';
+                            $treatmentPrice     = $treatmentData['treatment_discount_price'];
+                            $treatmentBD        = $treatmentData['treatment_price'];
                         } else {
-                            $treatmentName  = $treatmentData['treatment_name'];
-                            $treatmentPrice = $treatmentData['treatment_price'];
+                            $treatmentName      = $treatmentData['treatment_name'];
+                            $treatmentDiscount  = NULL;
+                            $treatmentPrice     = $treatmentData['treatment_price'];
+                            $treatmentBD        = NULL;
                         }
                         
                         $newMedtreat = [
@@ -200,6 +204,8 @@ class Medical extends BaseController
                             'medtreat_treatment'      => $medtreat_treatment,
                             'medtreat_name'           => $treatmentName,
                             'medtreat_price'          => $treatmentPrice,
+                            'medtreat_discount'       => $treatmentDiscount,
+                            'medtreat_discount_price' => $treatmentBD,
                         ];
                         $amount        = $amount + $treatmentPrice; 
                         $this->medtreat->insert($newMedtreat);
@@ -231,9 +237,18 @@ class Medical extends BaseController
                         $updateProduct = [
                             'product_qty' => $productQty
                         ];
+
+                        $newStock = [
+                            'stock_product'     => $medprod_product,
+                            'stock_type'        => 'Pengurangan',
+                            'stock_qty'         => $medprod_qty,
+                            'stock_create'      => date('Y-m-d H:i:s'),
+                            'stock_description' => $medical_code,
+                        ];
                         
                         $this->medprod->insert($newMedprod);
                         $this->product->update($medprod_product, $updateProduct);
+                        $this->product_stock->insert($newStock);
                         
                     }
                 }

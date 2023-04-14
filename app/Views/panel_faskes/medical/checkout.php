@@ -75,8 +75,15 @@
                         <div class="row">
                             <div class="col-sm-6 mt-3">
                                 <address>
-                                    <strong>Metode Pembayaran:</strong><br>
-                                    <?= $invoice['invoice_method'] ?><br>
+                                    <strong>Pembayaran:</strong><br>
+                                    Via: <?= $invoice['invoice_method'] ?><br>
+                                    Status:
+                                    <?php if ($invoice['invoice_status'] == 'SUCCEEDED') { ?> 
+                                        Lunas
+                                    <?php } ?>
+                                    <?php if ($invoice['invoice_status'] != 'SUCCEEDED') { ?> 
+                                        Pending
+                                    <?php } ?>
                                 </address>
                             </div>
                             <div class="col-sm-6 mt-3 text-sm-end">
@@ -128,7 +135,14 @@
                                         $nomor++; ?>
                                         <tr>
                                             <td><?= $nomor ?></td>
-                                            <td>TR - <?= $treatment['medtreat_name'] ?></td>
+                                            <td>TR - 
+                                                <?= $treatment['medtreat_discount'] ?>
+                                                <?= $treatment['treatment_type'] ?> 
+                                                <?= $treatment['medtreat_name'] ?>
+                                                <?php if ($treatment['medtreat_discount'] != NULL) { ?>
+                                                    <s>Rp <?= rupiah($treatment['medtreat_discount_price']) ?></s>
+                                                <?php } ?>
+                                            </td>
                                             <td class="text-end">Rp <?= rupiah($treatment['medtreat_price']) ?></td>
                                         </tr>
                                         <?php endforeach; ?>
@@ -139,7 +153,12 @@
                                         $nomor++; ?>
                                         <tr>
                                             <td><?= $nomor ?></td>
-                                            <td>PR - <?= $product['medprod_name'] ?> (<?= $product['medprod_qty'] ?>) @<?= rupiah($product['medprod_price']) ?></td>
+                                            <td>PR - 
+                                                <?= $product['product_type'] ?> 
+                                                <?= $product['medprod_name'] ?> 
+                                                (<?= $product['medprod_qty'] ?>) 
+                                                @<?= rupiah($product['medprod_price']) ?>
+                                            </td>
                                             <td class="text-end">Rp <?= rupiah($product['medprod_price']*$product['medprod_qty']) ?></td>
                                         </tr>
                                         <?php endforeach; ?>

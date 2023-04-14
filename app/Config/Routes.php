@@ -123,11 +123,13 @@ $routes->get('product', 'Web\Product::index', ["filter" => "authweb"]);         
 $routes->get('product/formadd', 'Web\Product::formadd', ["filter" => "authweb"]);       //Product Add Modal
 $routes->post('product/formedit', 'Web\Product::formedit', ["filter" => "authweb"]);    //Product Edit Modal
 $routes->post('product/formstock', 'Web\Product::formstock', ["filter" => "authweb"]);  //Product Stock Modal
+$routes->get('product-flow', 'Web\Product::flow', ["filter" => "authweb"]);             //Product Flow Page
+$routes->post('product-flow/filter', 'Web\Product::flow_filter', ["filter" => "authweb"]); 
 
 $routes->get('medical', 'Web\Medical::index', ["filter" => "authweb"]);                                 //Medical Page
 $routes->get('medicalformadd', 'Web\Medical::formadd', ["filter" => "authweb"]);                        //Medical Add Page
 $routes->post('medical/formdetail', 'Web\Medical::formdetail', ["filter" => "authweb"]);                //Medical Detail Modal
-$routes->post('medical/formdiagnose', 'Web\Medical::formdiagnose', ["filter" => "authweb"]);          //Refer Hospital Diagnose Form
+$routes->post('medical/formdiagnose', 'Web\Medical::formdiagnose', ["filter" => "authweb"]);            //Refer Hospital Diagnose Form
 
 $routes->get('refer', 'Web\Refer::index', ["filter" => "authweb"]);                                     //Refer Page Clinic
 $routes->get('refer-visit', 'Web\Refer_Hospital::index', ["filter" => "authweb"]);                      //Refer Page Hospital
@@ -140,13 +142,10 @@ $routes->get('order', 'Web\Product_Order::index', ["filter" => "authweb"]);     
 $routes->get('appointment', 'Web\Appointment::index', ["filter" => "authweb"]);                          //Appointment Page
 $routes->post('appointment/formaccept', 'Web\Appointment::formaccept', ["filter" => "authweb"]);         //Appointment Form Accept
 
-$routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);  //Pay & Invoice 
-
-// $routes->get('transaction2/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);  //Pay & Invoice 
+$routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);   //Pay & Invoice 
 $routes->post('transaction/token', 'Web\Midtrans::token', ["filter" => "authweb"]);  
 $routes->post('transaction/finish', 'Web\Midtrans::finish'); 
 $routes->post('transaction/hook', 'Web\Midtrans::hook');
-
 $routes->post('transaction/formpayinfo', 'Web\Transaction::formpayinfo', ["filter" => "authweb"]);       //Cash Checkout Modal
 // $routes->post('transaction/formcash', 'Web\Transaction::formcash', ["filter" => "authweb"]);         //Cash Checkout Modal
 

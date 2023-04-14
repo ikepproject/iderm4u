@@ -34,6 +34,7 @@ use App\Models\Model_Visitor;
 use App\Models\Model_Appointment;
 use App\Models\Model_Midtrans;
 use App\Models\Model_Treatment_Discount;
+use App\Models\Model_Type;
 use CodeIgniter\Model;
 
 class BaseController extends Controller
@@ -79,6 +80,7 @@ class BaseController extends Controller
 		$this->appointment	= new Model_Appointment;
         $this->midtrans     = new Model_Midtrans;
         $this->discount     = new Model_Treatment_Discount;
+        $this->type         = new Model_Type;
 		$this->db 			= \Config\Database::connect();
 	}
 

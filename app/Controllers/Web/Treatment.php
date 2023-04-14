@@ -35,8 +35,9 @@ class Treatment extends BaseController
         if ($this->request->isAJAX()) {
             $user = $this->userauth(); // Return Object
             $data = [
-                'title' => 'Tambah Treatment',
-                'user'   => $user,
+                'title'         => 'Tambah Treatment',
+                'user'          => $user,
+                'type_treatment'=> $this->type->list('Treatment', $user['user_faskes']),
             ];
             $response = [
                 'data' => view('panel_faskes/treatment/add', $data)
@@ -48,11 +49,14 @@ class Treatment extends BaseController
     public function formedit()
     {
         if ($this->request->isAJAX()) {
+            $user           = $this->userauth(); // Return Object
             $treatment_code = $this->request->getVar('treatment_code');
             $treatment      = $this->treatment->find($treatment_code);
+            
             $data = [
-                'title'     => 'Edit Data Treatment',
-                'treatment' => $treatment,
+                'title'         => 'Edit Data Treatment',
+                'treatment'     => $treatment,
+                'type_treatment'=> $this->type->list('Treatment', $user['user_faskes']),
             ];
             $response = [
                 'data' => view('panel_faskes/treatment/edit', $data)

@@ -3,14 +3,15 @@
         <tr class="table-secondary">
             <th width="2%">#</th>
             <th width="15%">Nama</th>
+            <th width="10%">Jenis</th>
             <th width="10%">ID</th>
-            <th width="10%">Status</th>
+            <th width="8%">Status</th>
             <th width="10%">Harga</th>
             <th width="10%">Qty</th>
             <th width="10%">Unit</th>
             <!-- <th width="10%">Create/Edit</th> -->
-            <th width="20%">Keterangan</th>
-            <th width="5%"></th>
+            <th width="15%">Keterangan</th>
+            <th width="10%"></th>
         </tr>
     </thead>
     <tbody>
@@ -20,6 +21,7 @@
             <tr>
                 <td><?= $nomor ?></td>
                 <td><?= $data['product_name'] ?></td>
+                <td><?= $data['product_type'] ?></td>
                 <td><?= $data['product_code'] ?></td>
                 <td>
                     <?php if ($data['product_status'] == 't') { ?> 

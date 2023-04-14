@@ -17,7 +17,17 @@
                         <div class="invalid-feedback error_product_name"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="product_price" class="form-label">Harga product<code>*</code></label>
+                            <label for="product_type" class="form-label">Jenis Product <code>*</code></label>
+                            <select class="form-select" id="product_type" name="product_type">
+                                <option selected disabled>Pilih...</option>
+                                <?php foreach ($type_product as $key => $data) { ?>
+                                    <option value="<?= $data['type_name'] ?>" <?php if ($data['type_name'] == $product['product_type']) echo "selected"; ?> ><?= $data['type_name'] ?></option>
+                                <?php } ?>
+                            </select>
+                            <div class="invalid-feedback error_product_type"></div>
+                        </div>
+                    <div class="mb-3">
+                        <label for="product_price" class="form-label">Harga Product<code>*</code></label>
                         <input type="text" class="form-control price" id="product_price" name="product_price" value="<?= $product['product_price'] ?>" >
                         <div class="invalid-feedback error_product_price"></div>
                     </div>
@@ -71,6 +81,7 @@
         data: {
             product_code: $('input#product_code').val(),
             product_name: $('input#product_name').val(),
+            product_type: $('select#product_type').val(),
             product_price: $('input#product_price').val(),
             product_qty: $('input#product_qty').val(),
             product_unit: $('input#product_unit').val(),
@@ -98,6 +109,14 @@
                 } else {
                     $("#product_name").removeClass("is-invalid");
                     $(".error_product_name").html("");
+                }
+
+                if (response.error.product_type) {
+                    $("#product_type").addClass("is-invalid");
+                    $(".error_product_type").html(response.error.product_type);
+                } else {
+                    $("#product_type").removeClass("is-invalid");
+                    $(".error_product_type").html("");
                 }
 
                 if (response.error.product_unit) {

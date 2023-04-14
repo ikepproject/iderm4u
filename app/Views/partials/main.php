@@ -270,9 +270,20 @@
                         </li>
 
                         <li>
-                            <a href="<?= site_url('product') ?>" class="waves-effect">
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
                                 <i class="bx bx-package"></i>
-                                <span key="t-product">Produk</span>
+                                <span key="t-refer">Produk</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="<?= site_url('product') ?>" key="t-product">Data</a></li>
+                                <li><a href="<?= site_url('product-flow') ?>" key="t-product-flow">Flow</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="<?= site_url('report') ?>" class="waves-effect">
+                                <i class="bx bx-bar-chart-square"></i>
+                                <span key="t-report">Laporan</span>
                             </a>
                         </li>
 

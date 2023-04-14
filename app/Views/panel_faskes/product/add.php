@@ -17,7 +17,17 @@
                             <div class="invalid-feedback error_product_name"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="product_price" class="form-label">Harga product<code>*</code></label>
+                            <label for="product_type" class="form-label">Jenis Product <code>*</code></label>
+                            <select class="form-select" id="product_type" name="product_type">
+                                <option selected disabled>Pilih...</option>
+                                <?php foreach ($type_product as $key => $data) { ?>
+                                    <option value="<?= $data['type_name'] ?>"><?= $data['type_name'] ?></option>
+                                <?php } ?>
+                            </select>
+                            <div class="invalid-feedback error_product_type"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="product_price" class="form-label">Harga Product<code>*</code></label>
                             <input type="text" class="form-control price" id="product_price" name="product_price" placeholder="Masukan harga produk..." >
                             <div class="invalid-feedback error_product_price"></div>
                         </div>
@@ -90,6 +100,14 @@
             } else {
                 $("#product_name").removeClass("is-invalid");
                 $(".error_product_name").html("");
+            }
+
+            if (response.error.product_type) {
+                $("#product_type").addClass("is-invalid");
+                $(".error_product_type").html(response.error.product_type);
+            } else {
+                $("#product_type").removeClass("is-invalid");
+                $(".error_product_type").html("");
             }
 
             if (response.error.product_price) {

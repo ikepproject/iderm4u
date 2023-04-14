@@ -35,8 +35,9 @@ class Product extends BaseController
         if ($this->request->isAJAX()) {
             $user = $this->userauth(); // Return Object
             $data = [
-                'title' => 'Tambah Product',
-                'user'   => $user,
+                'title'         => 'Tambah Product',
+                'user'          => $user,
+                'type_product'  => $this->type->list('Product', $user['user_faskes']),
             ];
             $response = [
                 'data' => view('panel_faskes/product/add', $data)
@@ -48,11 +49,13 @@ class Product extends BaseController
     public function formedit()
     {
         if ($this->request->isAJAX()) {
+            $user = $this->userauth(); // Return Object
             $product_code = $this->request->getVar('product_code');
             $product      = $this->product->find($product_code);
             $data = [
-                'title'     => 'Edit Data Product',
-                'product'   => $product,
+                'title'         => 'Edit Data Product',
+                'product'       => $product,
+                'type_product'  => $this->type->list('Product', $user['user_faskes']),
             ];
             $response = [
                 'data' => view('panel_faskes/product/edit', $data)
@@ -80,12 +83,80 @@ class Product extends BaseController
         }
     }
 
+    public function flow()
+	{
+		$user = $this->userauth(); // Return Object
+
+        $uri            = new \CodeIgniter\HTTP\URI(current_url(true));
+        $queryString    = $uri->getQuery();
+        $params         = [];
+        parse_str($queryString, $params);
+
+        if (count($params) == 2 && array_key_exists('month', $params) && array_key_exists('year', $params)) {
+            $month = $params['month'];
+            $year  = $params['year'];
+
+            if (is_string($year)) {
+                $year = date('Y');
+            }
+
+            if (ctype_alpha($month) && $month != 'all') {
+                $month = date('m');
+            }
+
+            if ($month >= 1 && $month <= 9) { 
+                $month = str_pad($month, 2, '0', STR_PAD_LEFT);
+            }
+
+            if ($month == 'all') {
+                $list  = $this->product_stock->flow_year($year);
+            } else {
+                $list  = $this->product_stock->flow($month, $year);
+            }
+            
+        } else{
+            $month = date('m');
+            $year  = date('Y');
+            $list  = $this->product_stock->flow($month, $year);
+        }
+
+        $query_month    = $this->db->query('SELECT DISTINCT EXTRACT(MONTH FROM stock_create) AS month_number, to_char(stock_create, \'Month\') AS month_name FROM tb_product_stock');
+        $query_year     = $this->db->query('SELECT DISTINCT EXTRACT(YEAR FROM stock_create) AS year FROM tb_product_stock');
+
+        $unique_month   = $query_month->getResultArray();
+        $unique_year    = $query_year->getResultArray();
+
+		$data = [
+			'title'         => 'Product Flow',
+			'user'          => $user,
+            'unique_month'  => $unique_month,
+            'unique_year'   => $unique_year,
+            'month'         => $month,
+            'year'          => $year,
+            'list'          => $list
+		];
+		return view('panel_faskes/product/flow', $data);
+	}
+
+    public function flow_filter()
+    {
+        $month_filter = $this->request->getVar('month_filter'); 
+        $year_filter = $this->request->getVar('year_filter');
+
+        $queryParam = 'month=' . $month_filter . '&year=' . $year_filter;
+
+        $newUrl = 'product-flow?' . $queryParam; 
+
+        return redirect()->to($newUrl);
+    }
+
     public function create()
     {
         if ($this->request->isAJAX()) {
             $validation = \Config\Services::validation();
             $rules = [
                 'product_name'    => 'required',
+                'product_type'    => 'required',
                 'product_price'   => 'required',
                 'product_qty'     => 'required',
                 'product_unit'    => 'required',
@@ -95,6 +166,9 @@ class Product extends BaseController
             $errors = [
                 'product_name' => [
                     'required'   => 'Nama produk harus diisi.',
+                ],
+                'product_type' => [
+                    'required'   => 'Jenis produk harus dipilih.',
                 ],
                 'product_price' => [
                     'required'   => 'Harga produk harus diisi.',
@@ -114,6 +188,7 @@ class Product extends BaseController
                 $response = [
                     'error' => [
                         'product_name'      => $validation->getError('product_name'),
+                        'product_type'      => $validation->getError('product_type'),
                         'product_price'     => $validation->getError('product_price'),
                         'product_qty'       => $validation->getError('product_qty'),
                         'product_unit'      => $validation->getError('product_unit'),
@@ -144,6 +219,7 @@ class Product extends BaseController
                 $new = [
                     'product_code'        => $product_code,
                     'product_name'        => $this->request->getVar('product_name'),
+                    'product_type'        => $this->request->getVar('product_type'),
                     'product_price'       => $product_price,
                     'product_qty'         => $this->request->getVar('product_qty'),
                     'product_unit'        => $this->request->getVar('product_unit'),
@@ -168,6 +244,7 @@ class Product extends BaseController
             $validation = \Config\Services::validation();
             $rules = [
                 'product_name'    => 'required',
+                'product_type'    => 'required',
                 'product_price'   => 'required',
                 'product_unit'    => 'required',
                 'product_status'  => 'required',
@@ -176,6 +253,9 @@ class Product extends BaseController
             $errors = [
                 'product_name' => [
                     'required'   => 'Nama produk harus diisi.',
+                ],
+                'product_type' => [
+                    'required'   => 'Jenis produk harus dipilih.',
                 ],
                 'product_price' => [
                     'required'   => 'Harga produk harus diisi.',
@@ -192,6 +272,7 @@ class Product extends BaseController
                 $response = [
                     'error' => [
                         'product_name'      => $validation->getError('product_name'),
+                        'product_type'      => $validation->getError('product_type'),
                         'product_price'     => $validation->getError('product_price'),
                         'product_unit'      => $validation->getError('product_unit'),
                         'product_status'    => $validation->getError('product_status'),
@@ -203,6 +284,7 @@ class Product extends BaseController
 
                 $update = [
                     'product_name'        => $this->request->getVar('product_name'),
+                    'product_type'        => $this->request->getVar('product_type'),
                     'product_price'       => $product_price,
                     'product_unit'        => $this->request->getVar('product_unit'),
                     'product_description' => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('product_description'))),

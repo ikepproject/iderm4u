@@ -17,8 +17,13 @@
                             <div class="invalid-feedback error_treatment_name"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="treatment_type" class="form-label">Tipe Treatment<code>*</code></label>
-                            <input type="text" class="form-control" id="treatment_type" name="treatment_type" placeholder="Masukan tipe treatment..." >
+                            <label for="treatment_type" class="form-label">Jenis Treatment<code>*</code></label>
+                            <select class="form-select" id="treatment_type" name="treatment_type">
+                                <option selected disabled>Pilih...</option>
+                                <?php foreach ($type_treatment as $key => $data) { ?>
+                                    <option value="<?= $data['type_name'] ?>"><?= $data['type_name'] ?></option>
+                                <?php } ?>
+                            </select>
                             <div class="invalid-feedback error_treatment_type"></div>
                         </div>
                         <div class="mb-3">

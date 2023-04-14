@@ -3,7 +3,7 @@
         <tr class="table-secondary">
             <th width="2%">#</th>
             <th width="22%">Nama</th>
-            <th width="7%">Tipe</th>
+            <th width="7%">Jenis</th>
             <th width="10%">ID</th>
             <th width="10%">Status</th>
             <th width="10%">Harga</th>

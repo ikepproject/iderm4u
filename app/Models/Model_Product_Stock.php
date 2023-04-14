@@ -17,4 +17,23 @@ class Model_Product_Stock extends Model
             ->orderBy('stock_create', 'DESC')
             ->get()->getResultArray();
     }
+
+    public function flow($month, $year)
+    {
+        return $this->table('tb_product_stock')
+            ->join('tb_product', 'tb_product.product_code = tb_product_stock.stock_product')
+            ->where('EXTRACT(MONTH FROM stock_create)', $month)
+            ->where('EXTRACT(YEAR FROM stock_create)', $year)
+            ->orderBy('stock_create', 'DESC')
+            ->get()->getResultArray();
+    }
+
+    public function flow_year($year)
+    {
+        return $this->table('tb_product_stock')
+            ->join('tb_product', 'tb_product.product_code = tb_product_stock.stock_product')
+            ->where('EXTRACT(YEAR FROM stock_create)', $year)
+            ->orderBy('stock_create', 'DESC')
+            ->get()->getResultArray();
+    }
 }
