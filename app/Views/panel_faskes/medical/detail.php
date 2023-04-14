@@ -212,7 +212,7 @@
                                                                     <?= $product['product_type'] ?> 
                                                                     <?= $product['medprod_name'] ?> 
                                                                     (<?= $product['medprod_qty'] ?>) 
-                                                                    @<?= rupiah($product['product_price']) ?>
+                                                                    @<?= rupiah($product['medprod_price']) ?>
                                                                 </td>
                                                                 <td class="text-end">Rp <?= rupiah($product['medprod_price']*$product['medprod_qty']) ?></td>
                                                             </tr>
