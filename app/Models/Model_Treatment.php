@@ -24,6 +24,7 @@ class Model_Treatment extends Model
         return $this->table('tb_treatment')
             ->where('treatment_faskes', $user_faskes)
             ->where('treatment_status', 't')
+            ->orderBy('treatment_type', 'ASC')
             ->orderBy('treatment_name', 'ASC')
             ->get()->getResultArray();
     }

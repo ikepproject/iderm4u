@@ -24,6 +24,7 @@ class Model_Product extends Model
         return $this->table('tb_product')
             ->where('product_faskes', $user_faskes)
             ->where('product_status', 't')
+            ->orderBy('product_type', 'ASC')
             ->orderBy('product_name', 'ASC')
             ->get()->getResultArray();
     }

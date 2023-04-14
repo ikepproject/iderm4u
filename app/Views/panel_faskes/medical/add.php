@@ -75,9 +75,12 @@
                                     <select class="form-select select2repeater" id="medtreat_treatment" name="medtreat_treatment">
                                         <option selected disabled>Pilih...</option>
                                         <?php foreach ($treatment as $key => $data) { ?>
-                                            <option value="<?= $data['treatment_code'] ?>"><?= $data['treatment_name'] ?> - 
+                                            <option value="<?= $data['treatment_code'] ?>"> 
+                                            <?php if ($data['treatment_discount'] == 't') { ?> PROMO  <?= round((($data['treatment_price']-$data['treatment_discount_price'])/$data['treatment_price'])*100,2) ?> % <?php } ?>
+                                              <?= $data['treatment_type'] ?> - 
+                                              <?= $data['treatment_name'] ?> - 
                                               <?php if ($data['treatment_discount'] == 'f' || $data['treatment_discount'] == NULL) { ?> Rp <?= rupiah( $data['treatment_price']) ?> <?php } ?>
-                                              <?php if ($data['treatment_discount'] == 't') { ?> PROMO<i class="bx bxs-offer"></i> <?= round((($data['treatment_price']-$data['treatment_discount_price'])/$data['treatment_price'])*100,2) ?> % - Rp <?= rupiah($data['treatment_discount_price']) ?> <?php } ?>
+                                              <?php if ($data['treatment_discount'] == 't') { ?> Rp <?= rupiah($data['treatment_discount_price']) ?> <?php } ?>
                                             </option>
                                         <?php } ?>
                                     </select>
@@ -106,7 +109,7 @@
                                       <select class="form-select select2repeater" id="medprod_product" name="medprod_product">
                                           <option selected disabled>Pilih...</option>
                                           <?php foreach ($product as $key => $data) { ?>
-                                              <option value="<?= $data['product_code'] ?>" <?php if ($data['product_qty'] == 0) echo "disabled"; ?> > <?= $data['product_name'] ?> - Rp <?= rupiah($data['product_price']) ?> (Qty=<?= $data['product_qty'] ?>)</option>
+                                              <option value="<?= $data['product_code'] ?>" <?php if ($data['product_qty'] == 0) echo "disabled"; ?> > <?= $data['product_type'] ?> - <?= $data['product_name'] ?> - Rp <?= rupiah($data['product_price']) ?> (Qty=<?= $data['product_qty'] ?>)</option>
                                           <?php } ?>
                                       </select>
                                   </div>
