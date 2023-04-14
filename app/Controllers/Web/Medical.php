@@ -245,7 +245,7 @@ class Medical extends BaseController
                             'medprod_name'     => $productName
                         ];
                         
-                        $amount      = $amount + $productPrice; 
+                        $amount      = $amount + ($productPrice*$medprod_qty); 
                         
                         $productQty  = $productData['product_qty'] - $medprod_qty;
                         $updateProduct = [
