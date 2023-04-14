@@ -212,7 +212,7 @@
                                                                     <?= $product['product_type'] ?> 
                                                                     <?= $product['medprod_name'] ?> 
                                                                     (<?= $product['medprod_qty'] ?>) 
-                                                                    @<?= rupiah($product['medprod_price']) ?>
+                                                                    @<?= rupiah($product['product_price']) ?>
                                                                 </td>
                                                                 <td class="text-end">Rp <?= rupiah($product['medprod_price']*$product['medprod_qty']) ?></td>
                                                             </tr>
@@ -282,6 +282,30 @@
                         </div>
                         <?= form_close() ?>
                         <hr>
+
+                        <?php if ($medgal_refer != NULL) {?>
+                            <?php
+                            foreach ($medgal_refer as $gallery_refer) :
+                            ?>
+                            
+                            <div class="row">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="product-img position-relative">
+                                            <img src="<?= base_url() ?>/public/assets/images/medical/thumb/<?= $gallery_refer['medgal_filename'] ?>" alt="" class="img-fluid mx-auto d-block">
+                                        </div>
+                                        <div class="mt-4 text-center text-break">
+                                            <p class="mb-3"><?= $gallery_refer['medgal_filename'] ?></p> <br>
+                                            <button type="button" class="btn btn-danger mb-2" onclick="del('<?= $gallery_refer['medgal_id'] ?>', '<?= $gallery_refer['medgal_filename'] ?>')">
+                                                <i class="bx bx-trash"></i> Hapus
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        <?php } ?>
+                       
                         <?php
                         foreach ($medgal as $gallery) :
                         $nomor++; ?>
@@ -437,6 +461,10 @@
     </div><!-- /.modal-dialog -->
 </div>
 <script>
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+});
+
 function preview_images() {
     var total_file=document.getElementById("images").files.length;
     for(var i=0;i<total_file;i++) {

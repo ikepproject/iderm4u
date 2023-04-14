@@ -54,7 +54,7 @@
                         </div>
 
                         
-                            <button type="submit" class="btn btn-primary" id="save" name="save"><i class="bx bx-save"></i> Simpan Diagnosis</button>
+                        <button type="submit" class="btn btn-primary" id="save" name="save"><i class="bx bx-save"></i> Simpan Diagnosis</button>
                     <?= form_close() ?>
                     </div>
 
@@ -76,6 +76,16 @@
                             <li style="background-color: #556ee6;" data-bs-target="#carouselDiagnose" data-bs-slide-to="<?=  $nmr ?>"  <?php if ($nmr == 0) { ?> class="active" <?php } ?>  ></li>
                                 
                             <?php endforeach; ?>
+
+                            <?php if ($medgal_refer != NULL) {?>
+                                <?php
+                                foreach ($medgal_refer as $cr3) :
+                                $nmr++;   ?>
+                                
+                                <li style="background-color: #556ee6;" data-bs-target="#carouselDiagnose" data-bs-slide-to="<?=  $nmr ?>"  <?php if ($nmr == 0) { ?> class="active" <?php } ?>  ></li>
+                                    
+                                <?php endforeach; ?>
+                            <?php } ?>
                             </ol>
                             <!-- Wrapper for slides -->
                             <div class="carousel-inner">
@@ -102,6 +112,30 @@
                                     </div>
                                     
                                 <?php endforeach; ?>
+
+                                <?php if ($medgal_refer != NULL) {?>
+                                    <?php
+                                    foreach ($medgal_refer as $cr4) :
+                                    $nmr2++;   ?>
+                                    
+                                        <div class="carousel-item <?php if ($nmr2 == 0) { ?> active <?php } ?>">
+                                            <img src="<?= base_url() ?>/public/assets/images/medical/thumb/<?= $cr4['medgal_filename'] ?>" class="img-fluid mx-auto d-block" >
+                                            <div class="card border mt-3">
+                                                <div class="card-header bg-transparent ">
+                                                    <h5 class="my-0 text-primary"><i class="bx bx-chip"></i>Hasil Smart Detection</h5>
+                                                </div>
+                                                <div class="card-body">
+                                                    <h3 class="card-title">Disease A 90%</h3>
+                                                    <p class="card-text">
+                                                        Disease B 5% <br>
+                                                        Disease B 5% <br>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    <?php endforeach; ?>
+                                <?php } ?>
                                 <!-- Controls -->
                                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselDiagnose" data-bs-slide="prev">
                                     <span> <h1><i class="fa fa-angle-left text-primary" aria-hidden="true"></i></h1> </span>

@@ -72,18 +72,25 @@ class Medical extends BaseController
             $medgal       = $this->medgal->find_medical($medical_code);
             $invoice      = $this->invoice->find_medical($medical_code);
 
+            if ($medical['medical_refer_code'] != NULL) {
+                $medgal_refer  = $this->medgal->find_medical($medical['medical_refer_code']);
+            } else {
+                $medgal_refer  = NULL;
+            }
+
             $data = [
-                'title'     => 'Detail Data Kunjungan Pasien',
-                'user'      => $user,
-                'patient'   => $patient,
-                'medical'   => $medical,
-                'medtreat'  => $medtreat,
-                'medprod'   => $medprod,
-                'medoth'    => $medoth,
-                'medgal'    => $medgal,
-                'invoice'   => $invoice,
-                'faskes_user'=> $faskes_user, 
-                'faskes_list'=> $this->faskes->list_faskes()
+                'title'         => 'Detail Data Kunjungan Pasien',
+                'user'          => $user,
+                'patient'       => $patient,
+                'medical'       => $medical,
+                'medtreat'      => $medtreat,
+                'medprod'       => $medprod,
+                'medoth'        => $medoth,
+                'medgal'        => $medgal,
+                'medgal_refer'  => $medgal_refer,
+                'invoice'       => $invoice,
+                'faskes_user'   => $faskes_user, 
+                'faskes_list'   => $this->faskes->list_faskes()
             ];
             $response = [
                 'data' => view('panel_faskes/medical/detail', $data)
@@ -97,9 +104,15 @@ class Medical extends BaseController
         if ($this->request->isAJAX()) {
             $medical_code       = $this->request->getVar('medical_code');
             $medical            = $this->medical->find($medical_code);
-            $diagnose_medgal             = $this->medgal->find_medical($medical_code);
+            $diagnose_medgal    = $this->medgal->find_medical($medical_code);
             $patient_user       = $this->user->find($medical['medical_user']);
             $medical_refer_type = $medical['medical_refer_type'];
+
+            if ($medical['medical_refer_code'] != NULL) {
+                $medgal_refer  = $this->medgal->find_medical($medical['medical_refer_code']);
+            } else {
+                $medgal_refer  = NULL;
+            }
 
             if ($medical_refer_type == NULL) {
                 $type     = 'Kunjungan Pasien';
@@ -111,11 +124,12 @@ class Medical extends BaseController
             
 
             $data = [
-                'title'         => 'Form Diagnose ' . $type,
-                'type'          => $type,
-                'patient_user'  => $patient_user,
-                'medical'       => $medical,
-                'diagnose_medgal'        => $diagnose_medgal
+                'title'             => 'Form Diagnose ' . $type,
+                'type'              => $type,
+                'patient_user'      => $patient_user,
+                'medical'           => $medical,
+                'diagnose_medgal'   => $diagnose_medgal,
+                'medgal_refer'      => $medgal_refer,
 
             ];
             $response = [

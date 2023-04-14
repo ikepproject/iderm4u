@@ -45,8 +45,8 @@
                         <span class="badge bg-secondary">Diajukan</span>
                     <?php } ?>
                     <?php if ($data['appointment_date_fix'] != NULL) { ?> 
-                        <span class="badge bg-success">Dijadwalkan</span>
-                        <?= longdate_indo(substr($data['appointment_date_fix'],0,10)) ?>, <?= substr($data['appointment_date_fix'],12,16)?>WIB
+                        <span class="badge bg-success">Dijadwalkan</span> <br>
+                        <?= longdate_indo(substr($data['appointment_date_fix'],0,10)) ?>, <?= substr($data['appointment_date_fix'],11,5)?>WIB
                     <?php } ?>
                 </td>
                 <td>
