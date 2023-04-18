@@ -57,4 +57,38 @@ class Refer_Hospital extends BaseController
             echo json_encode($response);
         }
     }
+
+    public function refer_visit()
+	{
+		$user           = $this->userauth(); // Return Object
+        $user_faskes    = $user['user_faskes'];
+        $uri            = new \CodeIgniter\HTTP\URI(current_url(true));
+        $queryString    = $uri->getQuery();
+        $params         = [];
+        parse_str($queryString, $params);
+
+        if (count($params) == 1 && array_key_exists('medical', $params)) {
+            $medical_code   = $params['medical'];
+
+            $medical        = $this->medical->find($medical_code);
+
+            if ($medical != 0) {
+                $product     = $this->product->list_active($user_faskes);
+                $treatment   = $this->treatment->list_active($user_faskes);
+                $data = [
+                    'title'         => 'Form Rujukan Kunjungan',
+                    'user'          => $user,
+                    'product'       => $product,
+                    'treatment'     => $treatment
+                ];
+                return view('panel_faskes/refer_hospital/add_visit', $data);
+            } else {
+                return redirect()->to('/refer-visit');
+            }
+            
+        } else{
+            return redirect()->to('/refer-visit');
+        }
+		
+	}
 }

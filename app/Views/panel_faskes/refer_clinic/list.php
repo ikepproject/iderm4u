@@ -95,11 +95,11 @@
                     <?php } ?>
                     <?php if ($data['appointment_date_fix'] != NULL) { ?> 
                         <span class="badge bg-success">Dijadwalkan</span>
-                        <?= longdate_indo(substr($data['appointment_date_fix'],0,10)) ?>, <?= substr($data['appointment_date_fix'],12,16)?>WIB
+                        <?= longdate_indo(substr($data['appointment_date_fix'],0,10)) ?>, <?= substr($data['appointment_date_fix'],11,5)?>WIB
                     <?php } ?>
                 </td>
                 <td>
-                    <?php if ($data['appointment_date_fix'] != NULL) { ?> 
+                    <?php if ($data['appointment_date_fix'] == NULL) { ?> 
                         <button type="button" class="btn btn-danger mb-2" onclick="cancel('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>', '<?= $data['appointment_type'] ?>')"><i class="bx bx-x"></i>
                         </button> 
                     <?php } ?>

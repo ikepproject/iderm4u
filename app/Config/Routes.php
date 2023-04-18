@@ -82,6 +82,7 @@ $routes->post('medical/cancel', 'Web\Medical::cancel', ["filter" => "authweb"]);
 $routes->get('api/web/patient/get', 'Api\WebPatient::get', ["filter" => "authweb"]);
 $routes->post('medical/diagnose', 'Web\Medical::diagnose', ["filter" => "authweb"]);                        //Medical Diagnose Action
 
+
 $routes->get('refer/getdata', 'Web\Refer::getdata', ["filter" => "authweb"]); 
 $routes->get('refer-visit/getdata', 'Web\Refer_Hospital::getdatavisit', ["filter" => "authweb"]);
 $routes->get('refer-teledermatology/getdata', 'Web\Refer_Hospital::getdatatldm', ["filter" => "authweb"]);
@@ -134,6 +135,7 @@ $routes->post('medical/formdiagnose', 'Web\Medical::formdiagnose', ["filter" => 
 $routes->get('refer', 'Web\Refer::index', ["filter" => "authweb"]);                                     //Refer Page Clinic
 $routes->get('refer-visit', 'Web\Refer_Hospital::index', ["filter" => "authweb"]);                      //Refer Page Hospital
 $routes->get('refer-teledermatology', 'Web\Refer_Hospital::index', ["filter" => "authweb"]);            //Refer Page Hospital
+$routes->get('refer-visit/add', 'Web\Refer_Hospital::refer_visit', ["filter" => "authweb"]);
 
 $routes->get('invoice', 'Web\Invoice::index', ["filter" => "authweb"]);                                 //Invoice Page
 

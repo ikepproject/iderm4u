@@ -11,7 +11,11 @@
         </tr>
     </thead>
     <tbody>
-    <?php $nomor = 0;
+    <?php
+
+use Faker\Provider\Base;
+
+ $nomor = 0;
         foreach ($list as $data) :
             $nomor++; ?>
             <tr>
@@ -25,22 +29,11 @@
                     <?php if ($data['medical_status'] == 'Proses') { ?> 
                         <span class="badge rounded-pill bg-secondary">Proses</span>
                     <?php } ?>
-                    <?php if ($data['appointment_type'] == 'Teledermatologi') { ?> 
-                        <?php if ($data['invoice_status'] == 'SUCCEEDED') { ?> 
-                        <br> Pembayaran: <span class="badge rounded-pill bg-success">SUCCEEDED</span>
-                        <?php } ?>
-                        <?php if ($data['invoice_status'] == 'PENDING') { ?> 
-                        <br> Pembayaran: <span class="badge rounded-pill bg-secondary">PENDING</span>
-                        <?php } ?> 
-                    <?php } ?>  
                 </td>
                 <td>
                     <?php if ($data['appointment_type'] == 'Kunjungan') { ?> 
                         <span class="badge bg-success">Kunjungan</span>
                     <?php } ?>
-                    <?php if ($data['appointment_type'] == 'Teledermatologi') { ?> 
-                        <span class="badge bg-primary">Teledermatologi</span>
-                    <?php } ?>  
                 </td>
                 <td>
                     <?php if ($data['appointment_date_fix'] == NULL) { ?> 
@@ -48,24 +41,26 @@
                     <?php } ?>
                     <?php if ($data['appointment_date_fix'] != NULL) { ?> 
                         <span class="badge bg-success">Dijadwalkan</span>
-                        <?= longdate_indo(substr($data['appointment_date_fix'],0,10)) ?>, <?= substr($data['appointment_date_fix'],12,16)?>WIB
+                        <?= longdate_indo(substr($data['appointment_date_fix'],0,10)) ?>, <?= substr($data['appointment_date_fix'],11,5)?>WIB
                     <?php } ?>
                 </td>
                 <td>
                     <button type="button" class="btn btn-primary mb-2" onclick="detail('<?= $data['medical_code'] ?>')">
                         <i class="bx bx-detail"></i>
                     </button>
-                    <?php if ($data['appointment_date_fix'] == NULL && $data['invoice_status'] == 'SUCCEEDED') { ?> 
+                    <?php if ($data['appointment_date_fix'] == NULL) { ?> 
                         <button type="button" class="btn btn-success mb-2" onclick="accept('<?= $data['medical_code'] ?>')">
                             <i class="bx bx-calendar-check"></i>
                         </button>
                     <?php } ?>
-                    <?php if ($data['appointment_date_fix'] != NULL) { ?> 
-
+                    <?php if ($data['appointment_date_fix'] != NULL) { ?>
                         <?php if ($data['medical_status'] == 'Proses') { ?>
-                            <button type="button" class="btn btn-warning mb-2" onclick="edit('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>')">
-                            <i class="bx bx-edit"></i>
+                            <button type="button" class="btn btn-warning mb-2" onclick="accept('<?= $data['medical_code'] ?>')">
+                                <i class="bx bx-calendar-check"></i>
                             </button>
+                            <a type="button" class="btn btn-success mb-2" href="<?= base_url('refer-visit/add').'?medical='.$data['medical_code'] ?>">
+                                <i class="bx bx-plus-medical"></i>
+                            </a> 
                         <?php } ?>
                     <?php } ?>
                 </td>
@@ -76,7 +71,7 @@
 </table>
 
 <div class="detailmodal"></div>
-
+<div class="acceptmodal"></div>
 <script>
 $(document).ready(function () {
     //Patient Table
@@ -108,6 +103,20 @@ function detail(medical_code) {
         success: function(response) {
             $('.detailmodal').html(response.data).show();
             $('#modaldetail').modal('show');
+        }
+    });
+}
+function accept(medical_code) {
+    $.ajax({
+        type: "post",
+        url: "appointment/formaccept",
+        data: {
+            medical_code: medical_code
+        },
+        dataType: "json",
+        success: function(response) {
+            $('.acceptmodal').html(response.data).show();
+            $('#modalaccept').modal('show');
         }
     });
 }

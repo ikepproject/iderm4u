@@ -112,15 +112,23 @@ class Refer extends BaseController
                 $this->medical->update($this->request->getVar('medical_refer_code'), $updateMedical);
                 $this->medical->insert($newMedical);
                 $this->appointment->insert($newAppointment);
+                if ($refer_type == 'Kunjungan') {
+                    $invoice_code      = 'INV-' . $faskes_initial . '-'  . $this->request->getVar('medical_user') .date('YmdHis');
+                    $newInvoice = [
+                        'invoice_code'      => $invoice_code,
+                        'invoice_medical'   => $medical_code,
+                        'invoice_status'    => 'PENDING',
+                    ];
+                    $this->invoice->insert($newInvoice);
+                }
                 if ($refer_type == 'Teledermatologi') {
 
-                    $invoice_method = $this->request->getVar('invoice_method');
+                    $invoice_method    = $this->request->getVar('invoice_method');
 
                     $invoice_admin_fee = $this->transaction_fee($invoice_method, $amount);
 
                     $amount            = $amount + $invoice_admin_fee;
                     $invoice_code      = 'INV-' . $faskes_initial . '-'  . $this->request->getVar('medical_user') .date('YmdHis');
-                    $invoice_method    = 
                     $newInvoice = [
                         'invoice_code'      => $invoice_code,
                         'invoice_medical'   => $medical_code,
