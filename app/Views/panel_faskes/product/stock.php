@@ -31,7 +31,7 @@
                                     <input type="hidden" id="product_code" name="product_code" value="<?= $product['product_code'] ?>">
                                     <div class="mb-3">
                                         <label for="stock_type" class="form-label">Product <code>*</code></label>
-                                        <input type="text" value="<?= $product['product_code'] ?> - <?= $product['product_name'] ?>" readonly>
+                                        <input type="text" class="form-control" value="<?= $product['product_code'] ?> - <?= $product['product_name'] ?>" readonly>
                                     </div>
                                     <div class="mb-3">
                                         <label for="stock_type" class="form-label">Tindakan <code>*</code></label>
