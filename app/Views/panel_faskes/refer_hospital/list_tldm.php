@@ -4,6 +4,7 @@
             <th width="2%">#</th>
             <th width="11%">Pasien</th>
             <th width="9%">Faskes Asal</th>
+            <th width="5%">Tgl Dirujuk</th>
             <th width="7%">Status Pemeriksaan</th>
             <th width="7%">Status Pembayaran</th>
             <th width="5%">Jenis</th>
@@ -19,6 +20,9 @@
                 <td><?= $nomor ?></td>
                 <td><?= $data['patient_name'] ?></td>
                 <td><?= $data['faskes_name'] ?></td>
+                <td>
+                    <?= longdate_indo(substr($data['medical_create'],0,10)) ?>, <?= substr($data['medical_create'],11,5)?> WIB
+                </td>
                 <td>
                     <?php if ($data['medical_status'] == 'Selesai') { ?> 
                         <span class="badge rounded-pill bg-success">Selesai</span>

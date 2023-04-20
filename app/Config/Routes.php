@@ -52,104 +52,106 @@ $routes->setAutoRoute(false);
 // Authentication API Endpoint Mobile - http://localhost:8080/api/mobile
 $routes->post('api/app/auth/login', 'Api\AppAuth::login');         		
 
-// Web Action
+/**--- BACKEND FUNCTION ROUTES (Endpoint Function) ---*/
+/**--- auth ---*/
 $routes->post('dologin', 'Web\Auth::dologin'); 				
 $routes->post('doregister', 'Web\Auth::doregister');
 $routes->post('logout', 'Web\Auth::logout');
-
+/**--- patient ---*/
 $routes->get('patient/getdata', 'Web\Patient::getdata', ["filter" => "authweb"]); 
 $routes->post('patient/create', 'Web\Patient::create', ["filter" => "authweb"]);
 $routes->post('patient/update', 'Web\Patient::update', ["filter" => "authweb"]);
 $routes->post('patient/delete', 'Web\Patient::delete', ["filter" => "authweb"]);
-
+/**--- treatment ---*/
 $routes->get('treatment/getdata', 'Web\Treatment::getdata', ["filter" => "authweb"]); 
 $routes->post('treatment/create', 'Web\Treatment::create', ["filter" => "authweb"]);
 $routes->post('treatment/update', 'Web\Treatment::update', ["filter" => "authweb"]);
 $routes->post('treatment/discount', 'Web\Treatment::discount', ["filter" => "authweb"]);
-
+/**--- product ---*/
 $routes->get('product/getdata', 'Web\Product::getdata', ["filter" => "authweb"]); 
 $routes->post('product/create', 'Web\Product::create', ["filter" => "authweb"]);
 $routes->post('product/update', 'Web\Product::update', ["filter" => "authweb"]);
 $routes->post('product/restock', 'Web\Product::restock', ["filter" => "authweb"]);
-
+/**--- medical ---*/
 $routes->get('medical/getdata', 'Web\Medical::getdata', ["filter" => "authweb"]); 
 $routes->post('medical/create', 'Web\Medical::create', ["filter" => "authweb"]);
 $routes->post('medical/update', 'Web\Medical::update', ["filter" => "authweb"]);
 $routes->post('medical/delete', 'Web\Medical::delete', ["filter" => "authweb"]);
-$routes->post('medical/addgallery', 'Web\Medical::addgallery', ["filter" => "authweb"]);                //Medical Detail Add Gallery
-$routes->post('medical/deletegallery', 'Web\Medical::deletegallery', ["filter" => "authweb"]);          //Medical Detail Delete Gallery
-$routes->post('medical/cancel', 'Web\Medical::cancel', ["filter" => "authweb"]);                        //Medical Cancel Action
+$routes->post('medical/addgallery', 'Web\Medical::addgallery', ["filter" => "authweb"]);
+$routes->post('medical/deletegallery', 'Web\Medical::deletegallery', ["filter" => "authweb"]);          
+$routes->post('medical/cancel', 'Web\Medical::cancel', ["filter" => "authweb"]);                       
 $routes->get('api/web/patient/get', 'Api\WebPatient::get', ["filter" => "authweb"]);
-$routes->post('medical/diagnose', 'Web\Medical::diagnose', ["filter" => "authweb"]);                        //Medical Diagnose Action
-
-
+$routes->post('medical/diagnose', 'Web\Medical::diagnose', ["filter" => "authweb"]);                        
+/**--- refer (rujukan) ---*/
 $routes->get('refer/getdata', 'Web\Refer::getdata', ["filter" => "authweb"]); 
 $routes->get('refer-visit/getdata', 'Web\Refer_Hospital::getdatavisit', ["filter" => "authweb"]);
 $routes->get('refer-teledermatology/getdata', 'Web\Refer_Hospital::getdatatldm', ["filter" => "authweb"]);
 $routes->post('refer/create', 'Web\Refer::create', ["filter" => "authweb"]);
-
+$routes->post('refer-visit/create', 'Web\Refer_Hospital::create', ["filter" => "authweb"]);
+$routes->post('refer-visit/cancel', 'Web\Refer_Hospital::cancel', ["filter" => "authweb"]);
+/**--- invoice ---*/
 $routes->get('invoice/getdata', 'Web\Invoice::getdata', ["filter" => "authweb"]); 
-
+/**--- product order ---*/
 $routes->get('order/getdata', 'Web\Product_Order::getdata', ["filter" => "authweb"]);
-
+/**--- appointment ---*/
 $routes->get('appointment/getdata', 'Web\Appointment::getdata', ["filter" => "authweb"]);
 $routes->post('appointment/accept', 'Web\Appointment::accept', ["filter" => "authweb"]);
-
-$routes->post('transaction/cash', 'Web\Transaction::cash', ["filter" => "authweb"]);                    //Cash Pay Confirmation
-$routes->post('medicalrefer/create', 'Web\MedicalRefer::create', ["filter" => "authweb"]);              //Medical Refer Create
-
+/**--- transaction ---*/
+$routes->post('transaction/cash', 'Web\Transaction::cash', ["filter" => "authweb"]);                    
+$routes->post('medicalrefer/create', 'Web\MedicalRefer::create', ["filter" => "authweb"]);              
+/**--- tes function ---*/
 $routes->get('patient/tes', 'Web\Patient::tes'); 
 
-//Web Admin Access Frontend
-$routes->get('/', 'Web\Landing::index');									        //Landing Front Page
-$routes->get('/privacy', 'Web\Landing::privacy');									//Privacy Page
-$routes->get('/terms-and-conditions', 'Web\Landing::toc');							//TOC Page
-$routes->get('login', 'Web\Auth::login');  									        //Login Page
-$routes->get('register', 'Web\Auth::register');  							        //Register Page
-$routes->get('dashboard', 'Web\Dashboard::index', ["filter" => "authweb"]);         //Dashboard Page
-$routes->get('/test_purchase', 'Web\Landing::test_pruchase');						//Untuk test verifikasi dari midtrans
+/**--- FRONT END ROUTES (Endpoint pages)---*/
+/**--- landing page ---*/
+$routes->get('/', 'Web\Landing::index');									        
+$routes->get('/privacy', 'Web\Landing::privacy');									
+$routes->get('/terms-and-conditions', 'Web\Landing::toc');							
+$routes->get('login', 'Web\Auth::login');  									        
+$routes->get('register', 'Web\Auth::register');  							       
+$routes->get('dashboard', 'Web\Dashboard::index', ["filter" => "authweb"]);         
+$routes->get('/test_purchase', 'Web\Landing::test_pruchase');						
 $routes->get('/test_checkout', 'Web\Landing::test_checkout');	
-
-$routes->get('patient', 'Web\Patient::index', ["filter" => "authweb"]);                     //Pasien Page
-$routes->get('patient/formadd', 'Web\Patient::formadd', ["filter" => "authweb"]);           //Pasien Add Modal
-$routes->post('patient/formdetail', 'Web\Patient::formdetail', ["filter" => "authweb"]);    //Pasien Detail Modal
-$routes->post('patient/formedit', 'Web\Patient::formedit', ["filter" => "authweb"]);        //Pasien Edit Modal
-
-$routes->get('treatment', 'Web\Treatment::index', ["filter" => "authweb"]);                //Treatment Page
-$routes->get('treatment/formadd', 'Web\Treatment::formadd', ["filter" => "authweb"]);      //Treatment Add Modal
-$routes->post('treatment/formedit', 'Web\Treatment::formedit', ["filter" => "authweb"]);   //Treatment Edit Modal
-$routes->post('treatment/formdiscount', 'Web\Treatment::formdiscount', ["filter" => "authweb"]);   //Treatment Discount Modal
-
-$routes->get('product', 'Web\Product::index', ["filter" => "authweb"]);                 //Product Page
-$routes->get('product/formadd', 'Web\Product::formadd', ["filter" => "authweb"]);       //Product Add Modal
-$routes->post('product/formedit', 'Web\Product::formedit', ["filter" => "authweb"]);    //Product Edit Modal
-$routes->post('product/formstock', 'Web\Product::formstock', ["filter" => "authweb"]);  //Product Stock Modal
-$routes->get('product-flow', 'Web\Product::flow', ["filter" => "authweb"]);             //Product Flow Page
+/**--- patient ---*/
+$routes->get('patient', 'Web\Patient::index', ["filter" => "authweb"]);                     
+$routes->get('patient/formadd', 'Web\Patient::formadd', ["filter" => "authweb"]);           
+$routes->post('patient/formdetail', 'Web\Patient::formdetail', ["filter" => "authweb"]);    
+$routes->post('patient/formedit', 'Web\Patient::formedit', ["filter" => "authweb"]);        
+/**--- treatment ---*/
+$routes->get('treatment', 'Web\Treatment::index', ["filter" => "authweb"]);                
+$routes->get('treatment/formadd', 'Web\Treatment::formadd', ["filter" => "authweb"]);      
+$routes->post('treatment/formedit', 'Web\Treatment::formedit', ["filter" => "authweb"]);   
+$routes->post('treatment/formdiscount', 'Web\Treatment::formdiscount', ["filter" => "authweb"]);   
+/**--- product ---*/
+$routes->get('product', 'Web\Product::index', ["filter" => "authweb"]);                 
+$routes->get('product/formadd', 'Web\Product::formadd', ["filter" => "authweb"]);       
+$routes->post('product/formedit', 'Web\Product::formedit', ["filter" => "authweb"]);    
+$routes->post('product/formstock', 'Web\Product::formstock', ["filter" => "authweb"]);  
+$routes->get('product-flow', 'Web\Product::flow', ["filter" => "authweb"]);             
 $routes->post('product-flow/filter', 'Web\Product::flow_filter', ["filter" => "authweb"]); 
-
-$routes->get('medical', 'Web\Medical::index', ["filter" => "authweb"]);                                 //Medical Page
-$routes->get('medicalformadd', 'Web\Medical::formadd', ["filter" => "authweb"]);                        //Medical Add Page
-$routes->post('medical/formdetail', 'Web\Medical::formdetail', ["filter" => "authweb"]);                //Medical Detail Modal
-$routes->post('medical/formdiagnose', 'Web\Medical::formdiagnose', ["filter" => "authweb"]);            //Refer Hospital Diagnose Form
-
-$routes->get('refer', 'Web\Refer::index', ["filter" => "authweb"]);                                     //Refer Page Clinic
-$routes->get('refer-visit', 'Web\Refer_Hospital::index', ["filter" => "authweb"]);                      //Refer Page Hospital
-$routes->get('refer-teledermatology', 'Web\Refer_Hospital::index', ["filter" => "authweb"]);            //Refer Page Hospital
+/**--- medical ---*/
+$routes->get('medical', 'Web\Medical::index', ["filter" => "authweb"]);                                 
+$routes->get('medicalformadd', 'Web\Medical::formadd', ["filter" => "authweb"]);                        
+$routes->post('medical/formdetail', 'Web\Medical::formdetail', ["filter" => "authweb"]);                
+$routes->post('medical/formdiagnose', 'Web\Medical::formdiagnose', ["filter" => "authweb"]);            
+/**--- refer (rujukan) ---*/
+$routes->get('refer', 'Web\Refer::index', ["filter" => "authweb"]);                                     
+$routes->get('refer-visit', 'Web\Refer_Hospital::index', ["filter" => "authweb"]);                      
+$routes->get('refer-teledermatology', 'Web\Refer_Hospital::index', ["filter" => "authweb"]);            
 $routes->get('refer-visit/add', 'Web\Refer_Hospital::refer_visit', ["filter" => "authweb"]);
-
-$routes->get('invoice', 'Web\Invoice::index', ["filter" => "authweb"]);                                 //Invoice Page
-
-$routes->get('order', 'Web\Product_Order::index', ["filter" => "authweb"]);                             //Product_Order Page
-
-$routes->get('appointment', 'Web\Appointment::index', ["filter" => "authweb"]);                          //Appointment Page
-$routes->post('appointment/formaccept', 'Web\Appointment::formaccept', ["filter" => "authweb"]);         //Appointment Form Accept
-
-$routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);   //Pay & Invoice 
+/**--- invoice ---*/
+$routes->get('invoice', 'Web\Invoice::index', ["filter" => "authweb"]);                                 
+/**--- product order ---*/
+$routes->get('order', 'Web\Product_Order::index', ["filter" => "authweb"]);                            
+/**--- appointment ---*/
+$routes->get('appointment', 'Web\Appointment::index', ["filter" => "authweb"]);                          
+$routes->post('appointment/formaccept', 'Web\Appointment::formaccept', ["filter" => "authweb"]);         
+/**--- transaction ---*/
+$routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);   
 $routes->post('transaction/token', 'Web\Midtrans::token', ["filter" => "authweb"]);  
 $routes->post('transaction/finish', 'Web\Midtrans::finish'); 
 $routes->post('transaction/hook', 'Web\Midtrans::hook');
-$routes->post('transaction/formpayinfo', 'Web\Transaction::formpayinfo', ["filter" => "authweb"]);       //Cash Checkout Modal
-// $routes->post('transaction/formcash', 'Web\Transaction::formcash', ["filter" => "authweb"]);         //Cash Checkout Modal
+$routes->post('transaction/formpayinfo', 'Web\Transaction::formpayinfo', ["filter" => "authweb"]);       
 
 //Mobile API Endpoint Group Example
 // $routes->group('api', ["filter" => "authapp"],  function($routes) {

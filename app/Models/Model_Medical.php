@@ -122,4 +122,15 @@ class Model_Medical extends Model
             ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
             ->get()->getResultArray();
     }
+
+    //Medical - find complete data with tb_user, tb_patient, tb_faskes
+    public function medical_complete($medical_code)
+    {
+        return $this->table('tb_medical')
+            ->where('medical_code', $medical_code)
+            ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
+            ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->join('tb_faskes', 'tb_faskes.faskes_code = tb_user.user_faskes')
+            ->get()->getRowArray();
+    }
 }

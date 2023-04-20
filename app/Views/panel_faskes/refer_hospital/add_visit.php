@@ -13,14 +13,23 @@
 
           </div>
         </div>
-        <?= form_open('medical/create', ['class' => 'formadd']) ?>
+        <?= form_open('refer-visit/create', ['class' => 'formadd']) ?>
         <?= csrf_field(); ?>
         <div class="row">
             <div class="mb-3">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <h4 class="card-title mb-4">Data Pasien</h4>
-
+                        <h4 class="card-title mb-4">Data Medis</h4>
+                        <input class="form-control" type="hidden" id="medical_code" name="medical_code" value="<?= $medical['medical_code'] ?>">
+                        <input class="form-control" type="hidden" id="invoice_id" name="invoice_id" value="<?= $invoice['invoice_id'] ?>">
+                        <div class="mb-3">
+                          <label class="form-label">Pasien</label>
+                          <input class="form-control" type="text" value="<?= $medical['patient_name'] ?> - <?= $medical['faskes_name'] ?>" readonly>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Umur / Jenis Kelamin</label>
+                          <input class="form-control" type="text" value="<?= umur($medical['patient_birth']) ?> Tahun / <?= $medical['patient_gender'] ?>" readonly>
+                        </div>
                         <div class="mb-3">
                           <label class="form-label">Type Kunjungan<code>*</code></label>
                           <select class="form-control" name="medical_type" id="medical_type">
@@ -48,15 +57,8 @@
                           <input class="form-control" type="datetime-local" name="medical_create" id="medical_create" value="<?= date('Y-m-d H:i:s') ?>">
                         </div>
                         <div class="mb-3">
-                          <label class="form-label">Diagnosis<code>*</code></label>
-                          <select class="form-control" name="medical_diagnose" id="medical_diagnose">
-                            <option selected disabled>Pilih...</option>
-                          </select>
-                          <div class="invalid-feedback error_medical_diagnose"></div>
-                        </div>
-                        <div class="mb-3">
-                          <label class="form-label">Catatan Diagnose</label>
-                          <textarea class="form-control" name="medical_diagnose_note" id="medical_diagnose_note"></textarea>
+                          <label class="form-label">Catatan Kunjungan</label>
+                          <textarea class="form-control" name="medical_description" id="medical_description"></textarea>
                         </div>
                     </div>
                 </div>
@@ -258,18 +260,6 @@
 <!-- form repeater js -->
 <script src="<?= base_url() ?>/public/assets/libs/jquery.repeater/jquery.repeater.min.js"></script>
 
-<!-- <script src="<?= base_url() ?>/public/assets/js/fileinput/fileinput.js"></script>
-<script src="<?= base_url() ?>/public/assets/js/fileinput/explorer-fa6/theme.js"></script>
-<script>
-$("#inp-krajee-explorer-fa6-1").fileinput({
-    theme: "explorer-fa6",
-    allowedFileExtensions: ['jpg', 'png', 'gif'],
-    overwriteInitial: false,
-    initialPreviewAsData: true,
-    maxFileSize: 10000,
-    removeFromPreviewOnError: true
-});
-</script> -->
 <script>
 $(function () {
       $('[data-toggle="tooltip"]').tooltip()
@@ -326,13 +316,6 @@ $(document).ready(function () {
     },
     success: function (response) {
         if (response.error) {
-        if (response.error.medical_user) {
-            $("#medical_user").addClass("is-invalid");
-            $(".error_medical_user").html(response.error.medical_user);
-        } else {
-            $("#medical_user").removeClass("is-invalid");
-            $(".error_medical_user").html("");
-        }
 
         if (response.error.medical_type) {
             $("#medical_type").addClass("is-invalid");
