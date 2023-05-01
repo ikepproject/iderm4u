@@ -96,7 +96,7 @@
                                 $nmr2++;   ?>
                                 
                                     <div class="carousel-item <?php if ($nmr2 == 0) { ?> active <?php } ?>">
-                                        <img src="<?= base_url() ?>/public/assets/images/medical/ori/<?= $cr2['medgal_filename'] ?>" class="img-fluid mx-auto d-block" data-img-id="<?= $cr2['medgal_id'] ?>">
+                                        <img src="<?= base_url() ?>/public/assets/images/medical/thumb/<?= $cr2['medgal_filename'] ?>" class="img-fluid mx-auto d-block" data-img-id="<?= $cr2['medgal_id'] ?>">
                                         <div class="card border mt-3">
                                             <div class="card-header bg-transparent ">
                                                 <h5 class="my-0 text-primary"><i class="bx bx-chip"></i>Hasil Smart Detection</h5>
@@ -115,13 +115,13 @@
                                     $nmr2++;   ?>
                                     
                                         <div class="carousel-item <?php if ($nmr2 == 0) { ?> active <?php } ?>">
-                                            <img src="<?= base_url() ?>/public/assets/images/medical/ori/<?= $cr4['medgal_filename'] ?>" class="img-fluid mx-auto d-block" data-img-id="<?= $cr4['medgal_id'] ?>" >
+                                            <img src="<?= base_url() ?>/public/assets/images/medical/thumb/<?= $cr4['medgal_filename'] ?>" class="img-fluid mx-auto d-block" data-img-id="<?= $cr4['medgal_id'] ?>" >
                                             <div class="card border mt-3">
                                                 <div class="card-header bg-transparent ">
                                                     <h5 class="my-0 text-primary"><i class="bx bx-chip"></i>Hasil Smart Detection</h5>
                                                 </div>
                                                 <div class="card-body">
-                                                    <?= $cr2['medgal_prediction'] ?>
+                                                    <?= $cr4['medgal_prediction'] ?>
                                                 </div>
                                             </div>
                                         </div>
