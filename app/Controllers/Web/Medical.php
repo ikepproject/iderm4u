@@ -121,7 +121,22 @@ class Medical extends BaseController
             } else {
                 $type     = $medical_refer_type;
             }
-            
+
+            $img = [];
+
+            foreach ($diagnose_medgal as $dm) {
+                $img[] = [
+                    "id" => $dm["medgal_id"],
+                    "url" => base_url()."public/assets/images/medical/ori/".$dm["medgal_filename"],
+                ];
+            }
+
+            foreach ($medgal_refer as $mf) {
+                $img[] = [
+                    "id" => $mf["medgal_id"],
+                    "url" => base_url()."public/assets/images/medical/ori/".$mf["medgal_filename"],
+                ];
+            }
 
             $data = [
                 'title'             => 'Form Diagnose ' . $type,
@@ -130,12 +145,14 @@ class Medical extends BaseController
                 'medical'           => $medical,
                 'diagnose_medgal'   => $diagnose_medgal,
                 'medgal_refer'      => $medgal_refer,
+                'img'               => $img
 
             ];
             $response = [
                 'data' => view('panel_faskes/medical/diagnose', $data)
             ];
             echo json_encode($response);
+            // var_dump($img);
         }
     }
 

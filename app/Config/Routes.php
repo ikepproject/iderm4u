@@ -81,7 +81,8 @@ $routes->post('medical/addgallery', 'Web\Medical::addgallery', ["filter" => "aut
 $routes->post('medical/deletegallery', 'Web\Medical::deletegallery', ["filter" => "authweb"]);          
 $routes->post('medical/cancel', 'Web\Medical::cancel', ["filter" => "authweb"]);                       
 $routes->get('api/web/patient/get', 'Api\WebPatient::get', ["filter" => "authweb"]);
-$routes->post('medical/diagnose', 'Web\Medical::diagnose', ["filter" => "authweb"]);                        
+$routes->post('medical/diagnose', 'Web\Medical::diagnose', ["filter" => "authweb"]);
+$routes->post('api/diagnose/aiclasify', 'Api\Diagnose::clasify', ["filter" => "authweb"]);                        
 /**--- refer (rujukan) ---*/
 $routes->get('refer/getdata', 'Web\Refer::getdata', ["filter" => "authweb"]); 
 $routes->get('refer-visit/getdata', 'Web\Refer_Hospital::getdatavisit', ["filter" => "authweb"]);
