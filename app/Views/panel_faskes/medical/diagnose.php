@@ -153,7 +153,6 @@
                                                     <i class="bx bx-time"></i> <i>Running Prediksi</i> = <?= shortdate_indo(substr($cr4['medgal_prediction_create'],0,10)) ?>, <?= substr($cr4['medgal_prediction_create'],11,5)?> WIB 
                                                     
                                                 <?php } ?>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
