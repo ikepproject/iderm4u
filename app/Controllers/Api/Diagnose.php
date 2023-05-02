@@ -22,7 +22,7 @@ class Diagnose extends ResourceController
 	}
 
     //Clasify
-    public function save()
+    public function clasify()
     {
         $input = $this->request->getJSON();
 
