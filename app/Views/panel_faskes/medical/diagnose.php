@@ -103,15 +103,18 @@
                                             </div>
                                             <div class="card-body">
                                             <?php
-                                            $json = $cr2['medgal_prediction'];
+                                            if ($cr2['medgal_prediction'] != NULL) {
+                                                $json = $cr2['medgal_prediction'];
 
-                                            $data = json_decode($json, true);
+                                                $data = json_decode($json, true);
 
-                                            foreach ($data as $item) {
-                                                echo $item['class'] . " = " . $item['score'] . " %<br>";
+                                                foreach ($data as $item) {
+                                                    echo $item['class'] . " = " . $item['score'] . " %<br>";
+                                                }
                                             }
                                             ?>
-                                            Waktu Running Prediksi = <?= longdate_indo(substr($cr2['medgal_prediction_create'],0,10)) ?>, <?= substr($cr2['medgal_prediction_create'],11,5)?> WIB 
+                                            <br>
+                                            <i class="bx bx-time"></i> <i>Running Prediksi</i> = <?= shortdate_indo(substr($cr2['medgal_prediction_create'],0,10)) ?>, <?= substr($cr2['medgal_prediction_create'],11,5)?> WIB 
                                             </div>
                                         </div>
                                     </div>
@@ -131,6 +134,7 @@
                                                 </div>
                                                 <div class="card-body">
                                                 <?php
+                                                if ($cr4['medgal_prediction'] != NULL) {
                                                     $json = $cr4['medgal_prediction'];
 
                                                     $data = json_decode($json, true);
@@ -138,8 +142,11 @@
                                                     foreach ($data as $item) {
                                                         echo $item['class'] . " = " . $item['score'] . " %<br>";
                                                     }
+                                                }
+                                                    
                                                 ?>
-                                                Waktu Running Prediksi = <?= longdate_indo(substr($cr4['medgal_prediction_create'],0,10)) ?>, <?= substr($cr4['medgal_prediction_create'],11,5)?> WIB 
+                                                <br>
+                                                <i class="bx bx-time"></i> <i>Running Prediksi</i>  = <?= shortdate_indo(substr($cr4['medgal_prediction_create'],0,10)) ?>, <?= substr($cr4['medgal_prediction_create'],11,5)?> WIB 
                                                 </div>
                                             </div>
                                         </div>
