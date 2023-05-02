@@ -111,7 +111,7 @@
                                                 echo $item['class'] . " = " . $item['score'] . " %<br>";
                                             }
                                             ?>
-                                            Waktu Running Prediksi = <?= longdate_indo(substr($cr4['medgal_prediction_create'],0,10)) ?>, <?= substr($cr4['medgal_prediction_create'],11,5)?> WIB 
+                                            Waktu Running Prediksi = <?= longdate_indo(substr($cr2['medgal_prediction_create'],0,10)) ?>, <?= substr($cr2['medgal_prediction_create'],11,5)?> WIB 
                                             </div>
                                         </div>
                                     </div>
