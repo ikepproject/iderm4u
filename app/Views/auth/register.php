@@ -42,6 +42,7 @@
                                 <?= form_open('doregister', ['class' => 'formregister']) ?>
                                 <?= csrf_field() ?>
                                 <form class="form-horizontal">
+                                    <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
                                     <div class="mb-3">
                                         <label for="user_name" class="form-label">Nama <code>*</code></label>
                                         <input type="text" class="form-control" id="user_name" name="user_name" placeholder="Masukan alamat nama anda..." >
@@ -92,8 +93,8 @@
                                         <div class="invalid-feedback error_confirm_password"></div>
                                     </div>
                                     
-                                    <label class="form-label">Konfirmasi capctha dibawah <code>*</code></label>
-                                    <div class="g-recaptcha mb-3 required" data-sitekey="<?= $site_key ?>"></div>
+                                    <!-- <label class="form-label">Konfirmasi capctha dibawah <code>*</code></label>
+                                    <div class="g-recaptcha mb-3 required" data-sitekey="<?= $site_key ?>"></div> -->
 
                                     <div class="mb-3">
                                         <!-- <button type="button" class="btn btn-link waves-effect" data-bs-toggle="modal" data-bs-target="#TermAndCondition">
@@ -148,7 +149,7 @@
             </div>
         </div>
 
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<!-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> -->
 <script>
     // Register - Checked TOC
     $("#toc").click(function () {

@@ -35,6 +35,23 @@ class Auth extends BaseController
 		}
 	}
 
+    private function validateRecaptcha($responseToken, $secretKey, $scoreThreshold)
+    {
+        
+        $client = new \GuzzleHttp\Client();
+
+        $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                'secret' => $secretKey,
+                'response' => $responseToken
+            ]
+        ]);
+        
+        $responseData = json_decode($response->getBody(), true);
+        
+        return $responseData['success'] && $responseData['score'] >= $scoreThreshold;
+    }
+
 	public function dologin()
 	{
 		if( !$this->validate([
@@ -53,34 +70,17 @@ class Auth extends BaseController
 		$user       = $this->user->where('user_username', $this->request->getVar('user_username'))->first();
 		if( $user )
 		{
-            $recaptchaResponse = trim($this->request->getVar('g-recaptcha-response'));
-            $secret            = getenv('recaptchaSecret');
-            $credential        = array(
-                'secret' => $secret,
-                'response' => $recaptchaResponse
-            );
+            $secretKey      = getenv('recaptchaSecret');
+            $scoreThreshold = getenv('recaptchaThreshold');
 
-            $verify = curl_init();
-            curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
-            curl_setopt($verify, CURLOPT_POST, true);
-            curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($credential));
-            curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
-            $response = curl_exec($verify);
+             // validate reCAPTCHA
+             $responseToken = $this->request->getVar('g-recaptcha-response');
 
-            $status_captcha = json_decode($response, true);
+            //  var_dump($this->validateRecaptcha($responseToken, $secretKey, $scoreThreshold));
 
-			if( password_verify($this->request->getVar('user_password'), $user['user_password']) && $status_captcha["success"])
+			if( password_verify($this->request->getVar('user_password'), $user['user_password']) && $this->validateRecaptcha($responseToken, $secretKey, $scoreThreshold))
 			{
-                if ($user['user_active'] == 'f' && $status_captcha["success"]) {
-                    return $this->response->setJSON( 
-                        [
-                            'success' => false,
-                            'code'    => '403',
-                            'data'    => null, 
-                            'message' => 'Akun Belum Aktif.', 
-                        ]);
-                }  elseif($user['user_active'] == 't' && $status_captcha["success"])  {
+                if ($user['user_active'] == 't') {
                     $uid        = $user['user_id'];
                     $rle        = $user['user_role'];
                     $fsk        = $user['user_faskes'];
@@ -99,17 +99,21 @@ class Auth extends BaseController
                             'success' => true,
                             'code'    => '200',
                             'data'    => [
-                                'link' => 'dashboard'
+                                'link' => 'dashboard',
+                                'icon' => 'success',
                             ], 
                             'message' => 'Berhasil, Redirect...',  
                         ]);
                 } else {
                     return $this->response->setJSON( 
                         [
-                            'success' => false,
-                            'code'    => '403',
-                            'data'    => null, 
-                            'message' => 'Konfirmasi Capctcha Diperlukan.', 
+                            'success' => true,
+                            'code'    => '200',
+                            'data'    => [
+                                'link' => 'login',
+                                'icon' => 'warning',
+                            ], 
+                            'message' => 'Akun Belum Aktif, Redirect...',  
                         ]);
                 }
                 
@@ -117,10 +121,13 @@ class Auth extends BaseController
 			} else {
                 return $this->response->setJSON( 
                     [
-                        'success' => false,
-                        'code'    => '403',
-                        'data'    => null, 
-                        'message' => 'Username atau Password Salah & Konfirmasi Capctcha Diperlukan.', 
+                        'success' => true,
+                        'code'    => '200',
+                        'data'    => [
+                            'link' => 'login',
+                            'icon' => 'warning',
+                        ], 
+                        'message' => 'Password Salah atau Invalid Captcha Token, Refresh Page...',  
                     ]);
             }
 		}else{
@@ -130,7 +137,7 @@ class Auth extends BaseController
                     'success' => false,
                     'code'    => '403',
                     'data'    => null, 
-                    'message' => 'Username atau Password Salah.', 
+                    'message' => 'Username Tidak Ditemukan.', 
                     ]);
 		}
 		
@@ -231,17 +238,13 @@ class Auth extends BaseController
                     'response' => $recaptchaResponse
                 );
 
-                $verify = curl_init();
-                curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
-                curl_setopt($verify, CURLOPT_POST, true);
-                curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($credential));
-                curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
-                $response = curl_exec($verify);
+                $secretKey      = getenv('recaptchaSecret');
+                $scoreThreshold = getenv('recaptchaThreshold');
 
-                $status_captcha = json_decode($response, true);
+                // validate reCAPTCHA
+                $responseToken = $this->request->getVar('g-recaptcha-response');
 
-                if ($status_captcha['success']) {
+                if ($this->validateRecaptcha($responseToken, $secretKey, $scoreThreshold)) {
                     $this->db->transStart();
                     $newPatient = [
                         'patient_code' 		 => $patient_code
