@@ -27,10 +27,11 @@ class Diagnose extends ResourceController
         $input = $this->request->getJSON();
 
         $data = [
-            'medgal_prediction' => json_encode($input->result)
+            'medgal_prediction'        => json_encode($input->result),
+            'medgal_prediction_create' => date('Y-m-d H:i:s')
         ];
         $tb_medgal = new Model_Medgal;
-        $inserted = $this->$tb_medgal->update($input->img_id, $data);
+        $inserted = $tb_medgal->update($input->img_id, $data);
 
         if ($inserted) {
             return $this->respondCreated(['message' => 'Clasified Data Success']);

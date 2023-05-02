@@ -216,82 +216,7 @@
         });
     });
 </script>
-<!-- <script>
-    async function classifyImagesAndSendResults(images) {
-        const nodeJsServerUrl = "http://139.59.249.172/classify";
-        const ci4ApiUrl       = <?php base_url() ?>+"api/diagnose/aiclasify";
 
-        for (const image of images) {
-            try {
-            const response = await fetch(nodeJsServerUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ imageUrl: image.url }),
-            });
-            const results = await response.json();
-
-            const saveResponse = await fetch(ci4ApiUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                img_id: image.id,
-                result: JSON.stringify(results),
-                }),
-            });
-
-            if (saveResponse.status !== 200) {
-                console.log("Error saving results for image", image.id);
-            }
-            } catch (error) {
-            console.log("Error:", error);
-            }
-        }
-    }
-
-    const images = <?php echo json_encode($img); ?>;
-
-    document.getElementById('classify-all-btn').addEventListener('click', classifyImagesAndSendResults(images));
-</script> -->
-<!-- <script>
-    async function classifyImagesAndSendResults() {
-        const images = document.querySelectorAll('.carousel-item img');
-        const results = [];
-
-        for (const image of images) {
-            const imgId = image.dataset.imgId;
-            const imgSrc = image.src;
-
-            try {
-                const response = await fetch('http://139.59.249.172/classify', {
-                    method: 'POST',
-                    body: JSON.stringify({ image_url: imgSrc }),
-                    headers: { 'Content-Type': 'application/json' },
-                });
-                const result = await response.json();
-
-                // Send the result to the CodeIgniter 4 API
-                const apiResponse = await fetch('/api/diagnose/aiclasify', {
-                    method: 'POST',
-                    body: JSON.stringify({ img_id: imgId, result: result }),
-                    headers: { 'Content-Type': 'application/json' },
-                });
-
-                if (!apiResponse.ok) {
-                    console.error('Error saving result for image ID:', imgId);
-                } else {
-                    results.push({ imgId, result });
-                }
-            } catch (error) {
-                console.error('Error classifying image ID:', imgId, error);
-            }
-        }
-
-        console.log('Classification results:', results);
-    }
-
-    // Add a click event listener to the button
-    document.getElementById('classify-all-btn').addEventListener('click', classifyImagesAndSendResults);
-</script> -->
 <script>
     async function classifyImagesAndSendResults() {
         const images = document.querySelectorAll('.carousel-item img');
@@ -330,6 +255,9 @@
         }
 
         console.log('Classification results:', results);
+
+        // Redirect to the current URL (refresh the page)
+        window.location.reload();
     }
 
     // Add a click event listener to the button
