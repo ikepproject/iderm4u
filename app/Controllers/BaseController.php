@@ -32,6 +32,7 @@ use App\Models\Model_Treatment;
 use App\Models\Model_User;
 use App\Models\Model_Visitor;
 use App\Models\Model_Appointment;
+use App\Models\Model_Disease;
 use App\Models\Model_Midtrans;
 use App\Models\Model_Treatment_Discount;
 use App\Models\Model_Type;
@@ -81,6 +82,7 @@ class BaseController extends Controller
         $this->midtrans     = new Model_Midtrans;
         $this->discount     = new Model_Treatment_Discount;
         $this->type         = new Model_Type;
+        $this->disease      = new Model_Disease;
 		$this->db 			= \Config\Database::connect();
 	}
 

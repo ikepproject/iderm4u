@@ -3,7 +3,7 @@
 <!-- Plugins css -->
 <div class="page-content">
     <div class="container-fluid">
-        <a style="margin-left: 0px !important;" class="btn btn-primary waves-effect waves-light mb-3" href="<?= base_url('medical') ?>"> <i class="bx bx-left-arrow-alt"></i> Kembali</a>
+        <a style="margin-left: 0px !important;" class="btn btn-primary waves-effect waves-light mb-3" href="javascript:window.history.go(-1);"> <i class="bx bx-left-arrow-alt"></i> Kembali</a>
         
         <div class="row">
           <div class="page-title-box d-sm-flex align-items-center justify-content-between">

@@ -63,6 +63,11 @@
                             <i class="bx bx-receipt"></i>
                         </a>
                     <?php } ?>
+                    <?php if ($data['medical_diagnose'] != NULL) { ?> 
+                        <button type="button" class="btn btn-info mb-2" onclick="diagnose('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>')">
+                            <i class="fas fa-notes-medical"></i>
+                        </button>
+                    <?php } ?>
                 </td>
             </tr>
 
@@ -103,13 +108,18 @@
                         <button type="button" class="btn btn-danger mb-2" onclick="cancel('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>', '<?= $data['appointment_type'] ?>')"><i class="bx bx-x"></i>
                         </button> 
                     <?php } ?>
+                    <?php if ($data['medical_diagnose'] != NULL) { ?> 
+                        <button type="button" class="btn btn-info mb-2" onclick="diagnose('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>')">
+                            <i class="fas fa-notes-medical"></i>
+                        </button>
+                    <?php } ?>
                 </td>
             </tr>
 
         <?php endforeach; ?>
     </tbody>
 </table>
-
+<div class="diagnosemodal"></div>
 <div class="detailmodal"></div>
 
 <script>
@@ -169,5 +179,20 @@ function cancel(medical_code, patient_name, appointment_type) {
             });
         }
     })
+}
+
+function diagnose(medical_code) {
+    $.ajax({
+        type: "post",
+        url: "medical/formdiagnose",
+        data: {
+            medical_code: medical_code
+        },
+        dataType: "json",
+        success: function(response) {
+            $('.diagnosemodal').html(response.data).show();
+            $('#modaldiagnose').modal('show');
+        }
+    });
 }
 </script>

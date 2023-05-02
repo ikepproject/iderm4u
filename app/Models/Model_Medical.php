@@ -9,7 +9,7 @@ class Model_Medical extends Model
     protected $table      = 'tb_medical';
     protected $primaryKey = 'medical_code';
     protected $useAutoIncrement = false;
-    protected $allowedFields = ['medical_code', 'medical_faskes', 'medical_create', 'medical_type', 'medical_description', 'medical_employee', 'medical_user', 'medical_status', 'medical_creator_type', 'medical_refer_type', 'medical_refer_origin', 'medical_refer_code', 'medical_diagnose', 'medical_diagnose_create', 'medical_diagnose_note'];
+    protected $allowedFields = ['medical_code', 'medical_faskes', 'medical_create', 'medical_type', 'medical_description', 'medical_employee', 'medical_user', 'medical_status', 'medical_creator_type', 'medical_refer_type', 'medical_refer_origin', 'medical_refer_code', 'medical_diagnose', 'medical_diagnose_create', 'medical_diagnose_note', 'medical_diagnose_other'];
 
     //Medical - getData (Klinik)
     public function list($user_faskes)

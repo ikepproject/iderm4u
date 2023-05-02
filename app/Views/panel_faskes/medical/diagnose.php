@@ -36,34 +36,47 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Diagnosis<code>*</code></label>
-                            <select class="form-control" name="medical_diagnose" id="medical_diagnose" onchange="showDiv(this)">
+                            <select class="form-select" name="medical_diagnose" id="medical_diagnose" onchange="showDiv(this)" <?php if ($user_role == '1011' || $user_role == '2020' || $user_role == '2022') echo "disabled"; ?> >
                                 <option selected disabled>Pilih...</option>
-                                <option value="Disease A">Disease A</option>
-                                <option value="Disease B">Disease B</option>
-                                <option value="Lain">Lain...</option>
+                                <?php foreach ($disease as $key => $data) { ?>
+                                    <option value="<?= $data['disease_name'] ?>" <?php if ($medical['medical_diagnose'] == $data['disease_name']) echo "selected"; ?> ><?= $data['disease_name'] ?></option>
+                                <?php } ?>
                             </select>
                             <div class="invalid-feedback error_medical_diagnose"></div>
                         </div>
-                        <div class="mb-3" id="hidden_diagnose" style="display: none;">
+                        <div class="mb-3" id="hidden_diagnose" 
+                            <?php if ($medical['medical_diagnose'] != "Lain") { ?> 
+                                style="display: none;"
+                            <?php } ?>
+                            <?php if ($medical['medical_diagnose'] != "Lain") { ?> 
+                                style="display: block;"
+                            <?php } ?> >
                             <label class="form-label">Diagnosis Lainnya<code>*</code></label>
-                            <input type="text" name="medical_diagnose_other" id="medical_diagnose_other" class="form-control">
+                            <input type="text" name="medical_diagnose_other" id="medical_diagnose_other" class="form-control" value="<?= $medical['medical_diagnose_other'] ?>" <?php if ($user_role == '1011' || $user_role == '2020' || $user_role == '2022') echo "readonly"; ?> >
                         </div>
                         <div class="mb-3">
                             <label for="medical_diagnose_note" class="form-label">Catatan Diagnosis</label>
-                            <textarea class="form-control" id="medical_diagnose_note" name="medical_diagnose_note"></textarea>
+                            <textarea class="form-control" id="medical_diagnose_note" name="medical_diagnose_note" <?php if ($user_role == '1011' || $user_role == '2020' || $user_role == '2022') echo "readonly"; ?> ></textarea>
                         </div>
 
+                        <?php if ($user_role == '5050' || $user_role == '5055') { ?> 
+                            <button type="submit" class="btn btn-primary" id="save" name="save"><i class="bx bx-save"></i> Simpan Diagnosis</button>
+                        <?php } ?>
                         
-                        <button type="submit" class="btn btn-primary" id="save" name="save"><i class="bx bx-save"></i> Simpan Diagnosis</button>
+                        
+
                     <?= form_close() ?>
                     </div>
 
                     <div class="tab-pane" id="smart-1" role="tabpanel">
-                        <div class="text-center mb-3 mt-1">
-                            <button class="btn btn-primary" id="classify-all-btn">
-                                <i class="bx bx-chip mr-2"></i> Run Smart Detection
-                            </button>
-                        </div>
+                        <?php if ($user_role == 5050 || $user_role == 5055) { ?> 
+                            <div class="text-center mb-3 mt-1">
+                                <button class="btn btn-primary" id="classify-all-btn">
+                                    <i class="bx bx-chip mr-2"></i> Run Smart Detection
+                                </button>
+                            </div>
+                        <?php } ?>
+                        
                         
                         <div id="carouselDiagnose" class="carousel slide carousel-left" data-bs-ride="carousel" data-bs-interval="false">
                             <!-- Indicators -->
@@ -189,7 +202,7 @@
             } else{
             document.getElementById('hidden_diagnose').style.display = "none";
         }
-    } 
+    }
 
     $(document).ready(function () {
         $('#medical_diagnose_note').val("<?= $medical['medical_diagnose_note'] ?>");

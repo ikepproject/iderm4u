@@ -102,6 +102,9 @@ class Medical extends BaseController
     public function formdiagnose()
     {
         if ($this->request->isAJAX()) {
+            $user        = $this->userauth(); //Return array
+            $user_role   = $user['user_role'];
+
             $medical_code       = $this->request->getVar('medical_code');
             $medical            = $this->medical->find($medical_code);
             $diagnose_medgal    = $this->medgal->find_medical($medical_code);
@@ -122,37 +125,22 @@ class Medical extends BaseController
                 $type     = $medical_refer_type;
             }
 
-            $img = [];
-
-            foreach ($diagnose_medgal as $dm) {
-                $img[] = [
-                    "id" => $dm["medgal_id"],
-                    "url" => base_url()."public/assets/images/medical/ori/".$dm["medgal_filename"],
-                ];
-            }
-
-            foreach ($medgal_refer as $mf) {
-                $img[] = [
-                    "id" => $mf["medgal_id"],
-                    "url" => base_url()."public/assets/images/medical/ori/".$mf["medgal_filename"],
-                ];
-            }
-
             $data = [
                 'title'             => 'Form Diagnose ' . $type,
+                'user_role'         => $user_role,
                 'type'              => $type,
                 'patient_user'      => $patient_user,
                 'medical'           => $medical,
                 'diagnose_medgal'   => $diagnose_medgal,
                 'medgal_refer'      => $medgal_refer,
-                'img'               => $img
+                'disease'           => $this->disease->list(),
 
             ];
             $response = [
                 'data' => view('panel_faskes/medical/diagnose', $data)
             ];
             echo json_encode($response);
-            // var_dump($img);
+            //var_dump($user_role);
         }
     }
 
@@ -521,15 +509,16 @@ class Medical extends BaseController
                 $medical_diagnose   = $this->request->getVar('medical_diagnose');
 
                 if ($medical_diagnose == 'Lain') {
-                    $diagnose = $this->request->getVar('medical_diagnose_other');
+                    $medical_diagnose_other = $this->request->getVar('medical_diagnose_other');
                 } else {
-                    $diagnose = $medical_diagnose;
+                    $medical_diagnose_other = NULL;
                 }
                 
 
                 $update = [
                     'medical_status'          => 'Selesai',
-                    'medical_diagnose'        => $diagnose,
+                    'medical_diagnose'        => $medical_diagnose,
+                    'medical_diagnose_other'  => $medical_diagnose_other,
                     'medical_diagnose_create' => date('Y-m-d H:i:s'),
                     'medical_diagnose_note'   => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('medical_diagnose_note'))),
                 ];
