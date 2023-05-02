@@ -102,7 +102,16 @@
                                                 <h5 class="my-0 text-primary"><i class="bx bx-chip"></i>Hasil Smart Detection</h5>
                                             </div>
                                             <div class="card-body">
-                                                <?= $cr2['medgal_prediction'] ?>
+                                            <?php
+                                            $json = $cr2['medgal_prediction'];
+
+                                            $data = json_decode($json, true);
+
+                                            foreach ($data as $item) {
+                                                echo $item['class'] . " = " . $item['score'] . " %<br>";
+                                            }
+                                            ?>
+                                            Waktu Running Prediksi = <?= longdate_indo(substr($cr4['medgal_prediction_create'],0,10)) ?>, <?= substr($cr4['medgal_prediction_create'],11,5)?> WIB 
                                             </div>
                                         </div>
                                     </div>
@@ -121,7 +130,16 @@
                                                     <h5 class="my-0 text-primary"><i class="bx bx-chip"></i>Hasil Smart Detection</h5>
                                                 </div>
                                                 <div class="card-body">
-                                                    <?= $cr4['medgal_prediction'] ?>
+                                                <?php
+                                                    $json = $cr4['medgal_prediction'];
+
+                                                    $data = json_decode($json, true);
+
+                                                    foreach ($data as $item) {
+                                                        echo $item['class'] . " = " . $item['score'] . " %<br>";
+                                                    }
+                                                ?>
+                                                Waktu Running Prediksi = <?= longdate_indo(substr($cr4['medgal_prediction_create'],0,10)) ?>, <?= substr($cr4['medgal_prediction_create'],11,5)?> WIB 
                                                 </div>
                                             </div>
                                         </div>
