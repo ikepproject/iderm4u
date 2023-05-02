@@ -113,9 +113,11 @@
                                                 }
                                             }
                                             ?>
-                                            <br>
-                                            <i class="bx bx-time"></i> <i>Running Prediksi</i> = <?= shortdate_indo(substr($cr2['medgal_prediction_create'],0,10)) ?>, <?= substr($cr2['medgal_prediction_create'],11,5)?> WIB 
-                                            </div>
+                                            <?php if ($cr2['medgal_prediction_create'] != NULL) { ?>
+                                                <br>
+                                                <i class="bx bx-time"></i> <i>Running Prediksi</i> = <?= shortdate_indo(substr($cr2['medgal_prediction_create'],0,10)) ?>, <?= substr($cr2['medgal_prediction_create'],11,5)?> WIB 
+                                                </div>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                     
@@ -145,8 +147,11 @@
                                                 }
                                                     
                                                 ?>
-                                                <br>
-                                                <i class="bx bx-time"></i> <i>Running Prediksi</i>  = <?= shortdate_indo(substr($cr4['medgal_prediction_create'],0,10)) ?>, <?= substr($cr4['medgal_prediction_create'],11,5)?> WIB 
+                                                <?php if ($cr4['medgal_prediction_create'] != NULL) { ?>
+                                                    <br>
+                                                    <i class="bx bx-time"></i> <i>Running Prediksi</i> = <?= shortdate_indo(substr($cr4['medgal_prediction_create'],0,10)) ?>, <?= substr($cr4['medgal_prediction_create'],11,5)?> WIB 
+                                                    </div>
+                                                <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
