@@ -304,7 +304,7 @@
             try {
                 const response = await fetch('https://clasifier.iderm4u.com/classify', {
                     method: 'POST',
-                    body: JSON.stringify({ image_url: imgSrc }),
+                    body: JSON.stringify({ imageUrl: imgSrc }),
                     headers: { 'Content-Type': 'application/json' },
                 });
 
