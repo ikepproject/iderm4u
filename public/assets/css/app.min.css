@@ -4378,7 +4378,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
   padding-bottom: 190px;
 }
 .hero-section.bg-ico-hero {
-  background-image: url(../images/crypto/bg-ico-hero.jpg);
+  background-image: url(../images/bg-ico-hero.jpg);
   background-size: cover;
   background-position: top;
 }
@@ -4446,7 +4446,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
   bottom: 40px;
 }
 .client-images img {
-  max-height: 34px;
+  max-height: 60px;
   width: auto !important;
   margin: 12px auto;
   opacity: 0.7;
