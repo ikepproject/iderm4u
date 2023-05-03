@@ -32,6 +32,13 @@ class Transaction extends BaseController
                 $title = 'Invoice';
             }
 
+            if ($medical['medical_refer_origin'] == NULL) {
+                $redirect = 'medical';
+            } else {
+                $redirect = 'refer';
+            }
+            
+
             $data = [
                 'title'         => $title,
                 'modul'         => $modul,
@@ -44,7 +51,8 @@ class Transaction extends BaseController
                 'medprod'       => $medprod,
                 'medoth'        => $medoth,
                 'medgal'        => $medgal,
-                'invoice'       => $invoice
+                'invoice'       => $invoice,
+                'redirect'      => $redirect,
             ];
             return view('panel_faskes/medical/checkout', $data);
         } else {

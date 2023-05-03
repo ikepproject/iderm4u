@@ -152,7 +152,12 @@ $routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["f
 $routes->post('transaction/token', 'Web\Midtrans::token', ["filter" => "authweb"]);  
 $routes->post('transaction/finish', 'Web\Midtrans::finish'); 
 $routes->post('transaction/hook', 'Web\Midtrans::hook');
-$routes->post('transaction/formpayinfo', 'Web\Transaction::formpayinfo', ["filter" => "authweb"]);       
+$routes->post('transaction/formpayinfo', 'Web\Transaction::formpayinfo', ["filter" => "authweb"]);
+/**--- report ---*/       
+$routes->get('report-treatment', 'Web\Report::report_treatment', ["filter" => "authweb"]);             
+$routes->post('report-treatment/filter', 'Web\Report::report_treatment_filter', ["filter" => "authweb"]); 
+$routes->get('report-product', 'Web\Report::report_product', ["filter" => "authweb"]);             
+$routes->post('report-product/filter', 'Web\Report::report_product_filter', ["filter" => "authweb"]); 
 
 //Mobile API Endpoint Group Example
 // $routes->group('api', ["filter" => "authapp"],  function($routes) {

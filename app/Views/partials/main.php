@@ -281,10 +281,14 @@
                         </li>
 
                         <li>
-                            <a href="<?= site_url('report') ?>" class="waves-effect">
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
                                 <i class="bx bx-bar-chart-square"></i>
-                                <span key="t-report">Laporan</span>
+                                <span key="t-refer">Ekspor Laporan</span>
                             </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="<?= site_url('report-treatment') ?>" key="t-report-treatment">Treatment</a></li>
+                                <li><a href="<?= site_url('report-product') ?>" key="t-report-product">Produk</a></li>
+                            </ul>
                         </li>
 
                         <li>
