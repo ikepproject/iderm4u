@@ -127,7 +127,7 @@ class Product extends BaseController
         $unique_year    = $query_year->getResultArray();
 
 		$data = [
-			'title'         => 'Product Flow',
+			'title'         => 'Data Produk Masuk/Keluar (Flow Produk)',
 			'user'          => $user,
             'unique_month'  => $unique_month,
             'unique_year'   => $unique_year,

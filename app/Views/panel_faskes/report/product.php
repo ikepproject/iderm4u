@@ -1,4 +1,4 @@
-<?= $this->extend('partials/main') ?>
+<?= $this->extend('partials/main_report') ?>
 <?= $this->section('isi') ?>
 
 <div class="page-content">
@@ -52,12 +52,12 @@
                             <thead>
                                 <tr class="table-secondary">
                                     <th width=2%>No.</th>
-                                    <th width=10%>Tgl</th>
+                                    <th width=10%>Tanggal</th>
                                     <th width=10%>Produk</th>
                                     <th width=6%>Jenis</th>
                                     <th width=5%>Jumlah</th>
                                     <th width=8%>ID Data Medis</th>
-                                    <th width=8%>No. Kuitansi</th>
+                                    <th width=8%>No. Invoice</th>
                                     <th width=9%>Harga Satuan</th>
                                     <th width=8%>Harga</th>
                                 </tr>
@@ -102,7 +102,27 @@
           [25, 70, 100, -1],
           [25, 70, 100, "All"],
       ],
-      buttons: ["copy", "excel", "pdf"],
+      buttons: [
+        "copy",
+        {
+          extend: "excel",
+          customize: function (xlsx) {
+              var sheet = xlsx.xl.worksheets["sheet1.xml"];
+
+              // Apply borders to all cells
+              $('row c', sheet).each(function () {
+                  $(this).attr('s', '25');
+              });
+
+              // Make title bigger and bold
+              $('row:first c', sheet).attr("s", "51");
+          },
+        },
+        {
+          extend: "pdf",
+          orientation: "landscape",
+          pageSize: "A4",
+        }],
       });
 
       table_report_product

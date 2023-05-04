@@ -8,7 +8,7 @@ class Landing extends BaseController
     public function index()
     {
         $data = [
-			'title' => 'Coming Soon',
+			'title' => 'The Best Intelligent Teledermatology System in Indonesia',
 		];
         return view('index', $data);
     }

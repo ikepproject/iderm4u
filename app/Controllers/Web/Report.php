@@ -50,7 +50,7 @@ class Report extends BaseController
         $unique_year    = $query_year->getResultArray();
 
 		$data = [
-			'title'         => 'Laporan Treatment',
+			'title'         => 'Laporan Register Tindakan (Treatment)',
 			'user'          => $user,
             'unique_month'  => $unique_month,
             'unique_year'   => $unique_year,
@@ -119,7 +119,7 @@ class Report extends BaseController
         $unique_year    = $query_year->getResultArray();
 
 		$data = [
-			'title'         => 'Laporan Product',
+			'title'         => 'Laporan Register Penjualan Produk',
 			'user'          => $user,
             'unique_month'  => $unique_month,
             'unique_year'   => $unique_year,

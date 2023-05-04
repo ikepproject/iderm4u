@@ -174,12 +174,12 @@
                                                 <h4 class="font-size-15 fw-bold">Order</h4>
                                             </div>
                                             <div class="table-responsive">
-                                                <table class="table table-nowrap">
+                                                <table class="table table-wrap">
                                                     <thead>
                                                         <tr>
-                                                            <th style="width: 70px;">No.</th>
-                                                            <th>Item (Jml)</th>
-                                                            <th class="text-end">Harga</th>
+                                                            <th width="1%">No.</th>
+                                                            <th width="79%">Item (Jml)</th>
+                                                            <th width="20%" class="text-end">Harga</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>

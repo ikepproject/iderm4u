@@ -91,7 +91,7 @@
                             <p class="font-size-14">Discover a smarter way to care for your skin.</p>
                             
                             <div class="d-flex flex-wrap gap-2 mt-4">
-                                <a href="https://play.google.com/store/apps/details?id=app.ikeproject.iderm4u&hl=en" target="_blank" class="btn btn-success"> <i class="mdi mdi-google-play"></i> Download on Playstore</a>
+                                <a href="https://play.google.com/store/apps/details?id=app.ikeproject.iderm4u&hl=en" target="_blank" class="btn btn-primary"> <i class="mdi mdi-google-play"></i> Available on Playstore</a>
                             </div>
                         </div>
                     </div>
@@ -286,7 +286,11 @@
                             <div class="row">
                                 <div class="col-lg-2 col-sm-4">
                                     <div class="nav flex-column nav-pills" role="tablist">
-                                        <a class="nav-link active" id="v-web-hf-tab" data-bs-toggle="pill" href="#v-web-hf" role="tab">
+                                        <a class="nav-link active" id="v-about-tab" data-bs-toggle="pill" href="#v-about" role="tab">
+                                            <i class= "bx bx-info-circle nav-icon d-block mb-2"></i>
+                                            <p class="fw-bold mb-0">About iDerm4U</p>
+                                        </a>
+                                        <a class="nav-link" id="v-web-hf-tab" data-bs-toggle="pill" href="#v-web-hf" role="tab">
                                             <i class= "bx bx-desktop nav-icon d-block mb-2"></i>
                                             <p class="fw-bold mb-0">Healthcare Facility Web Platform</p>
                                         </a>
@@ -304,7 +308,15 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="tab-content">
-                                                <div class="tab-pane fade show active" id="v-web-hf" role="tabpanel">
+                                                <div class="tab-pane fade show active" id="v-about" role="tabpanel">
+                                                    <h4 class="card-title mb-4">iDerm4U - Discover a smarter way to care for your skin.</h4>
+                                                    
+                                                    <div class="video-container">
+                                                        <iframe src="https://www.youtube.com/embed/-0wanFQsaUY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tab-pane fade show" id="v-web-hf" role="tabpanel">
                                                     <h4 class="card-title mb-4">Healthcare Facility Web Platform</h4>
                                                     
                                                     <div class="video-container">

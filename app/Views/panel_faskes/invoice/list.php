@@ -45,6 +45,11 @@
                 </td>
                 <td>Rp <?= rupiah($data['invoice_amount']) ?></td>
                 <td>
+                    <?php if ($data['medical_status'] == 'Selesai') { ?> 
+                        <a type="button" class="btn btn-secondary mb-2" href="<?= base_url('transaction/invoice/' . $data['medical_code']) ?>">
+                            <i class="bx bx-receipt"></i>
+                        </a>
+                    <?php } ?> 
                 </td>
             </tr>
 

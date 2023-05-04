@@ -4,7 +4,8 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>iDerm4U - <?= $title ?></title>
+    <title>iDerm4U - <?php if ($month != 'all') { ?> <?= $title ?> Bulan <?= date("F", mktime(0, 0, 0, ltrim($month, '0'), 1)); ?> <?= $year ?> <?php } ?> <?php if ($month == 'all') { ?> <?= $title ?> Tahun <?= $year ?> <?php } ?>
+    </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Teledermatology System (iDerm4U)" name="iDerm4U Project" />
     <meta content="Terledermatology Indonesia" name="iDerm4U" />

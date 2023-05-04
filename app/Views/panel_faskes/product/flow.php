@@ -1,4 +1,4 @@
-<?= $this->extend('partials/main') ?>
+<?= $this->extend('partials/main_report') ?>
 <?= $this->section('isi') ?>
 
 <div class="page-content">

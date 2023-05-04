@@ -1,4 +1,4 @@
-<?= $this->extend('partials/main') ?>
+<?= $this->extend('partials/main_report') ?>
 <?= $this->section('isi') ?>
 
 <div class="page-content">
@@ -9,7 +9,7 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <h4 class="card-title">Laporan Treatment</h4>
+                        <h4 class="card-title">Ekspor Laporan Treatment</h4>
                         <form method="POST" action="<?= base_url('report-treatment/filter') ?>">
                           <div class="row mb-3">
                             <div class="col">
@@ -52,10 +52,10 @@
                             <thead>
                                 <tr class="table-secondary">
                                     <th width=2%>No.</th>
-                                    <th width=10%>Tgl</th>
+                                    <th width=10%>Tanggal</th>
                                     <th width=10%>Tindakan</th>
                                     <th width=8%>ID Data Medis</th>
-                                    <th width=8%>No. Kuitansi</th>
+                                    <th width=8%>No. Invoice</th>
                                     <th width=9%>Keterangan Promo</th>
                                     <th width=8%>Harga</th>
                                 </tr>
@@ -71,11 +71,14 @@
                                     <td><?= $data['medical_code'] ?></td>
                                     <td><?= $data['invoice_code'] ?></td>
                                     <td>
+                                      <?php if ($data['medtreat_discount'] == NULL) { ?> 
+                                        -
+                                      <?php } ?>
                                       <?php if ($data['medtreat_discount'] != NULL) { ?> 
                                         <?= $data['medtreat_discount'] ?>, 
                                       <?php } ?>
                                       <?php if ($data['medtreat_discount_price'] != NULL) { ?> 
-                                        Harga asli Rp <?= rupiah($data['medtreat_discount_price']) ?>, 
+                                        Harga asli Rp <?= rupiah($data['medtreat_discount_price']) ?> 
                                       <?php } ?>
                                     </td>
                                     <td>Rp <?= rupiah($data['medtreat_price']) ?></td>
@@ -105,7 +108,27 @@
           [25, 70, 100, -1],
           [25, 70, 100, "All"],
       ],
-      buttons: ["copy", "excel", "pdf"],
+      buttons: [
+        "copy", 
+        {
+          extend: "excel",
+          customize: function (xlsx) {
+              var sheet = xlsx.xl.worksheets["sheet1.xml"];
+
+              // Apply borders to all cells
+              $('row c', sheet).each(function () {
+                  $(this).attr('s', '25');
+              });
+
+              // Make title bigger and bold
+              $('row:first c', sheet).attr("s", "51");
+          },
+        },
+        {
+          extend: "pdf",
+          orientation: "landscape",
+          pageSize: "A4",
+        }],
       });
 
       table_report_treatment
@@ -116,5 +139,6 @@
       $(".dataTables_length select").addClass("form-select form-select-sm");
   });
 </script>
+
 
 <?= $this->endSection('isi') ?>
