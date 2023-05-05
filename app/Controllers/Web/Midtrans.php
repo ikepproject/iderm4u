@@ -231,8 +231,27 @@ class Midtrans extends BaseController
         
     }
 
+    private function getServerKeyByOrderId($order_id)
+    {
+        $invoice_id = strtok($order_id, '-');
+        $invoice = $this->invoice->find($invoice_id);
+        $medical_code = $invoice['invoice_medical'];
+        $medical = $this->medical->find($medical_code);
+        $medical_faskes = $medical['medical_faskes'];
+
+        $faskes = $this->faskes->find($medical_faskes);
+        $key_enc = $faskes['faskes_server_key'];
+        $serverKey = $this->decrypt($key_enc);
+
+        return $serverKey;
+    }
+
     public function hook()
     {
+        $order_id = $this->request->getPost('order_id');
+        $serverKey = $this->getServerKeyByOrderId($order_id);
+
+        \Midtrans\Config::$serverKey = $serverKey;
         $result         = new \Midtrans\Notification();
 
         $order_id       = $result->order_id;
@@ -245,11 +264,6 @@ class Midtrans extends BaseController
         $faskes         = $this->faskes->find($medical_faskes);
         $key_enc        = $faskes['faskes_server_key'];
         $serverKey1      = $this->decrypt($key_enc);
-
-        // Debugging: Check the server key value
-        error_log('Server Key: ' . $serverKey1);
-
-        \Midtrans\Config::$serverKey = $serverKey1;
         
         $status_code    = $result->status_code;
         $gross_amount   = $result->gross_amount;
