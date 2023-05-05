@@ -56,19 +56,26 @@ class Test extends ResourceController
         // $faskes_client_key  = $faskes['faskes_client_key'];
         // var_dump($faskes_client_key);
 
-        $user_agent = $_SERVER['HTTP_USER_AGENT'];
-        $mobile_agents = array(
-            'Mobile', 'Android', 'Silk/', 'Kindle', 'BlackBerry', 
-            'Opera Mini', 'Opera Mobi'
+        $aMobileUA = array(
+            '/iphone/i' => 'iPhone', 
+            '/ipod/i' => 'iPod', 
+            '/ipad/i' => 'iPad', 
+            '/android/i' => 'Android', 
+            '/blackberry/i' => 'BlackBerry', 
+            '/webos/i' => 'Mobile'
         );
-        foreach ($mobile_agents as $mobile_agent) {
-            if (strpos($user_agent, $mobile_agent) !== false) {
-                $result = 'hp';
+    
+        //Return true if Mobile User Agent is detected
+        foreach($aMobileUA as $sMobileKey => $sMobileOS){
+            if(preg_match($sMobileKey, $_SERVER['HTTP_USER_AGENT'])){
+                $result = "hp";
             } else {
-                $result = 'pc';
+                $result = "other";
             }
         }
-        var_dump(getenv("MidtransisProduction"));
+        //Otherwise return false..  
+        return $result;
+        
     }
     
 }

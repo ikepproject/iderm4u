@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="tab-pane" id="smart-1" role="tabpanel">
-                        <?php if ($user_role == 5050 || $user_role == 5055) { ?> 
+                        <?php if ($user_role != '1011' && ($medical['medical_refer_origin'] != $user_faskes )) { ?> 
                             <div class="text-center mb-3 mt-1">
                                 <button class="btn btn-primary" id="classify-all-btn">
                                     <i class="bx bx-chip mr-2"></i> Run Smart Detection
