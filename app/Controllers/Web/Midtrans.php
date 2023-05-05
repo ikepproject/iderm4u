@@ -232,7 +232,7 @@ class Midtrans extends BaseController
 
     public function hook()
     {
-        $result         =new \Midtrans\Notification();
+        $result         = new \Midtrans\Notification();
 
         $order_id       = $result->order_id;
         $invoice_id     = strtok($order_id, '-');
@@ -244,6 +244,8 @@ class Midtrans extends BaseController
         $faskes         = $this->faskes->find($medical_faskes);
         $key_enc        = $faskes['faskes_server_key'];
         $serverKey      = $this->decrypt($key_enc);
+
+        \Midtrans\Config::$serverKey = $serverKey;
         
         $status_code    = $result->status_code;
         $gross_amount   = $result->gross_amount;
