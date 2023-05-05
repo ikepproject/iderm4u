@@ -12,7 +12,7 @@ class Midtrans extends BaseController
 
     public function __construct()
     {
-        \Midtrans\Config::$serverKey = 'SB-Mid-server-b-0mbmFYmSeynMwfpQVfusZh';
+        // \Midtrans\Config::$serverKey = 'SB-Mid-server-b-0mbmFYmSeynMwfpQVfusZh';
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
         \Midtrans\Config::$isProduction = false;
         // Set sanitization on (default)
@@ -244,7 +244,7 @@ class Midtrans extends BaseController
 
         $faskes         = $this->faskes->find($medical_faskes);
         $key_enc        = $faskes['faskes_server_key'];
-        $serverKey      = $this->decrypt($key_enc);
+        $serverKey1      = $this->decrypt($key_enc);
 
         
         
@@ -252,7 +252,7 @@ class Midtrans extends BaseController
         $gross_amount   = $result->gross_amount;
         $signature_key  = $result->signature_key;
 
-        $signature      = hash('sha512', $order_id.$status_code.$gross_amount.$serverKey);
+        $signature      = hash('sha512', $order_id.$status_code.$gross_amount.$serverKey1);
 
         if ($signature_key != $signature) {
             $data = [
