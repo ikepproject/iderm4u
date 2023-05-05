@@ -233,17 +233,17 @@ class Midtrans extends BaseController
 
     private function getServerKeyByOrderId($order_id)
     {
-        $invoice_id = strtok($order_id, '-');
-        // $invoice = $this->invoice->find($invoice_id);
-        // $medical_code = $invoice['invoice_medical'];
-        // $medical = $this->medical->find($medical_code);
-        // $medical_faskes = $medical['medical_faskes'];
+        $invoice_id     = strtok($order_id, '-');
+        $invoice        = $this->invoice->find($invoice_id);
+        $medical_code   = $invoice['invoice_medical'];
+        $medical        = $this->medical->find($medical_code);
+        $medical_faskes = $medical['medical_faskes'];
 
-        // $faskes = $this->faskes->find($medical_faskes);
-        // $key_enc = $faskes['faskes_server_key'];
-        // $serverKey = $this->decrypt($key_enc);
+        $faskes         = $this->faskes->find($medical_faskes);
+        $key_enc        = $faskes['faskes_server_key'];
+        $serverKey      = $this->decrypt($key_enc);
 
-        return $invoice_id;
+        return $serverKey;
     }
 
     public function hook()
@@ -251,13 +251,13 @@ class Midtrans extends BaseController
         $inputJSON = file_get_contents('php://input');
         $inputData = json_decode($inputJSON, true);
         if (isset($inputData['order_id'])) {
-            $order_id = $inputData['order_id'];
-            // $serverKey = $this->getServerKeyByOrderId($order_id);
+            $order_id   = $inputData['order_id'];
+            $serverKey  = $this->getServerKeyByOrderId($order_id);
             // \Midtrans\Config::$serverKey = $serverKey;
         } else {
             // Handle the case where the order ID is not available in the incoming data
             // You can return an error message or throw an exception
-            $order_id = 'order id not found';
+            $serverKey = 'serverKey not found';
         }
         
 
@@ -361,7 +361,7 @@ class Midtrans extends BaseController
 
         // return $this->response->setJSON($data);
 
-        var_dump($order_id);
+        var_dump($serverKey);
 
         
     }
