@@ -351,7 +351,7 @@ class Midtrans extends BaseController
 
         // return $this->response->setJSON($data);
 
-        var_dump($serverKey);
+        var_dump($order_id);
 
         
     }
