@@ -3,7 +3,7 @@
 <!-- Plugins css -->
 <div class="page-content">
     <div class="container-fluid">
-        <a style="margin-left: 0px !important;" class="btn btn-primary waves-effect waves-light mb-3" href="<?= base_url().$redirect ?>"> <i class="bx bx-left-arrow-alt"></i> Kembali</a>
+        <!-- <a style="margin-left: 0px !important;" class="btn btn-primary waves-effect waves-light mb-3" href="<?= base_url().$redirect ?>"> <i class="bx bx-left-arrow-alt"></i> Kembali</a> -->
         
         <div class="row">
           <div class="page-title-box d-sm-flex align-items-center justify-content-between">
@@ -33,18 +33,6 @@
           </div>
         </div>
         
-        <?php
-        if (session()->getFlashdata('pesan')) { 
-            echo'<div class="row">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="mdi mdi-check-all me-2"></i>
-                        Pembayaran via Payment Gateway sedang diproses. Lakukan pembayaran segera jika anda belum melakukan pembayaran!
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>';
-        }
-        ?>
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -68,7 +56,7 @@
                             <div class="col-sm-6 text-sm-end">
                                 <address>
                                     <strong>Waktu Kunjungan:</strong><br>
-                                    <?= longdate_indo(substr($medical['medical_create'],0,10)) ?><br>
+                                    <?= longdate_indo(substr($medical['medical_create'],0,10)) ?> <?= substr($medical['medical_create'],11,5)?><br>
                                 </address>
                             </div>
                         </div>
@@ -247,7 +235,7 @@
 <div class="cashmodal"></div>
 <div class="payinfomodal"></div>
 
-<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-1Q4ylPz1Yq_OD2ZG"></script>
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key=<?= $faskes_client_key ?> ></script>
 <script type="text/javascript">
     $('#pay-button').click(function(e) {
         e.preventDefault();

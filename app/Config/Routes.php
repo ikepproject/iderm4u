@@ -101,7 +101,9 @@ $routes->post('appointment/accept', 'Web\Appointment::accept', ["filter" => "aut
 $routes->post('transaction/cash', 'Web\Transaction::cash', ["filter" => "authweb"]);                    
 $routes->post('medicalrefer/create', 'Web\MedicalRefer::create', ["filter" => "authweb"]);              
 /**--- tes function ---*/
-$routes->get('patient/tes', 'Web\Patient::tes'); 
+$routes->get('77test77/encrypt', 'Api\Test::encrypt');
+$routes->get('77test77/decrypt', 'Api\Test::decrypt');
+$routes->get('77test77/check', 'Api\Test::check');  
 
 /**--- FRONT END ROUTES (Endpoint pages)---*/
 /**--- landing page ---*/

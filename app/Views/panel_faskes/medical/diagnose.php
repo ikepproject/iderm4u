@@ -36,7 +36,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Diagnosis<code>*</code></label>
-                            <select class="form-select" name="medical_diagnose" id="medical_diagnose" onchange="showDiv(this)" <?php if ($user_role == '1011' || $user_role == '2020' || $user_role == '2022') echo "disabled"; ?> >
+                            <select class="form-select" name="medical_diagnose" id="medical_diagnose" onchange="showDiv(this)" <?php if ($user_role == '1011' || ($medical['medical_refer_origin'] == $user_faskes )) echo "disabled"; ?> >
                                 <option selected disabled>Pilih...</option>
                                 <?php foreach ($disease as $key => $data) { ?>
                                     <option value="<?= $data['disease_name'] ?>" <?php if ($medical['medical_diagnose'] == $data['disease_name']) echo "selected"; ?> ><?= $data['disease_name'] ?></option>
@@ -52,14 +52,14 @@
                                 style="display: block;"
                             <?php } ?> >
                             <label class="form-label">Diagnosis Lainnya<code>*</code></label>
-                            <input type="text" name="medical_diagnose_other" id="medical_diagnose_other" class="form-control" value="<?= $medical['medical_diagnose_other'] ?>" <?php if ($user_role == '1011' || $user_role == '2020' || $user_role == '2022') echo "readonly"; ?> >
+                            <input type="text" name="medical_diagnose_other" id="medical_diagnose_other" class="form-control" value="<?= $medical['medical_diagnose_other'] ?>" <?php if ($user_role == '1011' || ($medical['medical_refer_origin'] == $user_faskes )) echo "readonly"; ?> >
                         </div>
                         <div class="mb-3">
                             <label for="medical_diagnose_note" class="form-label">Catatan Diagnosis</label>
-                            <textarea class="form-control" id="medical_diagnose_note" name="medical_diagnose_note" <?php if ($user_role == '1011' || $user_role == '2020' || $user_role == '2022') echo "readonly"; ?> ></textarea>
+                            <textarea class="form-control" id="medical_diagnose_note" name="medical_diagnose_note" <?php if ($user_role == '1011' || ($medical['medical_refer_origin'] == $user_faskes )) echo "readonly"; ?> ></textarea>
                         </div>
 
-                        <?php if ($user_role == '5050' || $user_role == '5055') { ?> 
+                        <?php if ($user_role != '1011' && ($medical['medical_refer_origin'] != $user_faskes )) { ?> 
                             <button type="submit" class="btn btn-primary" id="save" name="save"><i class="bx bx-save"></i> Simpan Diagnosis</button>
                         <?php } ?>
                         
@@ -128,7 +128,7 @@
                                             ?>
                                             <?php if ($cr2['medgal_prediction_create'] != NULL) { ?>
                                                 <br>
-                                                <i class="bx bx-time"></i> <i>Running Prediksi</i> = <?= shortdate_indo(substr($cr2['medgal_prediction_create'],0,10)) ?>, <?= substr($cr2['medgal_prediction_create'],11,5)?> WIB 
+                                                <i class="bx bx-time"></i> <i>Running Prediksi</i> = <?= shortdate_indo(substr($cr2['medgal_prediction_create'],0,10)) ?>, <?= substr($cr2['medgal_prediction_create'],11,5)?> 
                                                 
                                             <?php } ?>
                                             </div>
@@ -163,7 +163,7 @@
                                                 ?>
                                                 <?php if ($cr4['medgal_prediction_create'] != NULL) { ?>
                                                     <br>
-                                                    <i class="bx bx-time"></i> <i>Running Prediksi</i> = <?= shortdate_indo(substr($cr4['medgal_prediction_create'],0,10)) ?>, <?= substr($cr4['medgal_prediction_create'],11,5)?> WIB 
+                                                    <i class="bx bx-time"></i> <i>Running Prediksi</i> = <?= shortdate_indo(substr($cr4['medgal_prediction_create'],0,10)) ?>, <?= substr($cr4['medgal_prediction_create'],11,5)?> 
                                                     
                                                 <?php } ?>
                                                 </div>

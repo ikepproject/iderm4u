@@ -81,7 +81,8 @@ class Refer_Hospital extends BaseController
                     'medical'       => $medical,
                     'invoice'       => $invoice,
                     'product'       => $product,
-                    'treatment'     => $treatment
+                    'treatment'     => $treatment,
+                    'device'        => $this->device(),
                 ];
                 return view('panel_faskes/refer_hospital/add_visit', $data);
             } else {
@@ -287,15 +288,14 @@ class Refer_Hospital extends BaseController
     public function cancel()
     {
         if ($this->request->isAJAX()) {
-
             $medical_code = $this->request->getVar('medical_code');
-            $invoice_code = $this->request->getVar('invoice_code');
+            $invoice_id = $this->request->getVar('invoice_id');
 
             $medtreat     = $this->medtreat->find_medical($medical_code);
             $medprod      = $this->medprod->find_medical($medical_code);
             $medoth       = $this->medoth->find_medical($medical_code);
             $medgal       = $this->medgal->find_medical($medical_code);
-            $invoice      = $this->invoice->find_medical($medical_code);
+            $invoice      = $this->invoice->find($invoice_id);
 
             $this->db->transStart();
             if (count($medtreat) != 0) {
@@ -342,11 +342,11 @@ class Refer_Hospital extends BaseController
             ];
             
             $this->medical->update($medical_code, $updateMedical);
-            $this->invoice->update($invoice_code, $updateInvoice);
+            $this->invoice->update($invoice_id, $updateInvoice);
             $this->db->transComplete();
 
             $response = [
-                'success' => 'Data Kunjungan Pasien Berhasil Dibatalkan'
+                'success' => 'Revisi Data Kunjungan Pasien Berhasil'
             ];
 
             echo json_encode($response);

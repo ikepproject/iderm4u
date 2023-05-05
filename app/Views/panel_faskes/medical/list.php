@@ -5,9 +5,10 @@
             <th width="11%">Pasien</th>
             <th width="6%">ID</th>
             <th width="7%">Status</th>
+            <th width="7%">Pembayaran</th>
             <th width="10%">Jenis</th>
             <th width="8%">Waktu</th>
-            <th width="15%">Keterangan</th>
+            <!-- <th width="15%">Keterangan</th> -->
             <th width="7%"></th>
         </tr>
     </thead>
@@ -28,6 +29,16 @@
                     <?php } ?> 
                 </td>
                 <td>
+                    Metode: <?= $data['invoice_method'] ?> <br>
+                    Status:
+                    <?php if ($data['invoice_status'] == 'SUCCEEDED') { ?> 
+                        <span class="badge rounded-pill bg-success">Terbayar</span>
+                    <?php } ?>
+                    <?php if ($data['invoice_status'] == 'PENDING') { ?> 
+                        <span class="badge rounded-pill bg-secondary">-</span>
+                    <?php } ?> 
+                </td>
+                <td>
                     <?php if ($data['medical_type'] == 'Treatment') { ?> 
                         <span class="badge bg-primary">Treatment</span>
                     <?php } ?>
@@ -45,7 +56,7 @@
                     <?php } ?>
                 </td>
                 <td><?= longdate_indo(substr($data['medical_create'],0,10)) ?></td>
-                <td><?= $data['medical_description'] ?></td>
+                <!-- <td><?= $data['medical_description'] ?></td> -->
                 <td>
                     <button type="button" class="btn btn-primary mb-2" onclick="detail('<?= $data['medical_code'] ?>')">
                         <i class="bx bx-detail"></i>
@@ -64,9 +75,12 @@
                     <?php } ?> 
                     
                     <?php if ($data['medical_status'] == 'Selesai') { ?> 
-                        <a type="button" class="btn btn-secondary mb-2" href="<?= base_url('transaction/invoice/' . $data['medical_code']) ?>">
+                        <!-- <a type="button" class="btn btn-secondary mb-2" href="<?= base_url('transaction/invoice/' . $data['medical_code']) ?>">
                             <i class="bx bx-receipt"></i>
-                        </a>
+                        </a> -->
+                        <button type="button" class="btn btn-info mb-2" onclick="diagnose('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>')">
+                            <i class="fas fa-notes-medical"></i>
+                        </button>
                     <?php } ?> 
                 </td>
             </tr>
@@ -76,7 +90,7 @@
 </table>
 
 <div class="detailmodal"></div>
-
+<div class="diagnosemodal"></div>
 <script>
 $(document).ready(function () {
     //Patient Table
@@ -154,5 +168,20 @@ function cancel(medical_code, patient_name) {
             });
         }
     })
+}
+
+function diagnose(medical_code) {
+    $.ajax({
+        type: "post",
+        url: "medical/formdiagnose",
+        data: {
+            medical_code: medical_code
+        },
+        dataType: "json",
+        success: function(response) {
+            $('.diagnosemodal').html(response.data).show();
+            $('#modaldiagnose').modal('show');
+        }
+    });
 }
 </script>

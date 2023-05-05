@@ -68,19 +68,24 @@ class Appointment extends BaseController
         if ($this->request->isAJAX()) {
             $validation = \Config\Services::validation();
             $rules = [
-                'appointment_date_fix'    => 'required',
+                'appointment_fix_date'    => 'required',
+                'appointment_fix_time'    => 'required',
             ];
     
             $errors = [
-                'appointment_date_fix' => [
-                    'required'   => 'Jadwal Fix harus diisi.',
+                'appointment_fix_date' => [
+                    'required'   => 'Tgl Penjadwalan harus diisi.',
+                ],
+                'appointment_fix_time' => [
+                    'required'   => 'Waktu Penjadwalan harus diisi.',
                 ],
             ];
             $valid = $this->validate($rules, $errors);
             if (!$valid) {
                 $response = [
                     'error' => [
-                        'appointment_date_fix'      => $validation->getError('appointment_date_fix'),
+                        'appointment_fix_date'      => $validation->getError('appointment_fix_date'),
+                        'appointment_fix_time'      => $validation->getError('appointment_fix_time'),
                     ]
                 ];
             } else {
@@ -89,7 +94,7 @@ class Appointment extends BaseController
 
                 $update = [
                     'appointment_status'        => 'Dijadwalkan',
-                    'appointment_date_fix'      => $this->request->getVar('appointment_date_fix'),
+                    'appointment_date_fix'      => $this->request->getVar('appointment_fix_date').' '.$this->request->getVar('appointment_fix_time'),
                     'appointment_link'          => $this->request->getVar('appointment_link'),
                     'appointment_note_faskes'   => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('appointment_note_faskes'))),
                 ];

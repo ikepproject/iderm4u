@@ -66,7 +66,7 @@
                                 $nomor++; ?>
                                 <tr>
                                     <td><?= $nomor ?></td>
-                                    <td><?= shortdate_indo(substr($data['medical_create'],0,10)) ?>, <?= substr($data['medical_create'],11,5)?>WIB</td>
+                                    <td><?= shortdate_indo(substr($data['medical_create'],0,10)) ?>, <?= substr($data['medical_create'],11,5)?> </td>
                                     <td><?= $data['medtreat_name'] ?></td>
                                     <td><?= $data['medical_code'] ?></td>
                                     <td><?= $data['invoice_code'] ?></td>

@@ -340,9 +340,4 @@ class Patient extends BaseController
         }
     }
 
-    //Function Tes
-    public function tes()
-    {
-        
-    }
 }

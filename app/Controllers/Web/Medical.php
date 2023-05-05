@@ -49,7 +49,8 @@ class Medical extends BaseController
 			'title'     => 'Tambah Data Kunjungan Pasien',
 			'user'      => $user,
             'product'   => $product,
-            'treatment' => $treatment
+            'treatment' => $treatment,
+            'device'    => $this->device(),
 		];
 		return view('panel_faskes/medical/add', $data);
     }
@@ -90,7 +91,8 @@ class Medical extends BaseController
                 'medgal_refer'  => $medgal_refer,
                 'invoice'       => $invoice,
                 'faskes_user'   => $faskes_user, 
-                'faskes_list'   => $this->faskes->list_faskes()
+                'faskes_list'   => $this->faskes->list_faskes(),
+                'device'        => $this->device(),
             ];
             $response = [
                 'data' => view('panel_faskes/medical/detail', $data)
@@ -104,6 +106,7 @@ class Medical extends BaseController
         if ($this->request->isAJAX()) {
             $user        = $this->userauth(); //Return array
             $user_role   = $user['user_role'];
+            $user_faskes = $user['user_faskes'];
 
             $medical_code       = $this->request->getVar('medical_code');
             $medical            = $this->medical->find($medical_code);
@@ -128,6 +131,7 @@ class Medical extends BaseController
             $data = [
                 'title'             => 'Form Diagnose ' . $type,
                 'user_role'         => $user_role,
+                'user_faskes'       => $user_faskes,
                 'type'              => $type,
                 'patient_user'      => $patient_user,
                 'medical'           => $medical,
@@ -180,7 +184,7 @@ class Medical extends BaseController
                 $user_name          = $user['user_name'];
                 $faskes             = $this->faskes->find($user_faskes);
                 $initial            = $faskes['faskes_initial'];
-                $medical_create     = str_replace(str_split('T'), ' ', $this->request->getVar('medical_create'));
+                $medical_create     = $this->request->getVar('medical_create_date').' '.$this->request->getVar('medical_create_time');
                 $amount             = 0; 
                 $medical_code       = $this->generate_medical_code();
 

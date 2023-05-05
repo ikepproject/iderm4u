@@ -12,7 +12,6 @@ class Midtrans extends BaseController
 
     public function __construct()
     {
-        \Midtrans\Config::$serverKey = 'SB-Mid-server-b-0mbmFYmSeynMwfpQVfusZh';
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
         \Midtrans\Config::$isProduction = false;
         // Set sanitization on (default)
@@ -23,7 +22,15 @@ class Midtrans extends BaseController
 
     public function token()
     {
-        $medical_code   = $this->request->getVar('medical_code');
+        $medical_code                = $this->request->getVar('medical_code');
+        $medical                     = $this->medical->find($medical_code);
+        $medical_faskes              = $medical['medical_faskes']; 
+        $faskes                      = $this->faskes->find($medical_faskes);
+        $key_enc                     = $faskes['faskes_server_key'];
+        $faskes_server_key           = $this->decrypt($key_enc);
+        \Midtrans\Config::$serverKey = $faskes_server_key;
+
+        
         $invoice_id     = $this->request->getVar('invoice_id');
         $invoice_code   = $this->request->getVar('invoice_code');
         $invoice_method = $this->request->getVar('invoice_method');
@@ -227,9 +234,17 @@ class Midtrans extends BaseController
     {
         $result         =new \Midtrans\Notification();
 
-        $serverKey      = 'SB-Mid-server-b-0mbmFYmSeynMwfpQVfusZh';
-
         $order_id       = $result->order_id;
+        $invoice_id     = strtok($order_id, '-');
+        $invoice        = $this->invoice->find($invoice_id);
+        $medical_code   = $invoice['invoice_medical'];
+        $medical        = $this->medical->find($medical_code);
+        $medical_faskes = $medical['medical_faskes'];
+
+        $faskes         = $this->faskes->find($medical_faskes);
+        $key_enc        = $faskes['faskes_server_key'];
+        $serverKey      = $this->decrypt($key_enc);
+        
         $status_code    = $result->status_code;
         $gross_amount   = $result->gross_amount;
         $signature_key  = $result->signature_key;

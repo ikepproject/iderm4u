@@ -4,9 +4,9 @@
             <th width="2%">#</th>
             <th width="11%">Nama</th>
             <th width="6%">Status</th>
-            <th width="6%">Waktu Ajuan</th>
-            <th width="8%">Waktu Fix</th>
-            <th width="15%">Catatan Pasien</th>
+            <th width="6%">Waktu Pengajuan</th>
+            <th width="8%">Waktu Final</th>
+            <th width="15%">Catatan Appointment</th>
             <th width="7%"></th>
         </tr>
     </thead>
@@ -27,13 +27,13 @@
                 </td>
                 <td>
                     <?php if ($data['appointment_date_expect'] != NULL) { ?> 
-                        <?= longdate_indo(substr($data['appointment_date_expect'],0,10)) ?>, <?= substr($data['appointment_date_expect'],12,16)?>WIB
+                        <?= longdate_indo(substr($data['appointment_date_expect'],0,10)) ?> <?= substr($data['appointment_date_expect'],11,5)?>
                     <?php } ?>
                     
                 </td>
                 <td>
                     <?php if ($data['appointment_date_fix'] != NULL) { ?> 
-                        <?= longdate_indo(substr($data['appointment_date_fix'],0,10)) ?>, <?= substr($data['appointment_date_fix'],12,16)?>WIB
+                        <?= longdate_indo(substr($data['appointment_date_fix'],0,10)) ?>, <?= substr($data['appointment_date_fix'],11,5)?>
                     <?php } ?>
                 </td>
                 <td><?= $data['appointment_note_user'] ?></td>

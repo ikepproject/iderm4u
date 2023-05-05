@@ -291,7 +291,7 @@
                             </ul>
                         </li>
 
-                        <li>
+                        <!-- <li>
                             <a href="<?= site_url('promotion') ?>" class="waves-effect">
                                 <i class="bx bx-pin"></i>
                                 <span key="t-promotion">Pengumuman</span>
@@ -303,7 +303,7 @@
                                 <i class="bx bxs-user-badge"></i>
                                 <span key="t-employee">Akun</span>
                             </a>
-                        </li>
+                        </li> -->
                         <?php } ?>
                         
                         <?php if ($user['user_active'] == 't' && $user['user_role'] == '1011') { ?>

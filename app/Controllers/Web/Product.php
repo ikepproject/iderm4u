@@ -85,7 +85,8 @@ class Product extends BaseController
 
     public function flow()
 	{
-		$user = $this->userauth(); // Return Object
+		$user           = $this->userauth(); //Return array
+        $user_faskes    = $user['user_faskes'];
 
         $uri            = new \CodeIgniter\HTTP\URI(current_url(true));
         $queryString    = $uri->getQuery();
@@ -109,15 +110,15 @@ class Product extends BaseController
             }
 
             if ($month == 'all') {
-                $list  = $this->product_stock->flow_year($year);
+                $list  = $this->product_stock->flow_year($user_faskes, $year);
             } else {
-                $list  = $this->product_stock->flow($month, $year);
+                $list  = $this->product_stock->flow($user_faskes, $month, $year);
             }
             
         } else{
             $month = date('m');
             $year  = date('Y');
-            $list  = $this->product_stock->flow($month, $year);
+            $list  = $this->product_stock->flow($user_faskes, $month, $year);
         }
 
         $query_month    = $this->db->query('SELECT DISTINCT EXTRACT(MONTH FROM stock_create) AS month_number, to_char(stock_create, \'Month\') AS month_name FROM tb_product_stock');

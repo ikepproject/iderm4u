@@ -18,20 +18,22 @@ class Model_Product_Stock extends Model
             ->get()->getResultArray();
     }
 
-    public function flow($month, $year)
+    public function flow($user_faskes, $month, $year)
     {
         return $this->table('tb_product_stock')
             ->join('tb_product', 'tb_product.product_code = tb_product_stock.stock_product')
+            ->where('product_faskes', $user_faskes)
             ->where('EXTRACT(MONTH FROM stock_create)', $month)
             ->where('EXTRACT(YEAR FROM stock_create)', $year)
             ->orderBy('stock_create', 'DESC')
             ->get()->getResultArray();
     }
 
-    public function flow_year($year)
+    public function flow_year($user_faskes, $year)
     {
         return $this->table('tb_product_stock')
             ->join('tb_product', 'tb_product.product_code = tb_product_stock.stock_product')
+            ->where('product_faskes', $user_faskes)
             ->where('EXTRACT(YEAR FROM stock_create)', $year)
             ->orderBy('stock_create', 'DESC')
             ->get()->getResultArray();

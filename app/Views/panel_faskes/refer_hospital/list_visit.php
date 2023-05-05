@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" integrity="sha512-/Ae8qSd9X8ajHk6Zty0m8yfnKJPlelk42HTJjOHDWs1Tjr41RfsSkceZ/8yyJGLkxALGMIYd5L2oGemy/x1PLg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <table id="datatable_refer" class="table table-striped table-bordered dt-responsive wrap w-100 ">
     <thead>
         <tr class="table-secondary">
@@ -5,7 +7,7 @@
             <th width="11%">Pasien</th>
             <th width="9%">Faskes Asal</th>
             <th width="5%">Tgl Dirujuk</th>
-            <th width="7%">Status</th>
+            <th width="13%">Status</th>
             <th width="7%">Jenis</th>
             <th width="8%">Jadwal Fix</th>
             <th width="10%"></th>
@@ -24,14 +26,20 @@ use Faker\Provider\Base;
                 <td><?= $data['patient_name'] ?></td>
                 <td><?= $data['faskes_name'] ?></td>
                 <td>
-                    <?= longdate_indo(substr($data['medical_create'],0,10)) ?>, <?= substr($data['medical_create'],11,5)?> WIB
+                    <?= longdate_indo(substr($data['medical_create'],0,10)) ?>, <?= substr($data['medical_create'],11,5)?> 
                 </td>
                 <td>
                     <?php if ($data['medical_status'] == 'Selesai') { ?> 
-                        <span class="badge rounded-pill bg-success">Selesai</span>
+                        Periksa: <span class="badge rounded-pill bg-success">Selesai</span> <br>
                     <?php } ?>
                     <?php if ($data['medical_status'] == 'Proses') { ?> 
-                        <span class="badge rounded-pill bg-secondary">Proses</span>
+                        Periksa: <span class="badge rounded-pill bg-secondary">Proses</span> <br>
+                    <?php } ?>
+                    <?php if ($data['medical_diagnose'] != NULL) { ?> 
+                        Diagnosis: <span class="badge rounded-pill bg-success"> <i class="bx bx-check"></i> </span>
+                    <?php } ?>
+                    <?php if ($data['medical_diagnose'] == NULL) { ?> 
+                        Diagnosis: <span class="badge rounded-pill bg-secondary">-</span>
                     <?php } ?>
                 </td>
                 <td>
@@ -44,8 +52,8 @@ use Faker\Provider\Base;
                         <span class="badge bg-secondary">Diajukan</span>
                     <?php } ?>
                     <?php if ($data['appointment_date_fix'] != NULL) { ?> 
-                        <span class="badge bg-success">Dijadwalkan</span>
-                        <?= longdate_indo(substr($data['appointment_date_fix'],0,10)) ?>, <?= substr($data['appointment_date_fix'],11,5)?>WIB
+                        <span class="badge bg-success">Dijadwalkan</span> <br>
+                        <?= longdate_indo(substr($data['appointment_date_fix'],0,10)) ?>, <?= substr($data['appointment_date_fix'],11,5)?>
                     <?php } ?>
                 </td>
                 <td>
@@ -57,22 +65,24 @@ use Faker\Provider\Base;
                             <i class="bx bx-calendar-check"></i>
                         </button>
                     <?php } ?>
-                    <?php if ($data['medical_status'] == 'Proses') { ?>
-                        <?php if ($data['medical_type'] == NULL) { ?>
-                            <button type="button" class="btn btn-warning mb-2" onclick="accept('<?= $data['medical_code'] ?>')">
-                                <i class="bx bx-calendar-check"></i>
-                            </button>
-                        <?php } ?>
-                        <?php if ($data['medical_type'] == NULL) { ?>
+                    <?php if ($data['appointment_date_fix'] != NULL && $data['medical_type'] == NULL) { ?> 
+                        <button type="button" class="btn btn-warning mb-2" onclick="accept('<?= $data['medical_code'] ?>')">
+                            <i class="bx bx-calendar-check"></i>
+                        </button>
+                        <?php if ($data['medical_status'] == 'Proses' && $data['medical_type'] == NULL) { ?> 
                             <a type="button" class="btn btn-success mb-2" href="<?= base_url('refer-visit/add').'?medical='.$data['medical_code'] ?>">
                                 <i class="bx bx-plus-medical"></i>
-                            </a> 
+                        </a>
                         <?php } ?>
+                         
+                    <?php } ?>
+                    <?php if ($data['medical_status'] == 'Proses') { ?>
+                        
 
                         <?php if ($data['medical_type'] != NULL) { ?>
                             <?php if ($data['invoice_midtrans'] == NULL) { ?> 
-                                <button type="button" class="btn btn-danger mb-2" onclick="cancel('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>', '<?= $data['invoice_id'] ?>')">
-                                <i class="bx bx-x"></i>
+                                <button type="button" class="btn btn-warning mb-2" onclick="cancel('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>', '<?= $data['invoice_id'] ?>')">
+                                <i class="bx bx-revision"></i>
                                 </button>
                             <?php } ?> 
 
@@ -81,7 +91,7 @@ use Faker\Provider\Base;
                             </a>
                         <?php } ?>
                     <?php } ?>
-                    <?php if ($data['medical_type'] != NULL) { ?>
+                    <?php if ($data['medical_status'] == 'Selesai') { ?>
                         <button type="button" class="btn btn-info mb-2" onclick="diagnose('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>')">
                             <i class="fas fa-notes-medical"></i>
                         </button>
@@ -161,8 +171,8 @@ function diagnose(medical_code) {
 
 function cancel(medical_code, patient_name, invoice_id) {
     Swal.fire({
-        title: 'Batalkan data kunjungan?',
-        text: `Apakah anda yakin membatalkan data kunjungan ${patient_name}? `,
+        title: 'Masukan ulang data kunjungan?',
+        text: `Apakah anda yakin mengulang input data kunjungan ${patient_name}? `,
         icon: 'warning',
         allowOutsideClick: false,
         showCancelButton: true,
@@ -173,7 +183,7 @@ function cancel(medical_code, patient_name, invoice_id) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: "refer_visit/cancel",
+                url: "refer-visit/cancel",
                 type: "post",
                 dataType: "json",
                 data: {
@@ -197,3 +207,5 @@ function cancel(medical_code, patient_name, invoice_id) {
     })
 }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js" integrity="sha512-2xXe2z/uA+2SyT/sTSt9Uq4jDKsT0lV4evd3eoE/oxKih8DSAsOF6LUb+ncafMJPAimWAXdu9W+yMXGrCVOzQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

@@ -1,6 +1,8 @@
 <?= $this->extend('partials/main') ?>
 <?= $this->section('isi') ?>
 <!-- Plugins css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" integrity="sha512-/Ae8qSd9X8ajHk6Zty0m8yfnKJPlelk42HTJjOHDWs1Tjr41RfsSkceZ/8yyJGLkxALGMIYd5L2oGemy/x1PLg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link href="<?= base_url() ?>/public/assets/libs/dropzone/min/dropzone.min.css" rel="stylesheet" type="text/css" />
 <style>
   [data-repeater-item]:first-child [data-repeater-delete] { display: none; }
@@ -32,7 +34,7 @@
                         </div>
                         <div class="mb-3">
                           <label class="form-label">Type Kunjungan<code>*</code></label>
-                          <select class="form-control" name="medical_type" id="medical_type">
+                          <select class="form-control select2standart" name="medical_type" id="medical_type">
                             <option selected disabled>Pilih...</option>
                             <option value="Treatment">Treatment</option>
                             <option value="Product">Beli Produk</option>
@@ -43,19 +45,38 @@
                         </div>
                         <div class="mb-3">
                           <label class="form-label">Cara Bayar<code>*</code></label>
-                          <select class="form-control" name="invoice_method" id="invoice_method">
+                          <select class="form-control select2standart" name="invoice_method" id="invoice_method">
                             <option selected disabled>Pilih...</option>
                             <option value="Cash">Cash</option>
                             <option value="VA">Virtual Account (+ Rp 4.440)</option>
                             <!-- <option value="Gopay">GoPay (+ 2%)</option> -->
-                            <option value="QR">QRIS (+ 0.7%)</option>
+                            <?php if ($device != "hp") { ?> 
+                                <option value="QR">QRIS (+ 0.7%)</option>
+                            <?php } ?>
                           </select>
                           <div class="invalid-feedback error_invoice_method"></div>
                         </div>
+                        <!-- <div class="mb-3">
+                          <label class="form-label">Tanggal Kunjungan</label>
+                            <div class="input-group" id="datepicker2">
+                              <input type="text" id="medical_create_date" name="medical_create_date" class="form-control" placeholder="Tahun-Bulan-Tanggal"
+                                  data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
+                                  data-provide="datepicker" data-date-autoclose="true" value="<?= date("Y-m-d") ?>">
+
+                              <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                            </div>
+                        </div>
                         <div class="mb-3">
+                        <label class="form-label">Waktu Kunjungan</label>
+                          <div class="input-group" id="timepicker-input-group2">
+                              <input id="timepicker2" name="medical_create_time" type="text" class="form-control" data-provide="timepicker" value="<?= date("H:i") ?>">
+                              <span class="input-group-text"><i class="mdi mdi-clock-outline"></i></span>
+                          </div>
+                        </div> -->
+                        <!-- <div class="mb-3">
                           <label class="form-label">Waktu Kunjungan</label>
                           <input class="form-control" type="datetime-local" name="medical_create" id="medical_create" value="<?= date('Y-m-d H:i:s') ?>">
-                        </div>
+                        </div> -->
                         <div class="mb-3">
                           <label class="form-label">Catatan Kunjungan</label>
                           <textarea class="form-control" name="medical_description" id="medical_description"></textarea>
@@ -256,6 +277,9 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js" integrity="sha512-2xXe2z/uA+2SyT/sTSt9Uq4jDKsT0lV4evd3eoE/oxKih8DSAsOF6LUb+ncafMJPAimWAXdu9W+yMXGrCVOzQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <!-- End Page-content -->
 <!-- form repeater js -->
 <script src="<?= base_url() ?>/public/assets/libs/jquery.repeater/jquery.repeater.min.js"></script>
@@ -275,8 +299,19 @@ function preview_images()
 </script>
 <script>
   $(document).ready(function () {
+    // $('#timepicker2').timepicker({
+    //         showMeridian: false,
+    //         icons: {
+    //             up: 'mdi mdi-chevron-up',
+    //             down: 'mdi mdi-chevron-down'
+    //         },
+    //         appendWidgetTo: "#timepicker-input-group2"
+    //     });
     'use strict';
     $(this).find('.select2repeater').select2();
+    $(this).find('.select2standart').select2({
+            minimumResultsForSearch: Infinity
+        });
     $('.price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});
     $('.repeater').repeater({
         show: function () {

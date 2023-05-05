@@ -103,7 +103,7 @@ class BaseController extends Controller
             $ppn             = 0.11;
             $vat             = $midtrans_va_fee * $ppn;
             $invoice_admin_fee = $midtrans_va_fee + $vat;
-        } elseif ($invoice_method == 'E-WALLET') {
+        } elseif ($invoice_method == 'Gopay') {
             $invoice_admin_fee = $amount * 0.02;
         } elseif ($invoice_method == 'QR') {
             $invoice_admin_fee = $amount * 0.007;
@@ -193,5 +193,31 @@ class BaseController extends Controller
             $medical_code   = $code1 . $code2;
         }
         return $medical_code;
+    }
+
+    public function decrypt($key_enc)
+    {
+        $config         = new \Config\Encryption();
+        $config->key    = getenv("encrypt_key");
+        // ENCRYPTION
+        $encrypter  = \Config\Services::encrypter($config, false);
+        $key_dec    = $encrypter->decrypt(base64_decode($key_enc));
+        return $key_dec;
+    }
+
+    public function device()
+    {
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        $mobile_agents = array(
+            'Mobile', 'Android', 'Silk/', 'Kindle', 'BlackBerry', 
+            'Opera Mini', 'Opera Mobi'
+        );
+        foreach ($mobile_agents as $mobile_agent) {
+            if (strpos($user_agent, $mobile_agent) !== false) {
+                $result = 'hp';
+            } else {
+                $result = 'pc';
+            }
+        }
     }
 }

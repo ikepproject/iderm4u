@@ -11,20 +11,22 @@ class Transaction extends BaseController
         $invoice_count      = count($this->invoice->find_medical_ResultArray($medical_code));
         
         if ($invoice_count != 0) {
-            $medical        = $this->medical->find($medical_code);
-            $faskes_code    = $medical['medical_faskes'];
-            $faskes         = $this->faskes->find($faskes_code);
-            $faskes_name    = $faskes['faskes_name'];
-            $user_patient_id= $medical['medical_user'];
-            $user_patient   = $this->user->find($user_patient_id);
-            $patient_code   = $user_patient['user_patient'];
-            $patient        = $this->patient->find($patient_code);
+            $medical            = $this->medical->find($medical_code);
+            $faskes_code        = $medical['medical_faskes'];
+            $faskes             = $this->faskes->find($faskes_code);
+            $faskes_name        = $faskes['faskes_name'];
+            $key_enc            = $faskes['faskes_client_key'];
+            $faskes_client_key  = $this->decrypt($key_enc);
+            $user_patient_id    = $medical['medical_user'];
+            $user_patient       = $this->user->find($user_patient_id);
+            $patient_code       = $user_patient['user_patient'];
+            $patient            = $this->patient->find($patient_code);
 
-            $medtreat       = $this->medtreat->find_medical($medical_code);
-            $medprod        = $this->medprod->find_medical($medical_code);
-            $medoth         = $this->medoth->find_medical($medical_code);
-            $medgal         = $this->medgal->find_medical($medical_code);
-            $invoice        = $this->invoice->find_medical($medical_code);
+            $medtreat           = $this->medtreat->find_medical($medical_code);
+            $medprod            = $this->medprod->find_medical($medical_code);
+            $medoth             = $this->medoth->find_medical($medical_code);
+            $medgal             = $this->medgal->find_medical($medical_code);
+            $invoice            = $this->invoice->find_medical($medical_code);
 
             if ($modul == 'checkout') {
                 $title = 'Checkout';
@@ -40,19 +42,20 @@ class Transaction extends BaseController
             
 
             $data = [
-                'title'         => $title,
-                'modul'         => $modul,
-                'user'          => $user,
-                'faskes_name'   => $faskes_name,
-                'user_patient'  => $user_patient,
-                'patient'       => $patient,
-                'medical'       => $medical,
-                'medtreat'      => $medtreat,
-                'medprod'       => $medprod,
-                'medoth'        => $medoth,
-                'medgal'        => $medgal,
-                'invoice'       => $invoice,
-                'redirect'      => $redirect,
+                'title'             => $title,
+                'modul'             => $modul,
+                'user'              => $user,
+                'faskes_name'       => $faskes_name,
+                'faskes_client_key' => $faskes_client_key,
+                'user_patient'      => $user_patient,
+                'patient'           => $patient,
+                'medical'           => $medical,
+                'medtreat'          => $medtreat,
+                'medprod'           => $medprod,
+                'medoth'            => $medoth,
+                'medgal'            => $medgal,
+                'invoice'           => $invoice,
+                'redirect'          => $redirect,
             ];
             return view('panel_faskes/medical/checkout', $data);
         } else {

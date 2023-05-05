@@ -48,7 +48,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="treatment_discount_price" class="form-label">Harga Treatment Diskon<code>*</code></label>
-                                        <input type="text" class="form-control price" id="treatment_discount_price" name="treatment_discount_price" value="0" >
+                                        <input type="text" class="form-control price" id="treatment_discount_price" name="treatment_discount_price" value="<?= rupiah($treatment['treatment_discount_price'] )?>" >
                                     </div>
                                     <div class="mb-3">
                                         <label for="discount_description" class="form-label">Keterangan Diskon</label>

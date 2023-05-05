@@ -6,6 +6,7 @@
                 <h5 class="modal-title" id="exampleModalScrollableTitle"><?= $title ?></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
             <div class="modal-body">
                 <!-- Nav tabs -->
                 <ul class="nav nav-pills nav-justified" role="tablist">
@@ -123,7 +124,7 @@
                                                 <div class="col-sm-6 text-sm-end">
                                                     <address>
                                                         <strong>Hari, Tanggal:</strong><br>
-                                                        <?= longdate_indo(substr($medical['medical_create'],0,10)) ?><br>
+                                                        <?= longdate_indo(substr($medical['medical_create'],0,10)) ?> <?= substr($medical['medical_create'],11,5)?> <br>
                                                     </address>
                                                 </div>
                                             </div>
@@ -178,8 +179,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th width="1%">No.</th>
-                                                            <th width="79%">Item (Jml)</th>
-                                                            <th width="20%" class="text-end">Harga</th>
+                                                            <th width="75%">Item (Jml)</th>
+                                                            <th width="24%" class="text-end">Harga</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -405,7 +406,7 @@
                                     <button type="button" class="btn btn-light position-relative p-0 avatar-xs rounded-circle" data-toggle="tooltip" data-placement="top" 
                                     title="Jika memilih opsi Teledermatologi terdapat biaya yang harus dibayar diawal."> <span class="avatar-title bg-transparent text-reset"> <i class="bx bxs-info-circle"></i> </span>
                                     </button>
-                                    <select class="form-control" name="medical_refer_type" id="medical_refer_type" onchange="showDiv(this)">
+                                    <select class="form-select" name="medical_refer_type" id="medical_refer_type" onchange="showDiv(this)">
                                         <option selected disabled>Pilih...</option>
                                         <option value="Kunjungan">Rujuk Kunjungan</option>
                                         <option value="Teledermatologi">Rujuk Teledermatologi</option>
@@ -414,9 +415,11 @@
                                 </div>
                                 <div class="mb-3" id="hidden_bayar" style="display: none;">
                                     <label class="form-label">Cara Bayar<code>*</code></label>
-                                    <select class="form-control" name="invoice_method" id="invoice_method">
-                                        <option value="QR">QRIS (+ 0.7%)</option>
+                                    <select class="form-select" name="invoice_method" id="invoice_method">
                                         <option value="VA">Virtual Account (+ Rp 4.440)</option>
+                                        <?php if ($device != "hp") { ?> 
+                                            <option value="QR">QRIS (+ 0.7%)</option>
+                                        <?php } ?>
                                         <!-- <option value="Gopay">GoPay (+ 2%)</option> -->
                                     </select>
                                 </div>
@@ -434,9 +437,20 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Waktu yang Diharapkan dan Catatan Lain <code>*</code></label>
-                                <textarea class="form-control" name="appointment_note_user" id="appointment_note_user" placeholder="Cth: Hari Senin tgl xx-xx-xxx, diagnosisi awal ..."></textarea>
-                                <div class="invalid-feedback error_appointment_note_user"></div>
+                            <label class="form-label">Tanggal Perkiraan Kunjungan (Jadwal akan ditetapkan oleh faskes rujukan)</label>
+                                <div class="input-group" id="datepicker2">
+                                    <input type="text" id="appointment_date_expect" name="appointment_date_expect" class="form-control" placeholder="Tahun-Bulan-Tanggal"
+                                        data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
+                                        data-provide="datepicker" data-date-autoclose="true">
+
+                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                    <div class="invalid-feedback error_appointment_date_expect"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Catatan Lain </label>
+                                <textarea class="form-control" name="appointment_note_user" id="appointment_note_user" placeholder="Tulis catatan rujukan jika ada ..."></textarea>
+                                
                             </div>
                             <div class="row">
                                 <div class="mb-3">
@@ -460,6 +474,7 @@
        
     </div><!-- /.modal-dialog -->
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
@@ -568,12 +583,12 @@ $(document).ready(function () {
                 $(".error_medical_faskes").html("");
             }
 
-            if (response.error.appointment_note_user) {
-                $("#appointment_note_user").addClass("is-invalid");
-                $(".error_appointment_note_user").html(response.error.appointment_note_user);
+            if (response.error.appointment_date_expect) {
+                $("#appointment_date_expect").addClass("is-invalid");
+                $(".error_appointment_date_expect").html(response.error.appointment_date_expect);
             } else {
-                $("#appointment_note_user").removeClass("is-invalid");
-                $(".error_appointment_note_user").html("");
+                $("#appointment_date_expect").removeClass("is-invalid");
+                $(".error_appointment_date_expect").html("");
             }
 
         } else {

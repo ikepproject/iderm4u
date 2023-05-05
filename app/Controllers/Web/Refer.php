@@ -44,7 +44,7 @@ class Refer extends BaseController
             $rules = [
                 'medical_refer_type'    => 'required',
                 'medical_faskes'        => 'required',
-                'appointment_note_user' => 'required',
+                'appointment_date_expect' => 'required',
             ];
     
             $errors = [
@@ -54,8 +54,8 @@ class Refer extends BaseController
                 'medical_faskes' => [
                     'required'    => 'Faskes Rujukan harus dipilih.',
                 ],
-                'appointment_note_user' => [
-                    'required'    => 'Waktu yang Diharapkan dan Catatan Lain harus diisi.',
+                'appointment_date_expect' => [
+                    'required'    => 'Waktu perkiraan kunjungan harus diisi.',
                 ],
             ];
             $valid = $this->validate($rules, $errors);
@@ -64,7 +64,7 @@ class Refer extends BaseController
                     'error' => [
                         'medical_refer_type'    => $validation->getError('medical_refer_type'),
                         'medical_faskes'        => $validation->getError('medical_faskes'),
-                        'appointment_note_user' => $validation->getError('appointment_note_user'),
+                        'appointment_date_expect' => $validation->getError('appointment_date_expect'),
                     ]
                 ];
             } else {
@@ -97,14 +97,15 @@ class Refer extends BaseController
                 ];
 
                 $newAppointment = [
-                    'appointment_code'     => $appointment_code,
-                    'appointment_faskes'   => $faskes_code,
-                    'appointment_user'     => $this->request->getVar('medical_user'),
-                    'appointment_status'   => 'Diajukan',
-                    'appointment_create'   => date('Y-m-d H:i:s'),
-                    'appointment_type'     => $refer_type,
-                    'appointment_medical'  => $medical_code,
-                    'appointment_note_user'=> $this->request->getVar('appointment_note_user'),
+                    'appointment_code'          => $appointment_code,
+                    'appointment_faskes'        => $faskes_code,
+                    'appointment_user'          => $this->request->getVar('medical_user'),
+                    'appointment_status'        => 'Diajukan',
+                    'appointment_create'        => date('Y-m-d H:i:s'),
+                    'appointment_type'          => $refer_type,
+                    'appointment_medical'       => $medical_code,
+                    'appointment_date_expect'   => $this->request->getVar('appointment_date_expect'),
+                    'appointment_note_user'     => trim(preg_replace('/\s\s+/', ' ', $this->request->getVar('appointment_note_user'))),
                 ];
 
                 //Transaction Start
