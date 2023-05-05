@@ -246,7 +246,10 @@ class Midtrans extends BaseController
         $key_enc        = $faskes['faskes_server_key'];
         $serverKey1      = $this->decrypt($key_enc);
 
-        
+        // Debugging: Check the server key value
+        error_log('Server Key: ' . $serverKey1);
+
+        \Midtrans\Config::$serverKey = $serverKey1;
         
         $status_code    = $result->status_code;
         $gross_amount   = $result->gross_amount;
