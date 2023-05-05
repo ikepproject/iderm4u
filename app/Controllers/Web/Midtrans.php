@@ -261,107 +261,107 @@ class Midtrans extends BaseController
         }
         
 
-        // \Midtrans\Config::$serverKey = $serverKey;
-        // $result         = new \Midtrans\Notification();
+        \Midtrans\Config::$serverKey = $serverKey;
+        $result         = new \Midtrans\Notification();
 
-        // $order_id       = $result->order_id;
-        // $invoice_id     = strtok($order_id, '-');
-        // $invoice        = $this->invoice->find($invoice_id);
-        // $medical_code   = $invoice['invoice_medical'];
-        // $medical        = $this->medical->find($medical_code);
-        // $medical_faskes = $medical['medical_faskes'];
+        $order_id       = $result->order_id;
+        $invoice_id     = strtok($order_id, '-');
+        $invoice        = $this->invoice->find($invoice_id);
+        $medical_code   = $invoice['invoice_medical'];
+        $medical        = $this->medical->find($medical_code);
+        $medical_faskes = $medical['medical_faskes'];
 
-        // $faskes         = $this->faskes->find($medical_faskes);
-        // $key_enc        = $faskes['faskes_server_key'];
-        // $serverKey1      = $this->decrypt($key_enc);
+        $faskes         = $this->faskes->find($medical_faskes);
+        $key_enc        = $faskes['faskes_server_key'];
+        $serverKey1      = $this->decrypt($key_enc);
         
-        // $status_code    = $result->status_code;
-        // $gross_amount   = $result->gross_amount;
-        // $signature_key  = $result->signature_key;
+        $status_code    = $result->status_code;
+        $gross_amount   = $result->gross_amount;
+        $signature_key  = $result->signature_key;
 
-        // $signature      = hash('sha512', $order_id.$status_code.$gross_amount.$serverKey1);
+        $signature      = hash('sha512', $order_id.$status_code.$gross_amount.$serverKey1);
 
-        // if ($signature_key != $signature) {
-        //     $data = [
-        //         "message" => 'Invalid Signature',
-        //     ];
-        // } else {
-        //     $transaction_status = $result->transaction_status;
+        if ($signature_key != $signature) {
+            $data = [
+                "message" => 'Invalid Signature',
+            ];
+        } else {
+            $transaction_status = $result->transaction_status;
 
-        //     if ($transaction_status == 'settlement') {
-        //         $invoice_id         = strtok($order_id, '-');
-        //         $invoice            = $this->invoice->find($invoice_id);
-        //         $medical_code       = $invoice['invoice_medical'];
-        //         $medical            = $this->medical->find($medical_code);
+            if ($transaction_status == 'settlement') {
+                $invoice_id         = strtok($order_id, '-');
+                $invoice            = $this->invoice->find($invoice_id);
+                $medical_code       = $invoice['invoice_medical'];
+                $medical            = $this->medical->find($medical_code);
 
-        //         $updateMidtrans  = [
-        //             'status_code'       => $result->status_code,
-        //             'status_message'    => $result->status_message,
-        //             'gross_amount'      => strtok($result->gross_amount, '.'),
-        //             'transaction_status'=> $result->transaction_status,
-        //         ];
+                $updateMidtrans  = [
+                    'status_code'       => $result->status_code,
+                    'status_message'    => $result->status_message,
+                    'gross_amount'      => strtok($result->gross_amount, '.'),
+                    'transaction_status'=> $result->transaction_status,
+                ];
 
-        //         $updateInvoice  = [
-        //             'invoice_pay'      => strtok($result->gross_amount, '.'),
-        //             'invoice_status'   => 'SUCCEEDED',
-        //         ];
+                $updateInvoice  = [
+                    'invoice_pay'      => strtok($result->gross_amount, '.'),
+                    'invoice_status'   => 'SUCCEEDED',
+                ];
 
-        //         $updateMedical = [
-        //             'medical_status'   => 'Selesai'
-        //         ];
+                $updateMedical = [
+                    'medical_status'   => 'Selesai'
+                ];
 
-        //         if($medical['medical_refer_type'] == 'Teledermatologi' && $medical['medical_refer_code'] != NULL){
-        //             $updateMedical = [
-        //                 'medical_status'   => 'Proses'
-        //             ];
-        //         }
+                if($medical['medical_refer_type'] == 'Teledermatologi' && $medical['medical_refer_code'] != NULL){
+                    $updateMedical = [
+                        'medical_status'   => 'Proses'
+                    ];
+                }
 
-        //         $this->db->transStart();
-        //         $this->midtrans->update($order_id, $updateMidtrans);
-        //         $this->medical->update($invoice['invoice_medical'], $updateMedical);
-        //         $this->invoice->update($invoice_id, $updateInvoice);
-        //         $this->db->transComplete();
+                $this->db->transStart();
+                $this->midtrans->update($order_id, $updateMidtrans);
+                $this->medical->update($invoice['invoice_medical'], $updateMedical);
+                $this->invoice->update($invoice_id, $updateInvoice);
+                $this->db->transComplete();
 
-        //         $data = [
-        //             "message" => 'Transaction Paid',
-        //         ];
+                $data = [
+                    "message" => 'Transaction Paid',
+                ];
 
-        //     } elseif ($transaction_status == 'expire') {
-        //         $invoice_id     = strtok($order_id, '-');
-        //         $invoice        = $this->invoice->find($invoice_id);
+            } elseif ($transaction_status == 'expire') {
+                $invoice_id     = strtok($order_id, '-');
+                $invoice        = $this->invoice->find($invoice_id);
 
-        //         $updateMidtrans  = [
-        //             'status_code'       => $result->status_code,
-        //             'status_message'    => $result->status_message,
-        //             'transaction_status'=> $result->transaction_status,
-        //         ];
+                $updateMidtrans  = [
+                    'status_code'       => $result->status_code,
+                    'status_message'    => $result->status_message,
+                    'transaction_status'=> $result->transaction_status,
+                ];
 
-        //         $updateInvoice  = [
-        //             'invoice_midtrans'   => NULL,
-        //         ];
+                $updateInvoice  = [
+                    'invoice_midtrans'   => NULL,
+                ];
 
-        //         $this->db->transStart();
-        //         $this->midtrans->update($order_id, $updateMidtrans);
-        //         $this->invoice->update($invoice_id, $updateInvoice);
-        //         $this->db->transComplete();
+                $this->db->transStart();
+                $this->midtrans->update($order_id, $updateMidtrans);
+                $this->invoice->update($invoice_id, $updateInvoice);
+                $this->db->transComplete();
 
-        //         $data = [
-        //             "message" => 'Transaction Expired',
-        //         ];
+                $data = [
+                    "message" => 'Transaction Expired',
+                ];
 
-        //     } else {
-        //         $data = [
-        //             "message" => 'Transaction Status Unpaid',
-        //         ];
-        //     }
-        // }
+            } else {
+                $data = [
+                    "message" => 'Transaction Status Unpaid',
+                ];
+            }
+        }
         
-        // error_log(json_encode($data));
-        // echo($data);
+        error_log(json_encode($data));
+        echo($data);
 
-        // return $this->response->setJSON($data);
+        return $this->response->setJSON($data);
 
-        var_dump($serverKey);
+        //var_dump($serverKey);
 
         
     }
