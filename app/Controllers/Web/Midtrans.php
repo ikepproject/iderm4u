@@ -248,8 +248,18 @@ class Midtrans extends BaseController
 
     public function hook()
     {
-        $order_id = $this->request->getPost('order_id');
-        $serverKey = $this->getServerKeyByOrderId($order_id);
+        $inputJSON = file_get_contents('php://input');
+        $inputData = json_decode($inputJSON, true);
+        if (isset($inputData['order_id'])) {
+            $order_id = $inputData['order_id'];
+            // $serverKey = $this->getServerKeyByOrderId($order_id);
+            // \Midtrans\Config::$serverKey = $serverKey;
+        } else {
+            // Handle the case where the order ID is not available in the incoming data
+            // You can return an error message or throw an exception
+            $order_id = 'order id not found';
+        }
+        
 
         // \Midtrans\Config::$serverKey = $serverKey;
         // $result         = new \Midtrans\Notification();
