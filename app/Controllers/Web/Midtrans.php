@@ -12,6 +12,7 @@ class Midtrans extends BaseController
 
     public function __construct()
     {
+        \Midtrans\Config::$serverKey = 'SB-Mid-server-b-0mbmFYmSeynMwfpQVfusZh';
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
         \Midtrans\Config::$isProduction = false;
         // Set sanitization on (default)
@@ -245,7 +246,7 @@ class Midtrans extends BaseController
         $key_enc        = $faskes['faskes_server_key'];
         $serverKey      = $this->decrypt($key_enc);
 
-        \Midtrans\Config::$serverKey = $serverKey;
+        
         
         $status_code    = $result->status_code;
         $gross_amount   = $result->gross_amount;
