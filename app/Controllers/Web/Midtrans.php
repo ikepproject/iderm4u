@@ -357,7 +357,7 @@ class Midtrans extends BaseController
         }
         
         error_log(json_encode($data));
-        echo($data);
+        var_dump($data);
 
         return $this->response->setJSON($data);
 
