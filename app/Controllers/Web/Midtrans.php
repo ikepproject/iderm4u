@@ -263,23 +263,12 @@ class Midtrans extends BaseController
 
         \Midtrans\Config::$serverKey = $serverKey;
         $result         = new \Midtrans\Notification();
-
-        $order_id       = $result->order_id;
-        $invoice_id     = strtok($order_id, '-');
-        $invoice        = $this->invoice->find($invoice_id);
-        $medical_code   = $invoice['invoice_medical'];
-        $medical        = $this->medical->find($medical_code);
-        $medical_faskes = $medical['medical_faskes'];
-
-        $faskes         = $this->faskes->find($medical_faskes);
-        $key_enc        = $faskes['faskes_server_key'];
-        $serverKey1      = $this->decrypt($key_enc);
         
         $status_code    = $result->status_code;
         $gross_amount   = $result->gross_amount;
         $signature_key  = $result->signature_key;
 
-        $signature      = hash('sha512', $order_id.$status_code.$gross_amount.$serverKey1);
+        $signature      = hash('sha512', $order_id.$status_code.$gross_amount.$serverKey);
 
         if ($signature_key != $signature) {
             $data = [
