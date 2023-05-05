@@ -219,5 +219,6 @@ class BaseController extends Controller
                 $result = 'pc';
             }
         }
+        return $result;
     }
 }
