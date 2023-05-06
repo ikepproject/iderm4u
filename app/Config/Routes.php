@@ -45,7 +45,7 @@ $routes->setAutoRoute(false);
 
 /**
  * --------------------------------------------------------------------
- * My Route
+ * Route Healthcare
  * --------------------------------------------------------------------
  */
 
@@ -148,7 +148,8 @@ $routes->get('invoice', 'Web\Invoice::index', ["filter" => "authweb"]);
 $routes->get('order', 'Web\Product_Order::index', ["filter" => "authweb"]);                            
 /**--- appointment ---*/
 $routes->get('appointment', 'Web\Appointment::index', ["filter" => "authweb"]);                          
-$routes->post('appointment/formaccept', 'Web\Appointment::formaccept', ["filter" => "authweb"]);         
+$routes->post('appointment/formaccept', 'Web\Appointment::formaccept', ["filter" => "authweb"]);
+$routes->post('appointment/formdetail', 'Web\Appointment::formdetail', ["filter" => "authweb"]);           
 /**--- transaction ---*/
 $routes->get('transaction/(:any)/(:any)', 'Web\Transaction::checkout/$1/$2', ["filter" => "authweb"]);   
 $routes->post('transaction/token', 'Web\Midtrans::token', ["filter" => "authweb"]);  
@@ -166,6 +167,23 @@ $routes->post('report-product/filter', 'Web\Report::report_product_filter', ["fi
 // 	$routes->get('user', 'Api\User::index');
 // });
 
+/**
+ * --------------------------------------------------------------------
+ * Route Patient
+ * --------------------------------------------------------------------
+ */
+/**--- BACKEND FUNCTION ROUTES (Endpoint Function) ---*/
+/**--- appointment ---*/
+$routes->post('appointment-create', 'Web\Appointment::create_patient', ["filter" => "authweb"]);
+$routes->post('appointment/cancel', 'Web\Appointment::cancel', ["filter" => "authweb"]); 
+/**--- FRONT END ROUTES (Endpoint pages)---*/
+/**--- appointment ---*/
+$routes->get('appointment-list', 'Web\Appointment::index_patient', ["filter" => "authweb"]);
+$routes->get('appointment-getdata', 'Web\Appointment::getdata_patient', ["filter" => "authweb"]);                           
+$routes->get('appointment-formadd', 'Web\Appointment::formadd_patient', ["filter" => "authweb"]);
+/**--- medical ---*/ 
+$routes->get('medical-record', 'Web\Medical::index_patient', ["filter" => "authweb"]);  
+$routes->get('medical-getdata', 'Web\Medical::getdata_patient', ["filter" => "authweb"]);  
 /**
  * --------------------------------------------------------------------
  * Additional Routing

@@ -22,20 +22,22 @@
                             <span class="d-none d-md-block"><i class="far fa-images mr-2"></i> Foto</span>   
                         </a>
                     </li>
-                    <li class="nav-item waves-effect waves-light">
+                    <?php if ($user['user_role'] != 1011) { ?> 
+                        <li class="nav-item waves-effect waves-light">
                         <a class="nav-link" data-bs-toggle="tab" href="#gejala-1" role="tab">
                             <span class="d-block d-md-none"><i class="bx bx-map-pin"></i></span>
                             <span class="d-none d-md-block"><i class="bx bx-map-pin mr-2"></i> Area Gejala</span>   
                         </a>
-                    </li>
-                    <?php if ($medical['medical_status'] == 'Selesai' && $faskes_user['faskes_type'] == 'Klinik') { ?> 
-                    <li class="nav-item waves-effect waves-light">
-                        <a class="nav-link" data-bs-toggle="tab" href="#refer-1" role="tab">
-                            <span class="d-block d-md-none"><i class="fas fa-ambulance"></i></span>
-                            <span class="d-none d-md-block"><i class="fas fa-ambulance mr-2"></i> Rujuk</span>   
-                        </a>
-                    </li>
-                    <?php } ?> 
+                        </li>
+                        <?php if ($medical['medical_status'] == 'Selesai' && $faskes_user['faskes_type'] == 'Klinik') { ?> 
+                        <li class="nav-item waves-effect waves-light">
+                            <a class="nav-link" data-bs-toggle="tab" href="#refer-1" role="tab">
+                                <span class="d-block d-md-none"><i class="fas fa-ambulance"></i></span>
+                                <span class="d-none d-md-block"><i class="fas fa-ambulance mr-2"></i> Rujuk</span>   
+                            </a>
+                        </li>
+                        <?php } ?> 
+                    <?php } ?>
                 </ul>
 
                 <!-- Tab panes -->
@@ -258,32 +260,34 @@
                             </div>
                     </div>
                     <div class="tab-pane" id="gallery-1" role="tabpanel">
-                        <?= form_open('medical/addgallery', ['class' => 'formadd']) ?>
-                        <?= csrf_field(); ?>
-                        <input type="hidden" id="medical_code" name="medical_code" value="<?= $medical['medical_code'] ?>">
-                        <div class="row">
-                            <div class="mb-3">
-                                <label for="medgal_disease">Indikasi Dalam Foto (Jika lebih dari 1 indikasi pisah dengan tanda -)</label>
-                                <input type="text" class="form-control" id="medgal_disease" name="medgal_disease">
+                        <?php if ($user['user_role'] != 1011) { ?>
+                        
+                            <?= form_open('medical/addgallery', ['class' => 'formadd']) ?>
+                            <?= csrf_field(); ?>
+                            <input type="hidden" id="medical_code" name="medical_code" value="<?= $medical['medical_code'] ?>">
+                            <div class="row">
+                                <div class="mb-3">
+                                    <label for="medgal_disease">Indikasi Dalam Foto (Jika lebih dari 1 indikasi pisah dengan tanda -)</label>
+                                    <input type="text" class="form-control" id="medgal_disease" name="medgal_disease">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="name">Tambah foto</label>
+                                    <input type="file" class="form-control" id="images" name="images[]" onchange="preview_images();" accept=".jpg,.jpeg,.png" multiple/>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="name">Tambah foto</label>
-                                <input type="file" class="form-control" id="images" name="images[]" onchange="preview_images();" accept=".jpg,.jpeg,.png" multiple/>
+                            <div class="row">
+                                <div class="mb-3">
+                                    <div style="display: inline-block;" id="image_preview"></div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="mb-3">
-                                <div style="display: inline-block;" id="image_preview"></div>
+                            <div class="row">
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary" id="save" name="save"><i class="bx bx-images"></i> Tambah Foto</button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="mb-3">
-                                <button type="submit" class="btn btn-primary" id="save" name="save"><i class="bx bx-images"></i> Tambah Foto</button>
-                            </div>
-                        </div>
-                        <?= form_close() ?>
-                        <hr>
-
+                            <?= form_close() ?>
+                            <hr>
+                        <?php } ?>
                         <?php if ($medgal_refer != NULL) {?>
                             <?php
                             foreach ($medgal_refer as $gallery_refer) :
@@ -295,12 +299,14 @@
                                         <div class="product-img position-relative">
                                             <img src="<?= base_url() ?>/public/assets/images/medical/thumb/<?= $gallery_refer['medgal_filename'] ?>" alt="" class="img-fluid mx-auto d-block">
                                         </div>
-                                        <div class="mt-4 text-center text-break">
-                                            <p class="mb-3"><?= $gallery_refer['medgal_filename'] ?></p> <br>
-                                            <button type="button" class="btn btn-danger mb-2" onclick="del('<?= $gallery_refer['medgal_id'] ?>', '<?= $gallery_refer['medgal_filename'] ?>')">
-                                                <i class="bx bx-trash"></i> Hapus
-                                            </button>
-                                        </div>
+                                        <?php if ($user['user_role'] != 1011) { ?>
+                                            <div class="mt-4 text-center text-break">
+                                                <p class="mb-3"><?= $gallery_refer['medgal_filename'] ?></p> <br>
+                                                <button type="button" class="btn btn-danger mb-2" onclick="del('<?= $gallery_refer['medgal_id'] ?>', '<?= $gallery_refer['medgal_filename'] ?>')">
+                                                    <i class="bx bx-trash"></i> Hapus
+                                                </button>
+                                            </div>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
@@ -317,152 +323,158 @@
                                     <div class="product-img position-relative">
                                         <img src="<?= base_url() ?>/public/assets/images/medical/thumb/<?= $gallery['medgal_filename'] ?>" alt="" class="img-fluid mx-auto d-block">
                                     </div>
-                                    <div class="mt-4 text-center text-break">
-                                        <p class="mb-3"><?= $gallery['medgal_filename'] ?></p> <br>
-                                        <button type="button" class="btn btn-danger mb-2" onclick="del('<?= $gallery['medgal_id'] ?>', '<?= $gallery['medgal_filename'] ?>')">
-                                            <i class="bx bx-trash"></i> Hapus
-                                        </button>
-                                    </div>
+                                    <?php if ($user['user_role'] != 1011) { ?>
+                                        <div class="mt-4 text-center text-break">
+                                            <p class="mb-3"><?= $gallery['medgal_filename'] ?></p> <br>
+                                            <button type="button" class="btn btn-danger mb-2" onclick="del('<?= $gallery['medgal_id'] ?>', '<?= $gallery['medgal_filename'] ?>')">
+                                                <i class="bx bx-trash"></i> Hapus
+                                            </button>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
                         <?php endforeach; ?>
                     </div>
-                    <div class="tab-pane" id="gejala-1" role="tabpanel">
+                    <?php if ($user['user_role'] != 1011) { ?>
+                        <div class="tab-pane" id="gejala-1" role="tabpanel">
 
-                        <p><i class="bx bx-info-circle"></i> Lihat kode area terjadinya gejala pada setiap bagian memilik kode yg berbeda.</p>
-                        <p><i class="bx bx-info-circle"></i> Klik tombol dibawah agar illustrasi area gejala muncul.</p>
-                        
-                        <div class="d-flex bd-highlight mb-3">
-                            <div class="p-2 bd-highlight">
-                            <a class="btn btn-success btn-sm mb-3" data-bs-toggle="collapse" href="#face" aria-expanded="true" aria-controls="face">
-                                <i class="bx bx-face mr-2"></i> Area Wajah
-                            </a>
-                            </div>
-                            <div class="p-2 bd-highlight">
-                            <a class="btn btn-primary btn-sm mb-3" data-bs-toggle="collapse" href="#body" aria-expanded="true" aria-controls="body">
-                                <i class="bx bx-body mr-2"></i> Area Tubuh
-                            </a>
-                            </div>
-                        </div>
-
-                        <div class="collapse" id="face">
-                            <div class="row">
-                                <div class="card border border-primary shadow-lg text-left">
-                                    <div class="card-body">
-                                        <div class="product-img position-relative">
-                                            <img src="<?= base_url() ?>public/assets/images/mapping/face.png" alt="" class="img-fluid mx-auto d-block">
-                                        </div>
-                                    </div>
+                            <p><i class="bx bx-info-circle"></i> Lihat kode area terjadinya gejala pada setiap bagian memilik kode yg berbeda.</p>
+                            <p><i class="bx bx-info-circle"></i> Klik tombol dibawah agar illustrasi area gejala muncul.</p>
+                            
+                            <div class="d-flex bd-highlight mb-3">
+                                <div class="p-2 bd-highlight">
+                                <a class="btn btn-success btn-sm mb-3" data-bs-toggle="collapse" href="#face" aria-expanded="true" aria-controls="face">
+                                    <i class="bx bx-face mr-2"></i> Area Wajah
+                                </a>
+                                </div>
+                                <div class="p-2 bd-highlight">
+                                <a class="btn btn-primary btn-sm mb-3" data-bs-toggle="collapse" href="#body" aria-expanded="true" aria-controls="body">
+                                    <i class="bx bx-body mr-2"></i> Area Tubuh
+                                </a>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="collapse" id="body">
-                            <div class="row">
-                                <div class="card border border-primary shadow-lg text-left">
-                                    <div class="card-body">
-                                        <div class="product-img position-relative">
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="tab-pane" id="refer-1" role="tabpanel">
-                        <?php if ($medical['medical_refer_type'] == NULL) { ?>
-                            <div class="row">
-                                <div class="mb-3 text-center">
-                                    <a class="btn btn-primary btn-sm" data-bs-toggle="collapse" href="#RujukData" aria-expanded="true" aria-controls="patientData">
-                                        <i class="fas fa-expand-alt mr-2"></i> Info Rujukan
-                                    </a>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="collapse" id="RujukData">
-                                        <div class="card border border-primary shadow-lg">
-                                            <div class="card-body">
-                                                <?php foreach ($faskes_list as $key => $data) { ?>
-                                                    <strong><?= $data['faskes_name'] ?></strong> <br>
-                                                    Biaya Rujuk Teledermatologi: Rp <?= rupiah($data['faskes_refer_price']) ?> <br>
-                                                    Note: <?= $data['faskes_refer_note'] ?>
-                                                    <hr>
-                                                <?php } ?>
-                                                <p>Tanggal pasti Rujukan Kunjungan/Teledermatologi akan dikonfirmasi oleh Admin RS terlebih dahulu untuk menyesuaikan dengan jadwal Dokter yang tersedia. Pasien akan mendapatkan informasi lebih lanjut.</p>
+                            <div class="collapse" id="face">
+                                <div class="row">
+                                    <div class="card border border-primary shadow-lg text-left">
+                                        <div class="card-body">
+                                            <div class="product-img position-relative">
+                                                <img src="<?= base_url() ?>public/assets/images/mapping/face.png" alt="" class="img-fluid mx-auto d-block">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> 
-                            
-                            <?= form_open('refer/create', ['class' => 'formReferAdd']) ?>
-                            <?= csrf_field(); ?>
-                            <input type="hidden" id="medical_refer_code" name="medical_refer_code" value="<?= $medical['medical_code'] ?>">
-                            <input type="hidden" id="medical_user" name="medical_user" value="<?= $medical['medical_user'] ?>">
-                            <div class="row">
-                                <div class="mb-3">
-                                    <label for="medical_refer_type">Pilih Tipe Rujukan <code>*</code></label> 
-                                    <button type="button" class="btn btn-light position-relative p-0 avatar-xs rounded-circle" data-toggle="tooltip" data-placement="top" 
-                                    title="Jika memilih opsi Teledermatologi terdapat biaya yang harus dibayar diawal."> <span class="avatar-title bg-transparent text-reset"> <i class="bx bxs-info-circle"></i> </span>
-                                    </button>
-                                    <select class="form-select" name="medical_refer_type" id="medical_refer_type" onchange="showDiv(this)">
-                                        <option selected disabled>Pilih...</option>
-                                        <option value="Kunjungan">Rujuk Kunjungan</option>
-                                        <option value="Teledermatologi">Rujuk Teledermatologi</option>
-                                    </select>
-                                    <div class="invalid-feedback error_medical_refer_type"></div>
-                                </div>
-                                <div class="mb-3" id="hidden_bayar" style="display: none;">
-                                    <label class="form-label">Cara Bayar<code>*</code></label>
-                                    <select class="form-select" name="invoice_method" id="invoice_method">
-                                        <option value="VA">Virtual Account (+ Rp 4.440)</option>
-                                        <?php if ($device != "hp") { ?> 
-                                            <option value="QR">QRIS (+ 0.7%)</option>
-                                        <?php } ?>
-                                        <!-- <option value="Gopay">GoPay (+ 2%)</option> -->
-                                    </select>
-                                </div>
                             </div>
-                            <div class="row">
-                                <div class="mb-3">
-                                    <label for="medical_faskes">Pilih Rumah Sakit Rujukan <code>*</code></label>
-                                    <select class="form-select" id="medical_faskes" name="medical_faskes">
-                                        <option selected disabled>Pilih...</option>
-                                        <?php foreach ($faskes_list as $key => $data) { ?>
-                                            <option value="<?= $data['faskes_code'] ?>"><?= $data['faskes_name'] ?> </option>
-                                        <?php } ?>
-                                    </select>
-                                    <div class="invalid-feedback error_medical_faskes"></div>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                            <label class="form-label">Tanggal Perkiraan Kunjungan (Jadwal akan ditetapkan oleh faskes rujukan)</label>
-                                <div class="input-group" id="datepicker2">
-                                    <input type="text" id="appointment_date_expect" name="appointment_date_expect" class="form-control" placeholder="Tahun-Bulan-Tanggal"
-                                        data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
-                                        data-provide="datepicker" data-date-autoclose="true">
 
-                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
-                                    <div class="invalid-feedback error_appointment_date_expect"></div>
+                            <div class="collapse" id="body">
+                                <div class="row">
+                                    <div class="card border border-primary shadow-lg text-left">
+                                        <div class="card-body">
+                                            <div class="product-img position-relative">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Catatan Lain </label>
-                                <textarea class="form-control" name="appointment_note_user" id="appointment_note_user" placeholder="Tulis catatan rujukan jika ada ..."></textarea>
+
+                        </div>
+                    <?php } ?>
+                    <?php if ($user['user_role'] != 1011) { ?>
+                        <div class="tab-pane" id="refer-1" role="tabpanel">
+                            <?php if ($medical['medical_refer_type'] == NULL) { ?>
+                                <div class="row">
+                                    <div class="mb-3 text-center">
+                                        <a class="btn btn-primary btn-sm" data-bs-toggle="collapse" href="#RujukData" aria-expanded="true" aria-controls="patientData">
+                                            <i class="fas fa-expand-alt mr-2"></i> Info Rujukan
+                                        </a>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="collapse" id="RujukData">
+                                            <div class="card border border-primary shadow-lg">
+                                                <div class="card-body">
+                                                    <?php foreach ($faskes_list as $key => $data) { ?>
+                                                        <strong><?= $data['faskes_name'] ?></strong> <br>
+                                                        Biaya Rujuk Teledermatologi: Rp <?= rupiah($data['faskes_refer_price']) ?> <br>
+                                                        Note: <?= $data['faskes_refer_note'] ?>
+                                                        <hr>
+                                                    <?php } ?>
+                                                    <p>Tanggal pasti Rujukan Kunjungan/Teledermatologi akan dikonfirmasi oleh Admin RS terlebih dahulu untuk menyesuaikan dengan jadwal Dokter yang tersedia. Pasien akan mendapatkan informasi lebih lanjut.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
                                 
-                            </div>
-                            <div class="row">
-                                <div class="mb-3">
-                                    <button type="submit" class="btn btn-warning" id="refer" name="refer"><i class="bx bx-transfer-alt"></i> Rujuk</button>
+                                <?= form_open('refer/create', ['class' => 'formReferAdd']) ?>
+                                <?= csrf_field(); ?>
+                                <input type="hidden" id="medical_refer_code" name="medical_refer_code" value="<?= $medical['medical_code'] ?>">
+                                <input type="hidden" id="medical_user" name="medical_user" value="<?= $medical['medical_user'] ?>">
+                                <div class="row">
+                                    <div class="mb-3">
+                                        <label for="medical_refer_type">Pilih Tipe Rujukan <code>*</code></label> 
+                                        <button type="button" class="btn btn-light position-relative p-0 avatar-xs rounded-circle" data-toggle="tooltip" data-placement="top" 
+                                        title="Jika memilih opsi Teledermatologi terdapat biaya yang harus dibayar diawal."> <span class="avatar-title bg-transparent text-reset"> <i class="bx bxs-info-circle"></i> </span>
+                                        </button>
+                                        <select class="form-select" name="medical_refer_type" id="medical_refer_type" onchange="showDiv(this)">
+                                            <option selected disabled>Pilih...</option>
+                                            <option value="Kunjungan">Rujuk Kunjungan</option>
+                                            <option value="Teledermatologi">Rujuk Teledermatologi</option>
+                                        </select>
+                                        <div class="invalid-feedback error_medical_refer_type"></div>
+                                    </div>
+                                    <div class="mb-3" id="hidden_bayar" style="display: none;">
+                                        <label class="form-label">Cara Bayar<code>*</code></label>
+                                        <select class="form-select" name="invoice_method" id="invoice_method">
+                                            <option value="VA">Virtual Account (+ Rp 4.440)</option>
+                                            <?php if ($device != "hp") { ?> 
+                                                <option value="QR">QRIS (+ 0.7%)</option>
+                                            <?php } ?>
+                                            <!-- <option value="Gopay">GoPay (+ 2%)</option> -->
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <?= form_close() ?>
-                        <?php } ?> 
-                        <?php if ($medical['medical_refer_type'] != NULL) { ?> 
-                            <h5 class="text-center">Data Kunjungan ini sudah dirujuk.</h5>
-                        <?php } ?> 
-                    </div>
+                                <div class="row">
+                                    <div class="mb-3">
+                                        <label for="medical_faskes">Pilih Rumah Sakit Rujukan <code>*</code></label>
+                                        <select class="form-select" id="medical_faskes" name="medical_faskes">
+                                            <option selected disabled>Pilih...</option>
+                                            <?php foreach ($faskes_list as $key => $data) { ?>
+                                                <option value="<?= $data['faskes_code'] ?>"><?= $data['faskes_name'] ?> </option>
+                                            <?php } ?>
+                                        </select>
+                                        <div class="invalid-feedback error_medical_faskes"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                <label class="form-label">Tanggal Perkiraan Kunjungan (Jadwal akan ditetapkan oleh faskes rujukan)</label>
+                                    <div class="input-group" id="datepicker2">
+                                        <input type="text" id="appointment_date_expect" name="appointment_date_expect" class="form-control" placeholder="Tahun-Bulan-Tanggal"
+                                            data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
+                                            data-provide="datepicker" data-date-autoclose="true">
+
+                                        <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                        <div class="invalid-feedback error_appointment_date_expect"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Catatan Lain </label>
+                                    <textarea class="form-control" name="appointment_note_user" id="appointment_note_user" placeholder="Tulis catatan rujukan jika ada ..."></textarea>
+                                    
+                                </div>
+                                <div class="row">
+                                    <div class="mb-3">
+                                        <button type="submit" class="btn btn-warning" id="refer" name="refer"><i class="bx bx-transfer-alt"></i> Rujuk</button>
+                                    </div>
+                                </div>
+                                <?= form_close() ?>
+                            <?php } ?> 
+                            <?php if ($medical['medical_refer_type'] != NULL) { ?> 
+                                <h5 class="text-center">Data Kunjungan ini sudah dirujuk.</h5>
+                            <?php } ?> 
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
             <div class="modal-footer">

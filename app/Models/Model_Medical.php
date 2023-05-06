@@ -133,4 +133,17 @@ class Model_Medical extends Model
             ->join('tb_faskes', 'tb_faskes.faskes_code = tb_user.user_faskes')
             ->get()->getRowArray();
     }
+
+    //Medical - getData Patient User
+    public function list_patient($user_id)
+    {
+        return $this->table('tb_medical')
+            ->where('medical_user', $user_id)
+            ->orderBy('medical_create', 'DESC')
+            ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
+            ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->join('tb_faskes', 'tb_faskes.faskes_code = tb_medical.medical_faskes')
+            ->join('tb_invoice', 'tb_invoice.invoice_medical = tb_medical.medical_code')
+            ->get()->getResultArray();
+    }
 }

@@ -7,10 +7,13 @@ class Treatment extends BaseController
 {
 	public function index()
 	{
-		$user = $this->userauth(); // Return Object
+		$user        = $this->userauth(); // Return Array
+        $user_faskes = $user['user_faskes'];
+        $faskes      = $this->faskes->find($user_faskes);
 		$data = [
 			'title'  => 'Treatment',
 			'user'   => $user,
+            'faskes_name' => $faskes['faskes_name']
 		];
 		return view('panel_faskes/treatment/index', $data);
 	}
@@ -18,10 +21,12 @@ class Treatment extends BaseController
     public function getdata()
     {
         if ($this->request->isAJAX()) {
-            $user        = $this->userauth(); // Return Object
+            $user        = $this->userauth(); // Return Array
             $user_faskes = $user['user_faskes'];
+            $user_role   = $user['user_role'];
             $data = [
-                'list' => $this->treatment->list($user_faskes)
+                'list'      => $this->treatment->list($user_faskes),
+                'user_role' => $user_role,
             ];
             $response = [
                 'data' => view('panel_faskes/treatment/list', $data)
@@ -33,7 +38,7 @@ class Treatment extends BaseController
 	public function formadd()
     {
         if ($this->request->isAJAX()) {
-            $user = $this->userauth(); // Return Object
+            $user = $this->userauth(); // Return Array
             $data = [
                 'title'         => 'Tambah Treatment',
                 'user'          => $user,
@@ -49,7 +54,7 @@ class Treatment extends BaseController
     public function formedit()
     {
         if ($this->request->isAJAX()) {
-            $user           = $this->userauth(); // Return Object
+            $user           = $this->userauth(); // Return Array
             $treatment_code = $this->request->getVar('treatment_code');
             $treatment      = $this->treatment->find($treatment_code);
             

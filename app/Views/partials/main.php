@@ -310,50 +310,37 @@
                         <li class="menu-title" key="t-menu">Menu Pasien</li>
 
                         <li>
-                            <a href="appointmentformadd" class="waves-effect">
+                            <a href="<?= site_url('appointment-list') ?>" class="waves-effect">
                                 <i class="bx bx-calendar"></i>
-                                <span key="t-kunjungan">Buat Appointment</span>
+                                <span key="t-appointment-formadd">Appointment</span>
                             </a>
                         </li>
 
                         <li>
-                            <a href="orderformadd" class="waves-effect">
+                            <a href="<?= site_url('treatment') ?>" class="waves-effect">
+                                <i class="bx bx-diamond"></i>
+                                <span key="t-treatment-list">Treatment</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
                                 <i class="bx bx-shopping-bag"></i>
-                                <span key="t-kunjungan">Beli Produk</span>
+                                <span key="t-produk">Produk</span>
+                            </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="<?= site_url('order-product') ?>" key="t-order-product">Order Produk</a></li>
+                                <li><a href="<?= site_url('order-cart') ?>" key="t-order-cart">Keranjang</a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="<?= site_url('medical-record') ?>" class="waves-effect">
+                                <i class="bx bxs-user-detail"></i>
+                                <span key="t-medical-record">Kunjungan</span>
                             </a>
                         </li>
                         
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="bx bxs-user-detail"></i>
-                                <span key="t-kunjungan">Riwayat Kunjungan</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="index.html" key="t-default">Semua</a></li>
-                                <li><a href="dashboard-saas.html" key="t-saas">Pemeriksaan</a></li>
-                                <li><a href="dashboard-crypto.html" key="t-crypto">Pembelian</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="bx bx-task"></i>
-                                <span key="t-rujukan">Rujukan</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="index.html" key="t-default">Kunjungan</a></li>
-                                <li><a href="dashboard-saas.html" key="t-saas">Data</a></li>
-                                <li><a href="dashboard-crypto.html" key="t-crypto">Teledermatologi</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="invoice" class="waves-effect">
-                                <i class="bx bx-receipt"></i>
-                                <span key="t-kunjungan">Invoice</span>
-                            </a>
-                        </li>
                         <?php } ?>
                         
                         <?php if ($user['user_active'] == 't' && $user['user_role'] == '7077') { ?>

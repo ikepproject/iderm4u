@@ -8,7 +8,9 @@
             <th width="10%">Status</th>
             <th width="10%">Harga</th>
             <th width="20%">Keterangan</th>
-            <th width="10%"></th>
+            <?php if ($user_role != 1011) { ?> 
+                <th width="10%"></th>
+            <?php } ?>
         </tr>
     </thead>
     <tbody>
@@ -33,14 +35,17 @@
                     <?php if ($data['treatment_discount'] == 't') { ?> <s>Rp <?= rupiah($data['treatment_price']) ?></s> -> <br> Rp <?= rupiah($data['treatment_discount_price']) ?> <br> <i class="bx bxs-offer"></i> <?= round((($data['treatment_price']-$data['treatment_discount_price'])/$data['treatment_price'])*100,2) ?> % <?php } ?>
                 </td>
                 <td><?= $data['treatment_description'] ?></td>
-                <td>
-                    <button type="button" class="btn btn-warning mb-2" onclick="edit('<?= $data['treatment_code'] ?>')">
-                        <i class="bx bx-edit"></i>
-                    </button>
-                    <button type="button" class="btn btn-primary mb-2" onclick="discount('<?= $data['treatment_code'] ?>')">
-                        <i class="bx bxs-offer"></i>
-                    </button>
-                </td>
+                <?php if ($user_role != 1011) { ?> 
+                    <td>
+                        <button type="button" class="btn btn-warning mb-2" onclick="edit('<?= $data['treatment_code'] ?>')">
+                            <i class="bx bx-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-primary mb-2" onclick="discount('<?= $data['treatment_code'] ?>')">
+                            <i class="bx bxs-offer"></i>
+                        </button>
+                    </td>
+                <?php } ?>
+                
             </tr>
 
         <?php endforeach; ?>

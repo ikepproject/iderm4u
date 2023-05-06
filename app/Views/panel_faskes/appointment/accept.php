@@ -30,7 +30,7 @@
                     <div class="invalid-feedback error_appointment_date_fix"></div>
                 </div> -->
                 <div class="mb-3">
-                    <label class="form-label">Finalisasi Tangga Kunjungan<code>*</code></label>
+                    <label class="form-label">Finalisasi Tanggal Kunjungan<code>*</code></label>
                     <div class="input-group" id="datepicker2">
                         <input type="text" id="appointment_fix_date" name="appointment_fix_date" class="form-control" placeholder="Tahun-Bulan-Tanggal"
                             data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
@@ -60,7 +60,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-success" id="save" name="save"><i class="bx bx-calendar-check"></i> Finalisasi Jadwal</button>
+                    <button type="submit" class="btn btn-success" id="accept" name="accept"><i class="bx bx-calendar-check"></i> Finalisasi Jadwal</button>
                 </div>
             </div>
             <?= form_close() ?>
@@ -137,9 +137,9 @@ $(document).ready(function () {
                 icon: "success",
                 showConfirmButton: false,
                 timer: 1500,
+                }).then(function () {
+                    window.location.reload();
                 });
-                $("#modalaccept").modal("hide");
-                datatable_refer();
             }
             }
         },

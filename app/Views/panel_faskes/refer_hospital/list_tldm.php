@@ -127,7 +127,8 @@ function accept(medical_code) {
         type: "post",
         url: "appointment/formaccept",
         data: {
-            medical_code: medical_code
+            medical_code: medical_code,
+            modul: 'refer'
         },
         dataType: "json",
         success: function(response) {

@@ -9,12 +9,13 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <h4 class="card-title">Data Treatment</h4>
-                        <button type="button" class="btn btn-primary waves-effect waves-light mb-4 add">
+                        <h4 class="card-title">Data Treatment <?= $faskes_name ?></h4>
+                        <?php if ($user['user_role'] != 1011) { ?> 
+                          <button type="button" class="btn btn-primary waves-effect waves-light mb-4 add">
                             <i class="bx bx-plus-circle font-size-16 align-middle me-2"></i> Tambah
-                        </button>
+                          </button>
+                        <?php } ?>
                         
-
                         <div class="dataTreatment">
                         </div>
 

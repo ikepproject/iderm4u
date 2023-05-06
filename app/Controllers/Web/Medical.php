@@ -148,6 +148,34 @@ class Medical extends BaseController
         }
     }
 
+    public function index_patient()
+	{
+		$user = $this->userauth(); //Return array
+		$data = [
+			'title'  => 'Kunjungan',
+			'user'   => $user,
+		];
+		return view('panel_patient/medical/index', $data);
+	}
+
+    public function getdata_patient()
+    {
+        if ($this->request->isAJAX()) {
+            $user    = $this->userauth(); //Return array
+            $user_id = $user['user_id'];
+
+            $list    = $this->medical->list_patient($user_id);
+            
+            $data = [
+                'list' => $list
+            ];
+            $response = [
+                'data' => view('panel_patient/medical/list', $data)
+            ];
+            echo json_encode($response);
+        }
+    }
+
     public function create()
     {
         if ($this->request->isAJAX()) {

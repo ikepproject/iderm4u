@@ -7,6 +7,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+            <?php if ($user_role != 1011) { ?>
                 <!-- Nav tabs -->
                 <ul class="nav nav-pills nav-justified" role="tablist">
                     <li class="nav-item waves-effect waves-light">
@@ -15,6 +16,7 @@
                             <span class="d-none d-md-block"><i class="fas fa-notes-medical mr-2"></i> Diagnosis</span> 
                         </a>
                     </li>
+                    
                     <li class="nav-item waves-effect waves-light">
                         <a class="nav-link" data-bs-toggle="tab" href="#smart-1" role="tab">
                             <span class="d-block d-md-none"><i class="bx bx-chip"></i></span>
@@ -22,7 +24,7 @@
                         </a>
                     </li>
                 </ul>
-
+            <?php } ?>
                 <!-- Tab panes -->
                 <div class="tab-content p-3 text-muted">
 
@@ -67,7 +69,7 @@
 
                     <?= form_close() ?>
                     </div>
-
+                    <?php if ($user_role != 1011) { ?>
                     <div class="tab-pane" id="smart-1" role="tabpanel">
                         <?php if ($user_role != '1011' && ($medical['medical_refer_origin'] != $user_faskes )) { ?> 
                             <div class="text-center mb-3 mt-1">
@@ -184,6 +186,7 @@
                             </div>
                         </div>
                     </div>
+                    <?php } ?>
                 </div>
                 
             </div>

@@ -1,16 +1,14 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" integrity="sha512-/Ae8qSd9X8ajHk6Zty0m8yfnKJPlelk42HTJjOHDWs1Tjr41RfsSkceZ/8yyJGLkxALGMIYd5L2oGemy/x1PLg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <table id="datatable-appointment" class="table table-striped table-bordered dt-responsive nowrap w-100 ">
     <thead>
         <tr class="table-secondary">
             <th width="2%">#</th>
-            <th width="7%">ID Appointment</th>
-            <th width="7%">Nama</th>
-            <th width="6%">Jenis</th>
-            <th width="6%">Status</th>
+            <th width="5%">ID</th>
+            <th width="5%">Status</th>
+            <th width="4%">Jenis</th>
+            <th width="5%">Tujuan</th>
             <th width="6%">Waktu Pengajuan</th>
             <th width="8%">Waktu Final</th>
-            <th width="3%"></th>
+            <th width="7%"></th>
         </tr>
     </thead>
     <tbody>
@@ -20,7 +18,14 @@
             <tr>
                 <td><?= $nomor ?></td>
                 <td><?= $data['appointment_code'] ?></td>
-                <td><?= $data['patient_name'] ?></td>
+                <td>
+                    <?php if ($data['appointment_status'] == 'Diajukan') { ?> 
+                        <span class="badge bg-secondary">Diajukan</span>
+                    <?php } ?>
+                    <?php if ($data['appointment_status'] == 'Dijadwalkan') { ?> 
+                        <span class="badge bg-success">Dijadwalkan</span>
+                    <?php } ?>
+                </td>
                 <td>
                     <?php if ($data['appointment_type'] == 'Lokal') { ?> 
                         <span class="badge bg-info">Kunjungan </span>
@@ -32,14 +37,7 @@
                         <span class="badge bg-warning">Rujuk Kunjungan </span>
                     <?php } ?>
                 </td>
-                <td>
-                    <?php if ($data['appointment_status'] == 'Diajukan') { ?> 
-                        <span class="badge bg-secondary">Diajukan</span>
-                    <?php } ?>
-                    <?php if ($data['appointment_status'] == 'Dijadwalkan') { ?> 
-                        <span class="badge bg-success">Dijadwalkan</span>
-                    <?php } ?>
-                </td>
+                <td><?= $data['faskes_name'] ?> </td>
                 <td>
                     <?php if ($data['appointment_date_expect'] != NULL) { ?> 
                         <?= longdate_indo(substr($data['appointment_date_expect'],0,10)) ?> <?= substr($data['appointment_date_expect'],11,5)?>
@@ -55,16 +53,12 @@
                     <button type="button" class="btn btn-primary mb-2" onclick="detail('<?= $data['appointment_id'] ?>')">
                         <i class="bx bx-detail"></i>
                     </button>
-                    <?php if ($data['appointment_type'] == 'Lokal' && $data['appointment_status'] == 'Diajukan') { ?> 
-                        <button type="button" class="btn btn-success mb-2" onclick="accept('<?= $data['appointment_id'] ?>')">
-                            <i class="bx bx-calendar-check"></i>
+                    <?php if ($data['appointment_status'] == 'Diajukan') { ?> 
+                        <button type="button" class="btn btn-danger mb-2" onclick="cancel('<?= $data['appointment_id'] ?>', '<?= $data['appointment_code'] ?>')">
+                            <i class="bx bx-x"></i>
                         </button>
                     <?php } ?>
-                    <?php if ($data['appointment_type'] == 'Lokal' && $data['appointment_status'] == 'Dijadwalkan') { ?> 
-                        <button type="button" class="btn btn-warning mb-2" onclick="accept('<?= $data['appointment_id'] ?>')">
-                            <i class="bx bx-calendar-check"></i>
-                        </button>
-                    <?php } ?>
+                    
                 </td>
             </tr>
 
@@ -72,7 +66,6 @@
     </tbody>
 </table>
 
-<div class="acceptmodal"></div>
 <div class="detailmodal"></div>
 
 <script>
@@ -94,24 +87,7 @@ $(document).ready(function () {
     .appendTo("#datatable-appointment_wrapper .col-md-6:eq(0)");
 
     $(".dataTables_length select").addClass("form-select form-select-sm");
-
 });
-
-function accept(appointment_id) {
-    $.ajax({
-        type: "post",
-        url: "appointment/formaccept",
-        data: {
-            appointment_id: appointment_id,
-            modul: 'lokal'
-        },
-        dataType: "json",
-        success: function(response) {
-            $('.acceptmodal').html(response.data).show();
-            $('#modalaccept').modal('show');
-        }
-    });
-}
 
 function detail(appointment_id) {
     $.ajax({
@@ -127,6 +103,43 @@ function detail(appointment_id) {
         }
     });
 }
+
+
+function cancel(appointment_id, appointment_code) {
+    Swal.fire({
+        title: 'Batalkan pengajuan appointment kunjungan?',
+        text: `Apakah anda yakin membatalkan appointment kunjungan ${appointment_code}? `,
+        icon: 'warning',
+        allowOutsideClick: false,
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Iya',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "appointment/cancel",
+                type: "post",
+                dataType: "json",
+                data: {
+                    appointment_id: appointment_id,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: "Berhasil!",
+                            text: response.success,
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function () {
+                            window.location.reload();
+                        });
+                    }
+                }
+            });
+        }
+    })
+}
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js" integrity="sha512-2xXe2z/uA+2SyT/sTSt9Uq4jDKsT0lV4evd3eoE/oxKih8DSAsOF6LUb+ncafMJPAimWAXdu9W+yMXGrCVOzQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
