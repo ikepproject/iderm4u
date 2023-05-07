@@ -22,7 +22,7 @@
                             <span class="d-none d-md-block"><i class="far fa-images mr-2"></i> Foto</span>   
                         </a>
                     </li>
-                    <?php if ($user['user_role'] != 1011) { ?> 
+                    <?php if ($user_role != 1011) { ?> 
                         <li class="nav-item waves-effect waves-light">
                         <a class="nav-link" data-bs-toggle="tab" href="#gejala-1" role="tab">
                             <span class="d-block d-md-none"><i class="bx bx-map-pin"></i></span>
@@ -260,7 +260,7 @@
                             </div>
                     </div>
                     <div class="tab-pane" id="gallery-1" role="tabpanel">
-                        <?php if ($user['user_role'] != 1011) { ?>
+                        <?php if ($user_role != 1011) { ?>
                         
                             <?= form_open('medical/addgallery', ['class' => 'formadd']) ?>
                             <?= csrf_field(); ?>
@@ -299,7 +299,7 @@
                                         <div class="product-img position-relative">
                                             <img src="<?= base_url() ?>/public/assets/images/medical/thumb/<?= $gallery_refer['medgal_filename'] ?>" alt="" class="img-fluid mx-auto d-block">
                                         </div>
-                                        <?php if ($user['user_role'] != 1011) { ?>
+                                        <?php if ($user_role != 1011) { ?>
                                             <div class="mt-4 text-center text-break">
                                                 <p class="mb-3"><?= $gallery_refer['medgal_filename'] ?></p> <br>
                                                 <button type="button" class="btn btn-danger mb-2" onclick="del('<?= $gallery_refer['medgal_id'] ?>', '<?= $gallery_refer['medgal_filename'] ?>')">
@@ -323,7 +323,7 @@
                                     <div class="product-img position-relative">
                                         <img src="<?= base_url() ?>/public/assets/images/medical/thumb/<?= $gallery['medgal_filename'] ?>" alt="" class="img-fluid mx-auto d-block">
                                     </div>
-                                    <?php if ($user['user_role'] != 1011) { ?>
+                                    <?php if ($user_role != 1011) { ?>
                                         <div class="mt-4 text-center text-break">
                                             <p class="mb-3"><?= $gallery['medgal_filename'] ?></p> <br>
                                             <button type="button" class="btn btn-danger mb-2" onclick="del('<?= $gallery['medgal_id'] ?>', '<?= $gallery['medgal_filename'] ?>')">
@@ -336,7 +336,7 @@
                         </div>
                         <?php endforeach; ?>
                     </div>
-                    <?php if ($user['user_role'] != 1011) { ?>
+                    <?php if ($user_role != 1011) { ?>
                         <div class="tab-pane" id="gejala-1" role="tabpanel">
 
                             <p><i class="bx bx-info-circle"></i> Lihat kode area terjadinya gejala pada setiap bagian memilik kode yg berbeda.</p>
@@ -381,7 +381,7 @@
 
                         </div>
                     <?php } ?>
-                    <?php if ($user['user_role'] != 1011) { ?>
+                    <?php if ($user_role != 1011) { ?>
                         <div class="tab-pane" id="refer-1" role="tabpanel">
                             <?php if ($medical['medical_refer_type'] == NULL) { ?>
                                 <div class="row">

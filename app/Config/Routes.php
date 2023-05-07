@@ -176,6 +176,12 @@ $routes->post('report-product/filter', 'Web\Report::report_product_filter', ["fi
 /**--- appointment ---*/
 $routes->post('appointment-create', 'Web\Appointment::create_patient', ["filter" => "authweb"]);
 $routes->post('appointment/cancel', 'Web\Appointment::cancel', ["filter" => "authweb"]); 
+/**--- product order ---*/ 
+$routes->post('order-product-search', 'Web\Product_Order::index_patient_search', ["filter" => "authweb"]); 
+$routes->post('order-product/formorder', 'Web\Product_Order::formorder', ["filter" => "authweb"]); 
+$routes->post('order-product/cart', 'Web\Product_Order::cart', ["filter" => "authweb"]);
+$routes->post('order-product/cancel', 'Web\Product_Order::cancel', ["filter" => "authweb"]);
+
 /**--- FRONT END ROUTES (Endpoint pages)---*/
 /**--- appointment ---*/
 $routes->get('appointment-list', 'Web\Appointment::index_patient', ["filter" => "authweb"]);
@@ -183,7 +189,11 @@ $routes->get('appointment-getdata', 'Web\Appointment::getdata_patient', ["filter
 $routes->get('appointment-formadd', 'Web\Appointment::formadd_patient', ["filter" => "authweb"]);
 /**--- medical ---*/ 
 $routes->get('medical-record', 'Web\Medical::index_patient', ["filter" => "authweb"]);  
-$routes->get('medical-getdata', 'Web\Medical::getdata_patient', ["filter" => "authweb"]);  
+$routes->get('medical-getdata', 'Web\Medical::getdata_patient', ["filter" => "authweb"]);
+/**--- product order ---*/ 
+$routes->get('order-product', 'Web\Product_Order::index_patient', ["filter" => "authweb"]);  
+$routes->post('order-product/formorder', 'Web\Product_Order::formorder', ["filter" => "authweb"]); 
+$routes->get('order-cart', 'Web\Product_Order::cart_patient', ["filter" => "authweb"]); 
 /**
  * --------------------------------------------------------------------
  * Additional Routing

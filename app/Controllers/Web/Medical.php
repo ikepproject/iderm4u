@@ -58,6 +58,9 @@ class Medical extends BaseController
     public function formdetail()
     {
         if ($this->request->isAJAX()) {
+            $user        = $this->userauth(); //Return array
+            $user_role   = $user['user_role'];
+
             $medical_code = $this->request->getVar('medical_code');
             $medical      = $this->medical->find($medical_code);
             $user_id      = $medical['medical_user'];
@@ -82,6 +85,7 @@ class Medical extends BaseController
             $data = [
                 'title'         => 'Detail Data Kunjungan Pasien',
                 'user'          => $user,
+                'user_role'     => $user_role,
                 'patient'       => $patient,
                 'medical'       => $medical,
                 'medtreat'      => $medtreat,

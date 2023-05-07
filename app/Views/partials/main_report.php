@@ -252,7 +252,7 @@
                         <li>
                             <a href="<?= site_url('order') ?>" class="waves-effect">
                                 <i class="bx bx-shopping-bag"></i>
-                                <span key="t-order">Produk Order (PO)</span>
+                                <span key="t-order">Produk Preorder (PO)</span>
                             </a>
                         </li>
 
@@ -311,48 +311,36 @@
                         <li class="menu-title" key="t-menu">Menu Pasien</li>
 
                         <li>
-                            <a href="appointmentformadd" class="waves-effect">
+                            <a href="<?= site_url('appointment-list') ?>" class="waves-effect">
                                 <i class="bx bx-calendar"></i>
-                                <span key="t-kunjungan">Buat Appointment</span>
+                                <span key="t-appointment-formadd">Appointment</span>
                             </a>
                         </li>
 
                         <li>
-                            <a href="orderformadd" class="waves-effect">
+                            <a href="<?= site_url('treatment') ?>" class="waves-effect">
+                                <i class="bx bx-diamond"></i>
+                                <span key="t-treatment-list">Treatment</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="javascript: void(0);" class="has-arrow waves-effect">
                                 <i class="bx bx-shopping-bag"></i>
-                                <span key="t-kunjungan">Beli Produk</span>
+                                <span key="t-produk">Produk (Preorder)</span>
                             </a>
+                            <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="<?= site_url('order-product') ?>" key="t-order-product">Daftar Produk</a></li>
+                                <li><a href="<?= site_url('order-cart') ?>" key="t-order-cart">Keranjang</a></li>
+                                <li><a href="<?= site_url('order-transaction') ?>" key="t-order-cart">Transaksi</a></li>
+
+                            </ul>
                         </li>
-                        
 
                         <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <a href="<?= site_url('medical-record') ?>" class="waves-effect">
                                 <i class="bx bxs-user-detail"></i>
-                                <span key="t-kunjungan">Riwayat Kunjungan</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="index.html" key="t-default">Semua</a></li>
-                                <li><a href="dashboard-saas.html" key="t-saas">Pemeriksaan</a></li>
-                                <li><a href="dashboard-crypto.html" key="t-crypto">Pembelian</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                <i class="bx bx-task"></i>
-                                <span key="t-rujukan">Rujukan</span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="index.html" key="t-default">Kunjungan</a></li>
-                                <li><a href="dashboard-saas.html" key="t-saas">Data</a></li>
-                                <li><a href="dashboard-crypto.html" key="t-crypto">Teledermatologi</a></li>
-                            </ul>
-                        </li>
-
-                        <li>
-                            <a href="invoice" class="waves-effect">
-                                <i class="bx bx-receipt"></i>
-                                <span key="t-kunjungan">Invoice</span>
+                                <span key="t-medical-record">Kunjungan</span>
                             </a>
                         </li>
                         <?php } ?>

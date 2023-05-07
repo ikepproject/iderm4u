@@ -134,11 +134,12 @@ class Model_Medical extends Model
             ->get()->getRowArray();
     }
 
-    //Medical - getData Patient User
+    //Medical - getData Patient Menu
     public function list_patient($user_id)
     {
         return $this->table('tb_medical')
             ->where('medical_user', $user_id)
+            ->where('medical_creator_type', 'Admin')
             ->orderBy('medical_create', 'DESC')
             ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
             ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')

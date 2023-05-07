@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="modaldetail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-modal="true" style="display: block;">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalScrollableTitle"><?= $title ?></h5>
@@ -60,7 +60,7 @@
                             <td><?= $appointment['appointment_note_user'] ?></td>
                         </tr>
                         <tr>
-                            <td><b>Estimasi Tgl Appointment</b></td>
+                            <td><b>Tgl Permintaan Appointment</b></td>
                             <td>
                                 <?php if ($appointment['appointment_date_expect'] != NULL) { ?> 
                                     <?= longdate_indo(substr($appointment['appointment_date_expect'],0,10)) ?> <?= substr($appointment['appointment_date_expect'],11,5)?>
@@ -69,10 +69,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><b>Tanggal FINAL Appointment Terkonfirmasi</b></td>
+                            <td><b>Tgl FINAL Appointment Terkonfirmasi</b></td>
                             <td>
-                                <?php if ($appointment['appointment_date_fix'] != NULL) { ?> 
-                                    <?= longdate_indo(substr($appointment['appointment_date_fix'],0,10)) ?> <?= substr($appointment['appointment_date_fix'],11,5)?>
+                                <?php if ($appointment['appointment_date_fix'] != NULL) { ?> <b><?= longdate_indo(substr($appointment['appointment_date_fix'],0,10)) ?> <?= substr($appointment['appointment_date_fix'],11,5)?></b>
+                                    
                                 <?php } ?>
                                 
                             </td>

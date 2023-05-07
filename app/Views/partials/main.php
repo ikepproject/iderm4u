@@ -251,7 +251,7 @@
                         <li>
                             <a href="<?= site_url('order') ?>" class="waves-effect">
                                 <i class="bx bx-shopping-bag"></i>
-                                <span key="t-order">Produk Order (PO)</span>
+                                <span key="t-order">Produk Preorder (PO)</span>
                             </a>
                         </li>
 
@@ -326,11 +326,13 @@
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
                                 <i class="bx bx-shopping-bag"></i>
-                                <span key="t-produk">Produk</span>
+                                <span key="t-produk">Produk (Preorder)</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="<?= site_url('order-product') ?>" key="t-order-product">Order Produk</a></li>
+                                <li><a href="<?= site_url('order-product') ?>" key="t-order-product">Daftar Produk</a></li>
                                 <li><a href="<?= site_url('order-cart') ?>" key="t-order-cart">Keranjang</a></li>
+                                <li><a href="<?= site_url('order-transaction') ?>" key="t-order-cart">Transaksi</a></li>
+
                             </ul>
                         </li>
 
