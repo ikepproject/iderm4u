@@ -6,6 +6,7 @@
                 <h5 class="modal-title" id="exampleModalScrollableTitle"><?= $title ?></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            
             <div class="modal-body">
                 <?= form_open('patient/create', ['class' => 'formadd']) ?>
                 <?= csrf_field(); ?>
@@ -37,9 +38,15 @@
                             <div class="invalid-feedback error_patient_gender"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="patient_birth" class="form-label">Tanggal Lahir <code>*</code></label>
-                            <input type="date" class="form-control"  id="patient_birth" name="patient_birth">
-                            <div class="invalid-feedback error_patient_birth"></div>
+                            <label for="patient_birth" class="form-label">Tanggal Lahir (cth: 1990-12-01)<code>*</code></label>
+                            <div class="input-group" id="datepicker2">
+                              <input type="text" id="patient_birth" name="patient_birth" class="form-control" placeholder="Tahun-Bulan-Tanggal"
+                                  data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
+                                  data-provide="datepicker" data-date-autoclose="true">
+                              <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                              <div class="invalid-feedback error_patient_birth"></div>
+                            </div>
+                            
                         </div>
                         <div class="mb-3">
                             <label for="patient_type" class="form-label">Kategori Pasien <code>*</code></label>
@@ -63,7 +70,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="patient_other" class="form-label">Keterangan Lain</label>
-                            <textarea class="form-control" id="patient_other" name="patient_other"></textarea>
+                            <textarea style="height: 150px;" class="form-control" id="patient_other" name="patient_other"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="user_photo" class="form-label">Foto</label>
@@ -86,6 +93,7 @@
        
     </div><!-- /.modal-dialog -->
 </div>
+
 <script>
     $(document).ready(function () {
         $(".formadd").submit(function (e) {
