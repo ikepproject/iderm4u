@@ -70,7 +70,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <h5 class="card-title mb-4">Pilih Metode Pembayaran</h5>
-                                        <select class="form-select" name="invoice_method" id="invoice_method">
+                                        <select class="form-control select2-cart" name="invoice_method" id="invoice_method">
                                             <option selected disabled>Pilih...</option>
                                             <option value="VA">Virtual Account (+ Rp 4.440)</option>
                                             <option value="Gopay">GoPay (+ 2%)</option>
@@ -125,7 +125,11 @@
 <!-- End Page-content -->
 
 <script>
-
+$(document).ready(function () {
+    $('.select2-cart').select2({
+            minimumResultsForSearch: Infinity
+    });
+});
 function cancel(cart_id, product_name) {
     Swal.fire({
         title: 'Hapus produk dari keranjang?',

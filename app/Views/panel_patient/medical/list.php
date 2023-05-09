@@ -64,13 +64,6 @@
                         <button type="button" class="btn btn-info mb-2" onclick="diagnose('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>')">
                             <i class="fas fa-notes-medical"></i>
                         </button>
-                    <?php } ?> 
-
-                    <?php if ($data['medical_status'] == 'Proses') { ?> 
-
-                        <a type="button" class="btn btn-success mb-2" href="<?= base_url('transaction/checkout/' . $data['medical_code']) ?>">
-                            <i class="bx bx-check"></i>
-                        </a>
                     <?php } ?>  
                 </td>
             </tr>
@@ -119,45 +112,6 @@ function detail(medical_code) {
             $('#modaldetail').modal('show');
         }
     });
-}
-
-
-function cancel(medical_code, patient_name) {
-    Swal.fire({
-        title: 'Batalkan data kunjungan?',
-        text: `Apakah anda yakin membatalkan data kunjungan ${patient_name}? `,
-        icon: 'warning',
-        allowOutsideClick: false,
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Iya',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: "medical/cancel",
-                type: "post",
-                dataType: "json",
-                data: {
-                    medical_code: medical_code,
-                    modul: 'Lokal'
-                },
-                success: function(response) {
-                    if (response.success) {
-                        Swal.fire({
-                            title: "Berhasil!",
-                            text: response.success,
-                            icon: "success",
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        datatable_medical();
-                    }
-                }
-            });
-        }
-    })
 }
 
 function diagnose(medical_code) {

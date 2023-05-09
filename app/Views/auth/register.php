@@ -69,7 +69,7 @@
                                         
                                     <div class="mb-3">
                                         <label for="user_faskes" class="form-label">Pilih Faskes Asal <code>*</code> </label>
-                                        <select class="form-select" id="user_faskes" name="user_faskes">
+                                        <select class="form-control select2-register" id="user_faskes" name="user_faskes">
                                             <option selected disabled>Pilih...</option>
                                             <?php foreach ($faskes as $key => $data) { ?>
                                                 <option value="<?= $data['faskes_code'] ?>"><?= $data['faskes_name'] ?></option>
@@ -161,6 +161,8 @@
         }
     });
     $(document).ready(function () {
+        $('.select2-register').select2();
+
         // Register
         $(".formregister").submit(function (e) {
             e.preventDefault();

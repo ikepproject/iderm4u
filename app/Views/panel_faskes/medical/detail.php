@@ -407,41 +407,8 @@
                                     </div>
                                 </div> 
                                 <style>
-                                    .select2-container .select2-selection--single .select2-selection__rendered {
-                                        display: block;
-                                        padding-left: 8px;
-                                        padding-right: 660px;
-                                        overflow: hidden;
-                                        text-overflow: ellipsis;
-                                        white-space: nowrap;
-                                    }
-
-                                    /* For devices smaller than 1200px */
-                                    @media (max-width: 1199px) {
-                                        .select2-container .select2-selection--single .select2-selection__rendered {
-                                            padding-right: 500px;
-                                        }
-                                    }
-
-                                    /* For devices smaller than 992px */
-                                    @media (max-width: 991px) {
-                                        .select2-container .select2-selection--single .select2-selection__rendered {
-                                            padding-right: 350px;
-                                        }
-                                    }
-
-                                    /* For devices smaller than 768px */
-                                    @media (max-width: 767px) {
-                                        .select2-container .select2-selection--single .select2-selection__rendered {
-                                            padding-right: 230px;
-                                        }
-                                    }
-
-                                    /* For devices smaller than 576px */
-                                    @media (max-width: 575px) {
-                                        .select2-container .select2-selection--single .select2-selection__rendered {
-                                            padding-right: 240px;
-                                        }
+                                    .select2-container {
+                                        width: 100% !important;
                                     }
                                 </style>
                                 <?= form_open('refer/create', ['class' => 'formReferAdd']) ?>
@@ -453,7 +420,7 @@
                                         <button type="button" class="btn btn-light position-relative p-0 avatar-xs rounded-circle" data-toggle="tooltip" data-placement="top" 
                                         title="Jika memilih opsi Teledermatologi terdapat biaya yang harus dibayar diawal."> <span class="avatar-title bg-transparent text-reset"> <i class="bx bxs-info-circle"></i> </span>
                                         </button> <br>
-                                        <select style="padding-right: 660px!important;" class="form-control select2-detail" name="medical_refer_type" id="medical_refer_type" onchange="showDiv(this)">
+                                        <select class="form-select select2-detail" name="medical_refer_type" id="medical_refer_type" onchange="showDiv(this)">
                                             <option selected disabled>Pilih...</option>
                                             <option value="Kunjungan">Rujuk Kunjungan</option>
                                             <option value="Teledermatologi">Rujuk Teledermatologi</option>
@@ -462,7 +429,7 @@
                                     </div>
                                     <div class="mb-3" id="hidden_bayar" style="display: none;">
                                         <label class="form-label">Cara Bayar<code>*</code></label> <br>
-                                        <select style="padding-right: 660px;" class="form-control select2-detail" name="invoice_method" id="invoice_method">
+                                        <select class="form-select select2-detail" name="invoice_method" id="invoice_method">
                                             <option value="VA">Virtual Account (+ Rp 4.440)</option>
                                             <?php if ($device != "hp") { ?> 
                                                 <option value="QR">QRIS (+ 0.7%)</option>
