@@ -18,7 +18,7 @@
                     </div>
                     <div class="mb-3">
                             <label for="product_type" class="form-label">Jenis Product <code>*</code></label>
-                            <select class="form-select" id="product_type" name="product_type">
+                            <select class="form-control select2-edit" id="product_type" name="product_type">
                                 <option selected disabled>Pilih...</option>
                                 <?php foreach ($type_product as $key => $data) { ?>
                                     <option value="<?= $data['type_name'] ?>" <?php if ($data['type_name'] == $product['product_type']) echo "selected"; ?> ><?= $data['type_name'] ?></option>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="product_status" class="form-label">Status Produk <code>*</code></label>
-                        <select class="form-select" id="product_status" name="product_status">
+                        <select class="form-control select2-edit" id="product_status" name="product_status">
                             <option value="t" <?php if ($product['product_status'] == "t") echo "selected"; ?> >Aktif</option>
                             <option value="f" <?php if ($product['product_status'] == "f") echo "selected"; ?> >Nonaktif</option>
                         </select>
@@ -68,6 +68,11 @@
 </div>
 <script>
     $(document).ready(function () {
+        $('.select2-edit').select2({
+            dropdownParent: $('#modaledit'),
+            minimumResultsForSearch: Infinity
+        });
+
         $('#product_description').val("<?= $product['product_description'] ?>");
 
         $('.price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});

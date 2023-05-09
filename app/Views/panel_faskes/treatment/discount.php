@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="treatment_discount" class="form-label">Status Diskon <code>*</code></label>
-                                        <select class="form-select" id="treatment_discount" name="treatment_discount">
+                                        <select class="form-control select2-discount" id="treatment_discount" name="treatment_discount">
                                             <option value="f" <?php if ($treatment['treatment_discount'] == "f" || $treatment['treatment_discount'] == NULL) echo "selected"; ?> >Nonaktif</option>
                                             <option value="t" <?php if ($treatment['treatment_discount'] == "t") echo "selected"; ?> >Aktif</option>
                                         </select>
@@ -110,6 +110,11 @@
 
 <script>
     $(document).ready(function () {
+        $('.select2-discount').select2({
+            dropdownParent: $('#modaldiscount'),
+            minimumResultsForSearch: Infinity
+        });
+
         $('.price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});
 
         $(".formdiscount").submit(function (e) {

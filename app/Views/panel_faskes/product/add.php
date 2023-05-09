@@ -18,7 +18,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="product_type" class="form-label">Jenis Product <code>*</code></label>
-                            <select class="form-select" id="product_type" name="product_type">
+                            <select class="form-control select2-add" id="product_type" name="product_type">
                                 <option selected disabled>Pilih...</option>
                                 <?php foreach ($type_product as $key => $data) { ?>
                                     <option value="<?= $data['type_name'] ?>"><?= $data['type_name'] ?></option>
@@ -43,7 +43,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="product_status" class="form-label">Status product <code>*</code></label>
-                            <select class="form-select" id="product_status" name="product_status">
+                            <select class="form-control select2-add" id="product_status" name="product_status">
                                 <option selected disabled>Pilih...</option>
                                 <option value="t">Aktif</option>
                                 <option value="f">Nonaktif</option>
@@ -69,6 +69,11 @@
 </div>
 <script>
     $(document).ready(function () {
+
+        $('.select2-add').select2({
+            dropdownParent: $('#modaladd'),
+            minimumResultsForSearch: Infinity
+        });
 
         $('.price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});
 

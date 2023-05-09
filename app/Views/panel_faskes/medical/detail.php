@@ -406,18 +406,54 @@
                                         </div>
                                     </div>
                                 </div> 
-                                
+                                <style>
+                                    .select2-container .select2-selection--single .select2-selection__rendered {
+                                        display: block;
+                                        padding-left: 8px;
+                                        padding-right: 660px;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;
+                                    }
+
+                                    /* For devices smaller than 1200px */
+                                    @media (max-width: 1199px) {
+                                        .select2-container .select2-selection--single .select2-selection__rendered {
+                                            padding-right: 500px;
+                                        }
+                                    }
+
+                                    /* For devices smaller than 992px */
+                                    @media (max-width: 991px) {
+                                        .select2-container .select2-selection--single .select2-selection__rendered {
+                                            padding-right: 350px;
+                                        }
+                                    }
+
+                                    /* For devices smaller than 768px */
+                                    @media (max-width: 767px) {
+                                        .select2-container .select2-selection--single .select2-selection__rendered {
+                                            padding-right: 230px;
+                                        }
+                                    }
+
+                                    /* For devices smaller than 576px */
+                                    @media (max-width: 575px) {
+                                        .select2-container .select2-selection--single .select2-selection__rendered {
+                                            padding-right: 240px;
+                                        }
+                                    }
+                                </style>
                                 <?= form_open('refer/create', ['class' => 'formReferAdd']) ?>
                                 <?= csrf_field(); ?>
                                 <input type="hidden" id="medical_refer_code" name="medical_refer_code" value="<?= $medical['medical_code'] ?>">
                                 <input type="hidden" id="medical_user" name="medical_user" value="<?= $medical['medical_user'] ?>">
-                                <div class="row">
                                     <div class="mb-3">
                                         <label for="medical_refer_type">Pilih Tipe Rujukan <code>*</code></label> 
                                         <button type="button" class="btn btn-light position-relative p-0 avatar-xs rounded-circle" data-toggle="tooltip" data-placement="top" 
                                         title="Jika memilih opsi Teledermatologi terdapat biaya yang harus dibayar diawal."> <span class="avatar-title bg-transparent text-reset"> <i class="bx bxs-info-circle"></i> </span>
-                                        </button>
-                                        <select class="form-select" name="medical_refer_type" id="medical_refer_type" onchange="showDiv(this)">
+                                        </button> <br>
+                                        <select style="padding-right: 660px!important;" class="form-control select2-detail" name="medical_refer_type" id="medical_refer_type" onchange="showDiv(this)">
                                             <option selected disabled>Pilih...</option>
                                             <option value="Kunjungan">Rujuk Kunjungan</option>
                                             <option value="Teledermatologi">Rujuk Teledermatologi</option>
@@ -425,8 +461,8 @@
                                         <div class="invalid-feedback error_medical_refer_type"></div>
                                     </div>
                                     <div class="mb-3" id="hidden_bayar" style="display: none;">
-                                        <label class="form-label">Cara Bayar<code>*</code></label>
-                                        <select class="form-select" name="invoice_method" id="invoice_method">
+                                        <label class="form-label">Cara Bayar<code>*</code></label> <br>
+                                        <select style="padding-right: 660px;" class="form-control select2-detail" name="invoice_method" id="invoice_method">
                                             <option value="VA">Virtual Account (+ Rp 4.440)</option>
                                             <?php if ($device != "hp") { ?> 
                                                 <option value="QR">QRIS (+ 0.7%)</option>
@@ -434,18 +470,15 @@
                                             <!-- <option value="Gopay">GoPay (+ 2%)</option> -->
                                         </select>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="mb-3">
-                                        <label for="medical_faskes">Pilih Rumah Sakit Rujukan <code>*</code></label>
-                                        <select class="form-select" id="medical_faskes" name="medical_faskes">
-                                            <option selected disabled>Pilih...</option>
-                                            <?php foreach ($faskes_list as $key => $data) { ?>
-                                                <option value="<?= $data['faskes_code'] ?>"><?= $data['faskes_name'] ?> </option>
-                                            <?php } ?>
-                                        </select>
-                                        <div class="invalid-feedback error_medical_faskes"></div>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="medical_faskes">Pilih Rumah Sakit Rujukan <code>*</code></label> <br>
+                                    <select class="form-control select2-detail" id="medical_faskes" name="medical_faskes"> 
+                                        <option selected disabled>Pilih...</option>
+                                        <?php foreach ($faskes_list as $key => $data) { ?>
+                                            <option value="<?= $data['faskes_code'] ?>"><?= $data['faskes_name'] ?> </option>
+                                        <?php } ?>
+                                    </select>
+                                    <div class="invalid-feedback error_medical_faskes"></div>
                                 </div>
                                 <div class="mb-3">
                                 <label class="form-label">Tanggal Perkiraan Kunjungan (Jadwal akan ditetapkan oleh faskes rujukan)</label>
@@ -508,6 +541,11 @@ function showDiv(select){
 } 
 
 $(document).ready(function () {
+    $('.select2-detail').select2({
+            dropdownParent: $('#modaldetail'),
+            minimumResultsForSearch: Infinity
+        });
+
     $(".formadd").submit(function (e) {
     e.preventDefault();
     var form_data = new FormData($('form')[0]);

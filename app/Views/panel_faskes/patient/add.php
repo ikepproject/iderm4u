@@ -30,7 +30,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="patient_gender" class="form-label">Jenis Kelamin <code>*</code></label>
-                            <select class="form-select" id="patient_gender" name="patient_gender">
+                            <select class="form-control select2-add" id="patient_gender" name="patient_gender">
                                 <option selected disabled>Pilih...</option>
                                 <option value="Perempuan">Perempuan</option>
                                 <option value="Laki-Laki">Laki-Laki</option>
@@ -50,7 +50,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="patient_type" class="form-label">Kategori Pasien <code>*</code></label>
-                            <select class="form-select" id="patient_type" name="patient_type">
+                            <select class="form-select select2-add" id="patient_type" name="patient_type">
                                 <option selected disabled>Pilih...</option>
                                 <option value="Umum">Umum</option>
                                 <option value="Eksekutif">Eksekutif</option>
@@ -96,6 +96,10 @@
 
 <script>
     $(document).ready(function () {
+        $('.select2-add').select2({
+            dropdownParent: $('#modaladd'),
+            minimumResultsForSearch: Infinity
+        });
         $(".formadd").submit(function (e) {
         e.preventDefault();
         var form_data = new FormData($('form')[0]);

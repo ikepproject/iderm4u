@@ -34,20 +34,25 @@
                         </div>
                         <div class="mb-3">
                             <label for="edit_patient_gender" class="form-label">Jenis Kelamin <code>*</code></label>
-                            <select class="form-select" id="edit_patient_gender" name="edit_patient_gender">
+                            <select class="form-select select2-edit" id="edit_patient_gender" name="edit_patient_gender">
                                 <option value="Perempuan" <?php if ($profile['patient_gender'] == "Perempuan") echo "selected"; ?> > Perempuan </option>
                                 <option value="Laki-Laki" <?php if ($profile['patient_gender'] == "Laki-Laki") echo "selected"; ?> > Laki-Laki </option>
                             </select>
                             <div class="invalid-feedback error_edit_patient_gender"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="edit_patient_birth" class="form-label">Tanggal Lahir <code>*</code></label>
-                            <input type="date" class="form-control"  id="edit_patient_birth" name="edit_patient_birth" value="<?= $profile['patient_birth'] ?>">
-                            <div class="invalid-feedback error_edit_patient_birth"></div>
+                            <label for="edit_patient_birth" class="form-label">Tanggal Lahir (cth: 1990-12-01)<code>*</code></label>
+                            <div class="input-group" id="datepicker2">
+                              <input type="text" id="edit_patient_birth" name="edit_patient_birth" class="form-control" placeholder="Tahun-Bulan-Tanggal"
+                                  data-date-format="yyyy-mm-dd" data-date-container='#datepicker2'
+                                  data-provide="datepicker" data-date-autoclose="true" value="<?= $profile['patient_birth'] ?>">
+                              <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                              <div class="invalid-feedback error_edit_patient_birth"></div>
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="edit_patient_type" class="form-label">Kategori Pasien <code>*</code></label>
-                            <select class="form-select" id="edit_patient_type" name="edit_patient_type">
+                            <select class="form-select select2-edit" id="edit_patient_type" name="edit_patient_type">
                                 <option value="Umum" <?php if ($profile['patient_type'] == "Umum") echo "selected"; ?> >Umum</option>
                                 <option value="Eksekutif" <?php if ($profile['patient_type'] == "Eksekutif") echo "selected"; ?> >Eksekutif</option>
                                 <option value="BPJS" <?php if ($profile['patient_type'] == "BPJS") echo "selected"; ?> >BPJS</option>
@@ -97,6 +102,11 @@
 </div>
 <script>
     $(document).ready(function () {
+        $('.select2-edit').select2({
+            dropdownParent: $('#modaledit'),
+            minimumResultsForSearch: Infinity
+        });
+
         $('#edit_patient_address').val("<?= $profile['patient_address'] ?>");
         $('#edit_patient_other').val("<?= $profile['patient_other'] ?>");
 

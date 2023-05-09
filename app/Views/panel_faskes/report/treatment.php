@@ -14,7 +14,7 @@
                           <div class="row mb-3">
                             <div class="col">
                               <label for="month_filter">Bulan</label>
-                              <select class="form-select" name="month_filter" id="month_filter" >
+                              <select class="form-control select2-retreat" name="month_filter" id="month_filter" >
                                     <option value="all" <?php if ($month == 'all') echo "selected"; ?> > Semua </option>
                                   <?php foreach ($unique_month as $data) { ?>
                                     <option value="<?= $data['month_number'] ?>" <?php if ($data['month_number'] == $month) echo "selected"; ?> > <?= $data['month_name'] ?> </option>
@@ -23,7 +23,7 @@
                             </div>
                             <div class="col">
                               <label for="year_filter">Tahun</label>
-                              <select class="form-select" name="year_filter" id="year_filter">
+                              <select class="form-control select2-retreat" name="year_filter" id="year_filter">
                                   <?php foreach ($unique_year as $key => $data) { ?>
                                   <option value="<?= $data['year'] ?>" <?php if ($data['year'] == $year) echo "selected"; ?> > <?= $data['year'] ?> </option>
                                   <?php } ?>
@@ -100,6 +100,10 @@
 
 <script>
   $(document).ready(function () {
+      $('.select2-retreat').select2({
+            minimumResultsForSearch: Infinity
+        });
+
       //product Table
       var table_report_treatment = $("#datatable-report-treatment").DataTable({
       stateSave: true,

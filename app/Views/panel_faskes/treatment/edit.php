@@ -21,7 +21,7 @@
                     </div>
                     <div class="mb-3">
                             <label for="treatment_type" class="form-label">Jenis Treatment<code>*</code></label>
-                            <select class="form-select" id="treatment_type" name="treatment_type">
+                            <select class="form-control select2-edit" id="treatment_type" name="treatment_type">
                                 <option selected disabled>Pilih...</option>
                                 <?php foreach ($type_treatment as $key => $data) { ?>
                                     <option value="<?= $data['type_name'] ?>" <?php if ($data['type_name'] == $treatment['treatment_type']) echo "selected"; ?> ><?= $data['type_name'] ?></option>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="treatment_status" class="form-label">Status Treatment <code>*</code></label>
-                        <select class="form-select" id="treatment_status" name="treatment_status">
+                        <select class="form-control select2-edit" id="treatment_status" name="treatment_status">
                             <option value="t" <?php if ($treatment['treatment_status'] == "t") echo "selected"; ?> >Aktif</option>
                             <option value="f" <?php if ($treatment['treatment_status'] == "f") echo "selected"; ?> >Nonaktif</option>
                         </select>
@@ -61,6 +61,12 @@
 </div>
 <script>
     $(document).ready(function () {
+
+        $('.select2-edit').select2({
+            dropdownParent: $('#modaledit'),
+            minimumResultsForSearch: Infinity
+        });
+
         $('#treatment_description').val("<?= $treatment['treatment_description'] ?>");
 
         $('.price').maskMoney({prefix:'Rp. ', thousands:'.', decimal:',', precision:0, allowZero:true});

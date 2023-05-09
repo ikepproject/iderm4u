@@ -35,7 +35,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="stock_type" class="form-label">Tindakan <code>*</code></label>
-                                        <select class="form-select" id="stock_type" name="stock_type">
+                                        <select class="form-control select2-stock" id="stock_type" name="stock_type">
                                             <option selected disabled>Pilih...</option>
                                             <option value="Penambahan">+ Penambahan</option>
                                             <option value="Pengurangan">- Pengurangan</option>
@@ -105,6 +105,11 @@
 </div>
 <script>
     $(document).ready(function () {
+
+        $('.select2-stock').select2({
+            dropdownParent: $('#modalstock'),
+            minimumResultsForSearch: Infinity
+        });
 
         $(".formrestock").submit(function (e) {
         e.preventDefault();

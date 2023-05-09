@@ -38,7 +38,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Diagnosis<code>*</code></label>
-                            <select class="form-select" name="medical_diagnose" id="medical_diagnose" onchange="showDiv(this)" <?php if ($user_role == '1011' || ($medical['medical_refer_origin'] == $user_faskes )) echo "disabled"; ?> >
+                            <select class="form-select select2-diagnose" name="medical_diagnose" id="medical_diagnose" onchange="showDiv(this)" <?php if ($user_role == '1011' || ($medical['medical_refer_origin'] == $user_faskes )) echo "disabled"; ?> >
                                 <option selected disabled>Pilih...</option>
                                 <?php foreach ($disease as $key => $data) { ?>
                                     <option value="<?= $data['disease_name'] ?>" <?php if ($medical['medical_diagnose'] == $data['disease_name']) echo "selected"; ?> ><?= $data['disease_name'] ?></option>
@@ -208,6 +208,11 @@
     }
 
     $(document).ready(function () {
+        $('.select2-diagnose').select2({
+            dropdownParent: $('#modaldiagnose'),
+            minimumResultsForSearch: Infinity
+        });
+
         $('#medical_diagnose_note').val("<?= $medical['medical_diagnose_note'] ?>");
 
         $(".formdiagnose").submit(function (e) {
