@@ -101,7 +101,7 @@
                 <div class="d-flex">
 
 
-                    <!-- <div class="dropdown d-inline-block">
+                    <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item noti-icon waves-effect"
                             id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
@@ -114,9 +114,6 @@
                                 <div class="row align-items-center">
                                     <div class="col">
                                         <h6 class="m-0" key="t-notifications"> Notifikasi </h6>
-                                    </div>
-                                    <div class="col-auto">
-                                        <a href="#!" class="small" key="t-view-all"> Lihat Semua</a>
                                     </div>
                                 </div>
                             </div>
@@ -141,12 +138,11 @@
                             </div>
                             <div class="p-2 border-top d-grid">
                                 <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
-                                    <i class="mdi mdi-arrow-right-circle me-1"></i> <span key="t-view-more">View
-                                        More..</span>
+                                    <i class="mdi mdi-arrow-right-circle me-1"></i> <span key="t-view-more">Lihat semuanya..</span>
                                 </a>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
 
                     <div class="dropdown d-inline-block">
                         <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
