@@ -66,6 +66,54 @@
 </table>
 
 <hr>
+<h5 class="text-left">Data Rujuk Store & Foward</h5>
+
+<table id="datatable-refer-visit" class="table table-striped table-bordered dt-responsive wrap w-100 ">
+    <thead>
+        <tr class="table-secondary">
+            <th width="2%">#</th>
+            <th width="11%">Pasien</th>
+            <th width="7%">Status</th>
+            <th width="7%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $nomor2 = 0; 
+            foreach ($list_storefoward as $data) : 
+            $nomor2++; ?>
+            <tr>
+                <td><?= $nomor2 ?></td>
+                <td><?= $data['patient_name'] ?></td>
+                <td>
+                    <?php if ($data['medical_diagnose'] != NULL) { ?> 
+                        Diagnosis: <span class="badge rounded-pill bg-success"> <i class="bx bx-check"></i> </span> <br>
+                    <?php } ?>
+                    <?php if ($data['medical_diagnose'] == NULL) { ?> 
+                        Diagnosis: <span class="badge rounded-pill bg-secondary"> - </span> <br>
+                    <?php } ?> 
+                </td>
+                <td>
+                    <?php if ($data['invoice_midtrans'] == NULL) { ?> 
+                        <button type="button" class="btn btn-danger mb-2" onclick="cancel('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>', 'StoreFoward')">
+                        <i class="bx bx-x"></i>
+                        </button>
+                        <a type="button" class="btn btn-success mb-2" href="<?= base_url('transaction/checkout/' . $data['medical_code']) ?>">
+                            <i class="bx bx-check"></i>
+                        </a>
+                    <?php } ?>
+                    <?php if ($data['medical_diagnose'] != NULL) { ?> 
+                        <button type="button" class="btn btn-info mb-2" onclick="diagnose('<?= $data['medical_code'] ?>', '<?= $data['patient_name'] ?>')">
+                            <i class="fas fa-notes-medical"></i>
+                        </button>
+                    <?php } ?>
+                </td>
+            </tr>
+
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<hr>
 <h5 class="text-left">Data Rujuk Kunjungan</h5>
 
 <table id="datatable-refer-visit" class="table table-striped table-bordered dt-responsive wrap w-100 ">

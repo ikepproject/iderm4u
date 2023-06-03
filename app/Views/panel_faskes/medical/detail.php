@@ -396,6 +396,7 @@
                                                 <div class="card-body">
                                                     <?php foreach ($faskes_list as $key => $data) { ?>
                                                         <strong><?= $data['faskes_name'] ?></strong> <br>
+                                                        Biaya Rujuk Store & Foward: Rp <?= rupiah($data['faskes_refersf_price']) ?> <br>
                                                         Biaya Rujuk Teledermatologi: Rp <?= rupiah($data['faskes_refer_price']) ?> <br>
                                                         Note: <?= $data['faskes_refer_note'] ?>
                                                         <hr>
@@ -418,11 +419,12 @@
                                     <div class="mb-3">
                                         <label for="medical_refer_type">Pilih Tipe Rujukan <code>*</code></label> 
                                         <button type="button" class="btn btn-light position-relative p-0 avatar-xs rounded-circle" data-toggle="tooltip" data-placement="top" 
-                                        title="Jika memilih opsi Teledermatologi terdapat biaya yang harus dibayar diawal."> <span class="avatar-title bg-transparent text-reset"> <i class="bx bxs-info-circle"></i> </span>
+                                        title="Jika memilih opsi Store&Foward/Teledermatologi terdapat biaya yang harus dibayar diawal."> <span class="avatar-title bg-transparent text-reset"> <i class="bx bxs-info-circle"></i> </span>
                                         </button> <br>
                                         <select class="form-select select2-detail" name="medical_refer_type" id="medical_refer_type" onchange="showDiv(this)">
                                             <option selected disabled>Pilih...</option>
                                             <option value="Kunjungan">Rujuk Kunjungan</option>
+                                            <option value="StoreFoward">Rujuk Store & Foward</option>
                                             <option value="Teledermatologi">Rujuk Teledermatologi</option>
                                         </select>
                                         <div class="invalid-feedback error_medical_refer_type"></div>
@@ -447,7 +449,7 @@
                                     </select>
                                     <div class="invalid-feedback error_medical_faskes"></div>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-3" id="hidden_tgl" style="display: none;">
                                 <label class="form-label">Tanggal Perkiraan Kunjungan (Jadwal akan ditetapkan oleh faskes rujukan)</label>
                                     <div class="input-group" id="datepicker2">
                                         <input type="text" id="appointment_date_expect" name="appointment_date_expect" class="form-control" placeholder="Tahun-Bulan-Tanggal"
@@ -455,7 +457,6 @@
                                             data-provide="datepicker" data-date-autoclose="true">
 
                                         <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
-                                        <div class="invalid-feedback error_appointment_date_expect"></div>
                                     </div>
                                 </div>
                                 <div class="mb-3">
@@ -500,10 +501,15 @@ function preview_images() {
 };
 
 function showDiv(select){
-    if(select.value=="Teledermatologi"){
+    if(select.value=="Teledermatologi" || select.value=="StoreFoward"){
         document.getElementById('hidden_bayar').style.display = "block";
         } else{
         document.getElementById('hidden_bayar').style.display = "none";
+    }
+    if (select.value=="Teledermatologi" || select.value=="Kunjungan") {
+        document.getElementById('hidden_tgl').style.display = "block";
+    } else {
+        document.getElementById('hidden_tgl').style.display = "none";
     }
 } 
 
@@ -598,14 +604,6 @@ $(document).ready(function () {
             } else {
                 $("#medical_faskes").removeClass("is-invalid");
                 $(".error_medical_faskes").html("");
-            }
-
-            if (response.error.appointment_date_expect) {
-                $("#appointment_date_expect").addClass("is-invalid");
-                $(".error_appointment_date_expect").html(response.error.appointment_date_expect);
-            } else {
-                $("#appointment_date_expect").removeClass("is-invalid");
-                $(".error_appointment_date_expect").html("");
             }
 
         } else {

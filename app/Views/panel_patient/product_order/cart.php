@@ -60,51 +60,55 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <div class="col-xl-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-4">Pilih Metode Pembayaran<code>*</code> </h5>
-                                        <select class="form-control select2-cart" name="invoice_method" id="invoice_method">
-                                            <option selected disabled>Pilih...</option>
-                                            <option value="VA">Virtual Account (+ Rp 4.440)</option>
-                                            <option value="Gopay">GoPay (+ 2%)</option>
-                                            
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title mb-3">Rincian Order</h4>
-
-                                        <div class="table-responsive">
-                                            <table class="table mb-0">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Grand Total :</td>
-                                                        <td>Rp <?= rupiah($total)?>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Biaya Transaksi : </td>
-                                                        <td>Rp <a id="biaya_transaksi"></a> </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Total :</th>
-                                                        <th>Rp <a id="total_final"></a></th>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <div class="text-sm-end mt-2 mt-4">
-                                                <a href="javascript: void(0);" class="btn btn-success" id="checkout-button">
-                                                    <i class="bx bx-check me-1"></i> Checkout 
-                                                </a>
-                                            </div>
+                                <form>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-4">Pilih Metode Pembayaran<code>*</code> </h5>
+                                            <select class="form-control select2-cart" name="invoice_method" id="invoice_method">
+                                                <option selected disabled>Pilih...</option>
+                                                <option value="VA">Virtual Account (+ Rp 4.440)</option>
+                                                <option value="Gopay">GoPay (+ 2%)</option>
+                                                
+                                            </select>
                                         </div>
-                                        <!-- end table-responsive -->
                                     </div>
-                                </div>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title mb-3">Rincian Order</h4>
+
+                                            <div class="table-responsive">
+                                                <table class="table mb-0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Grand Total :</td>
+                                                            <td>Rp <?= rupiah($total)?>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Biaya Transaksi : </td>
+                                                            <td>Rp <a id="biaya_transaksi"></a> </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Total :</th>
+                                                            <th>Rp <a id="total_final"></a></th>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="text-sm-end mt-2 mt-4">
+                                                    <a href="javascript: void(0);" class="btn btn-success" id="checkout-button">
+                                                        <i class="bx bx-check me-1"></i> Checkout 
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <!-- end table-responsive -->
+                                        </div>
+                                    </div>
+                                </form>
                                 <!-- end card -->
                             </div>
+                            
                         </div>
                         <!-- end row -->
 
@@ -175,8 +179,40 @@ $(document).ready(function () {
                 confirmButtonText: 'Yes, proceed!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Code to execute when the user confirms the action, for example:
-                    // Submit the form, or redirect to another page
+                    var invoice_method = $('.select2-cart').val();
+                    var biaya_transaksi;
+                    if (invoice_method == 'VA') {
+                        biaya_transaksi = 4440;
+                    } else if (invoice_method == 'Gopay') {
+                        biaya_transaksi = total * 0.02;  // 2% of total
+                    }
+                    var total_final = total + biaya_transaksi;
+                    var requestData = {
+                        invoice_method: invoice_method,
+                        biaya_transaksi: biaya_transaksi,
+                        total: total,
+                        total_final: total_final,
+                    };
+
+                    $.ajax({
+                    url: "<?= site_url('order-product/checkout') ?>",
+                    type: "post",
+                    dataType: "json",
+                    data: requestData,
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                            title: "Berhasil!",
+                            text: response.success,
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500,
+                            }).then(function () {
+                                window.location = response.link;
+                            });
+                        }
+                    }
+                });
                 }
             });
         }

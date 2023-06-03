@@ -23,10 +23,12 @@ class Refer extends BaseController
 
             $list_kunjungan         = $this->medical->list_refer_klinik_kunjungan($user_faskes);
             $list_teledermatologi   = $this->medical->list_refer_klinik_teledermatologi($user_faskes);
+            $list_storefoward       = $this->medical->list_refer_klinik_storefoward($user_faskes);
 
             $data = [
                 'list_kunjungan'       => $list_kunjungan,
                 'list_teledermatologi' => $list_teledermatologi,
+                'list_storefoward'     => $list_storefoward,
             ];
 
             $response = [
@@ -44,7 +46,6 @@ class Refer extends BaseController
             $rules = [
                 'medical_refer_type'    => 'required',
                 'medical_faskes'        => 'required',
-                'appointment_date_expect' => 'required',
             ];
     
             $errors = [
@@ -64,7 +65,6 @@ class Refer extends BaseController
                     'error' => [
                         'medical_refer_type'    => $validation->getError('medical_refer_type'),
                         'medical_faskes'        => $validation->getError('medical_faskes'),
-                        'appointment_date_expect' => $validation->getError('appointment_date_expect'),
                     ]
                 ];
             } else {
@@ -73,9 +73,10 @@ class Refer extends BaseController
                 $faskes             = $this->faskes->find($faskes_code);
                 $faskes_initial     = $faskes['faskes_initial'];
                 $faskes_refer_price = $faskes['faskes_refer_price'];
+                $faskes_refersf_price = $faskes['faskes_refersf_price'];
 
                 $refer_type         = $this->request->getVar('medical_refer_type');
-                $amount             = $faskes_refer_price; 
+                
                 $medical_code       = $this->generate_medical_code_rujukan($faskes_code, $faskes_initial);
                 $appointment_code   = $this->generate_appointment_code_rujukan($faskes_code, $faskes_initial);
 
@@ -112,7 +113,9 @@ class Refer extends BaseController
                 $this->db->transStart();
                 $this->medical->update($this->request->getVar('medical_refer_code'), $updateMedical);
                 $this->medical->insert($newMedical);
-                $this->appointment->insert($newAppointment);
+                if ($refer_type == 'Kunjungan' || $refer_type == 'Teledermatologi') {
+                    $this->appointment->insert($newAppointment);
+                }
                 if ($refer_type == 'Kunjungan') {
                     $invoice_code      = 'INV-' . $faskes_initial . '-'  . $this->request->getVar('medical_user') .date('YmdHis');
                     $newInvoice = [
@@ -122,13 +125,21 @@ class Refer extends BaseController
                     ];
                     $this->invoice->insert($newInvoice);
                 }
-                if ($refer_type == 'Teledermatologi') {
+                if ($refer_type == 'Teledermatologi' || $refer_type == 'StoreFoward') {
+
+                    if ($refer_type == 'Teledermatologi') {
+                        $refer_price         = $faskes_refer_price;
+                        $medoth_name    = 'Teledermatologi';    
+                    }elseif ($refer_type == 'StoreFoward') {
+                        $refer_price         = $faskes_refersf_price;
+                        $medoth_name    = 'StoreFoward'; 
+                    }
 
                     $invoice_method    = $this->request->getVar('invoice_method');
 
-                    $invoice_admin_fee = $this->transaction_fee($invoice_method, $amount);
+                    $invoice_admin_fee = $this->transaction_fee($invoice_method, $refer_price);
 
-                    $amount            = $amount + $invoice_admin_fee;
+                    $amount            = $refer_price + $invoice_admin_fee;
                     $invoice_code      = 'INV-' . $faskes_initial . '-'  . $this->request->getVar('medical_user') .date('YmdHis');
                     $newInvoice = [
                         'invoice_code'      => $invoice_code,
@@ -142,9 +153,9 @@ class Refer extends BaseController
 
                     $newMedoth = [
                         'medoth_medical'  => $medical_code,
-                        'medoth_name'     => 'Teledermatologi',
+                        'medoth_name'     => $medoth_name,
                         'medoth_qty'      => 1,
-                        'medoth_price'    => $faskes_refer_price
+                        'medoth_price'    => $refer_price
                     ];
                     $this->medoth->insert($newMedoth);
                     

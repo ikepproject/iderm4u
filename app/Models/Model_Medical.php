@@ -78,6 +78,20 @@ class Model_Medical extends Model
             ->get()->getResultArray();
     }
 
+    //Refer - getData (Klinik Rujuk Store&Foward)
+    public function list_refer_klinik_storefoward($user_faskes)
+    {
+        return $this->table('tb_medical')
+            ->where('medical_refer_origin', $user_faskes)
+            ->where('medical_creator_type', 'Admin')
+            ->where('medical_refer_type', 'StoreFoward')
+            ->orderBy('medical_create', 'DESC')
+            ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
+            ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->join('tb_invoice', 'tb_invoice.invoice_medical = tb_medical.medical_code')
+            ->get()->getResultArray();
+    }
+
     //Refer - getData Kunjungan (RS)
     public function list_refer_visit($user_faskes)
     {
@@ -110,6 +124,21 @@ class Model_Medical extends Model
             ->get()->getResultArray();
     }
 
+    //Refer - getData Store & Foward (RS)
+    public function list_refer_stfw($user_faskes)
+    {
+        return $this->table('tb_medical')
+            ->where('medical_faskes', $user_faskes)
+            ->where('medical_refer_type', 'StoreFoward')
+            ->where('medical_creator_type', 'Admin')
+            ->orderBy('medical_create', 'DESC')
+            ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
+            ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->join('tb_faskes', 'tb_faskes.faskes_code = tb_medical.medical_refer_origin')
+            ->join('tb_invoice', 'tb_invoice.invoice_medical = tb_medical.medical_code')
+            ->get()->getResultArray();
+    }
+
     //Product Order - getData (Klinik)
     public function list_product_order($user_faskes)
     {
@@ -120,6 +149,21 @@ class Model_Medical extends Model
             ->orderBy('medical_create', 'DESC')
             ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
             ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->join('tb_invoice', 'tb_invoice.invoice_medical = tb_medical.medical_code')
+            ->get()->getResultArray();
+    }
+
+    //Product Order - getData (Klinik)
+    public function list_product_order_patient($user_id)
+    {
+        return $this->table('tb_medical')
+            ->where('medical_user', $user_id)
+            ->where('medical_type', 'Product')
+            ->where('medical_creator_type', 'Patient')
+            ->orderBy('medical_create', 'DESC')
+            ->join('tb_user', 'tb_user.user_id = tb_medical.medical_user')
+            ->join('tb_patient', 'tb_patient.patient_code = tb_user.user_patient')
+            ->join('tb_invoice', 'tb_invoice.invoice_medical = tb_medical.medical_code')
             ->get()->getResultArray();
     }
 

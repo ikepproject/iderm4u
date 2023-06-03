@@ -28,4 +28,15 @@ class Model_Treatment extends Model
             ->orderBy('treatment_name', 'ASC')
             ->get()->getResultArray();
     }
+
+    public function list_discount($user_faskes)
+    {
+        return $this->table('tb_treatment')
+            ->where('treatment_faskes', $user_faskes)
+            ->where('treatment_status', 't')
+            ->where('treatment_discount', 't')
+            ->orderBy('treatment_type', 'ASC')
+            ->orderBy('treatment_name', 'ASC')
+            ->get()->getResultArray();
+    }
 }

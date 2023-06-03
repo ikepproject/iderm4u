@@ -8,7 +8,7 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <h4 class="card-title">Data Rujukan <?php if ($type_refer == 'Visit') { ?>Kunjungan<?php }else{ ?> Teledermatologi <?php }?></h4>
+                        <h4 class="card-title">Data Rujukan <?php if ($type_refer == 'Visit') { ?>Kunjungan<?php }elseif($type_refer == 'Teledermatology'){ ?> Teledermatologi<?php }elseif($type_refer == 'Storefoward'){ ?> Store & Foward <?php }?></h4>
 
                         <div class="datarefer">
                         </div>
@@ -28,8 +28,10 @@ function datatable_refer() {
   var getUrl = null;
   if (type_refer == 'Visit') {
     getUrl = "refer-visit/getdata";
-  } else {
+  } else if(type_refer == 'Teledermatology') {
     getUrl = "refer-teledermatology/getdata";
+  }else if(type_refer == 'Storefoward') {
+    getUrl = "refer-storefoward/getdata";
   }
   $.ajax({
     url: getUrl,

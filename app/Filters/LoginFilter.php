@@ -29,12 +29,14 @@ class LoginFilter implements FilterInterface
         if (!get_cookie('gem')) {
 			return redirect()->to('login');
 		} else {
+			$requiredRoles = isset($arguments[0]) ? explode("-", $arguments[0]) : [];
 			$token  = get_cookie('gem');
 			$jwt    = new JWTCI4;
 			$verifiy= $jwt->parseweb($token);
-			if( !$verifiy['success'] )
+            $decode = $jwt->decodeweb($token);
+			if( !$verifiy['success'] || !in_array($decode->rle, $requiredRoles))
 			{
-				return redirect()->to('login');
+				return redirect()->to('404');
 			}
 		}
     }

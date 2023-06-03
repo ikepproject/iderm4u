@@ -47,6 +47,10 @@
     <!-- Responsive datatable examples -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-responsive-bs/2.4.1/responsive.bootstrap.min.css" integrity="sha512-lC7CsBqS9byAEsS32hb1hbptYmqxRoPc+kIKOydGHfpUXHywskhQHlIQj69/S5egtqEqsEsFwjc5x5HHx/T14Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- Apex Chart -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest/dist/apexcharts.min.js"></script>
+
 </head>
 
 <body data-sidebar="dark">
@@ -106,7 +110,7 @@
                             id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             <i class="bx bx-bell bx-tada"></i>
-                            <span class="badge bg-danger rounded-pill">1</span>
+                            <!-- <span class="badge bg-danger rounded-pill">1</span> -->
                         </button>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                             aria-labelledby="page-header-notifications-dropdown">
@@ -119,9 +123,9 @@
                             </div>
                             <div data-simplebar style="max-height: 230px;">
                                 <a href="" class="text-reset notification-item">
-                                    <div class="d-flex">
+                                    <!-- <div class="d-flex">
                                         <div class="avatar-xs me-3">
-                                            <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                            <span class="avatar-title bg-primary rounded-circle font-size-10">
                                                 <i class="bx bx-cart"></i>
                                             </span>
                                         </div>
@@ -133,7 +137,7 @@
                                                         key="t-min-ago">3 min ago</span></p>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </a>
                             </div>
                             <div class="p-2 border-top d-grid">
@@ -154,8 +158,8 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
                             <!-- item-->
-                            <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle me-1"></i>
-                                <span key="t-profile">Profile</span></a>
+                            <a class="dropdown-item" href="account"><i class="bx bx-user font-size-16 align-middle me-1"></i>
+                                <span key="t-profile">Akun</span></a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="" id=logout><i
                                     class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span
@@ -224,6 +228,7 @@
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="<?= site_url('refer-visit') ?>" key="t-refer-visit">Kunjungan</a></li>
+                                <li><a href="<?= site_url('refer-storefoward') ?>" key="t-refer-storefoward">Store & Foward</a></li>
                                 <li><a href="<?= site_url('refer-teledermatology') ?>" key="t-refer-teledermatology">Teledermatologi</a></li>
                             </ul>
                         </li>
@@ -314,12 +319,12 @@
                         <li>
                             <a href="javascript: void(0);" class="has-arrow waves-effect">
                                 <i class="bx bx-shopping-bag"></i>
-                                <span key="t-produk">Produk (Preorder)</span>
+                                <span key="t-produk">Order Produk</span>
                             </a>
                             <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="<?= site_url('order-product') ?>" key="t-order-product">Daftar Produk</a></li>
                                 <li><a href="<?= site_url('order-cart') ?>" key="t-order-cart">Keranjang</a></li>
-                                <li><a href="<?= site_url('order-transaction') ?>" key="t-order-cart">Transaksi</a></li>
+                                <li><a href="<?= site_url('order') ?>" key="t-order">Transaksi</a></li>
 
                             </ul>
                         </li>
@@ -327,7 +332,7 @@
                         <li>
                             <a href="<?= site_url('medical-record') ?>" class="waves-effect">
                                 <i class="bx bxs-user-detail"></i>
-                                <span key="t-medical-record">Kunjungan</span>
+                                <span key="t-medical-record">Medical Record</span>
                             </a>
                         </li>
                         

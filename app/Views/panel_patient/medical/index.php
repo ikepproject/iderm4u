@@ -8,7 +8,7 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <h4 class="card-title">Riwayat Data Kunjungan Pasien</h4>
+                        <h4 class="card-title">Data Medical Record</h4>
 
                         <div class="dataMedical">
                         </div>

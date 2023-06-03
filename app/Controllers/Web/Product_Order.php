@@ -20,10 +20,18 @@ class Product_Order extends BaseController
         if ($this->request->isAJAX()) {
             $user        = $this->userauth(); //Return array
             $user_faskes = $user['user_faskes'];
-            $list        = $this->medical->list_product_order($user_faskes);
+            $user_id     = $user['user_id'];
+            $user_role   = $user['user_role'];
 
+            if ($user_role == 1011) {
+                $list        = $this->medical->list_product_order_patient($user_id);
+            } else {
+                $list        = $this->medical->list_product_order($user_faskes);
+            }
+            
             $data = [
-                'list' => $list,
+                'list'      => $list,
+                'user_role' => $user_role,
             ];
 
             $response = [
@@ -185,6 +193,96 @@ class Product_Order extends BaseController
             ];
 
             echo json_encode($response);
+        }
+    }
+
+    public function checkout()
+    {
+        if ($this->request->isAJAX()) {
+            $user               = $this->userauth(); // Return array
+            $user_id            = $user['user_id'];
+            $user_faskes        = $user['user_faskes'];
+            $user_name          = $user['user_name'];
+            $faskes             = $this->faskes->find($user_faskes);
+            $initial            = $faskes['faskes_initial'];
+            $medical_create     = date('Y-m-d H:i:s');
+            $amount             = 0; 
+            $medical_code       = $this->generate_medical_code();
+
+            $new = [
+                'medical_code'         => $medical_code,
+                'medical_faskes'       => $user_faskes,
+                'medical_user'         => $user_id,
+                'medical_employee'     => $user_name,
+                'medical_type'         => 'Product',
+                'medical_create'       => $medical_create,
+                'medical_status'       => 'Proses',
+                'medical_creator_type' => 'Patient',
+            ];
+            //Transaction Start
+            $this->db->transStart();
+            $this->medical->insert($new);
+            $cart_items     = $this->cart->find_user($user_id);
+                if (count($cart_items) != 0) {
+                    foreach ($cart_items as $cart ) {
+                        $cart_product       = $cart['cart_product'];
+                        $cart_qty           = $cart['cart_qty'];
+                        $productData           = $this->product->find($cart_product);
+                        $productName           = $productData['product_name'];
+                        $productPrice          = $productData['product_price'];
+                        $newMedprod = [
+                            'medprod_medical'  => $medical_code,
+                            'medprod_product'  => $cart_product,
+                            'medprod_qty'      => $cart_qty,
+                            'medprod_price'    => $productPrice,
+                            'medprod_name'     => $productName
+                        ];
+                        
+                        $amount      = $amount + ($productPrice*$cart_qty); 
+                        
+                        $productQty  = $productData['product_qty'] - $cart_qty;
+                        $updateProduct = [
+                            'product_qty' => $productQty
+                        ];
+
+                        $newStock = [
+                            'stock_product'     => $cart_product,
+                            'stock_type'        => 'Pengurangan',
+                            'stock_qty'         => $cart_qty,
+                            'stock_create'      => date('Y-m-d H:i:s'),
+                            'stock_description' => $medical_code,
+                        ];
+                        
+                        $this->medprod->insert($newMedprod);
+                        $this->product->update($cart_product, $updateProduct);
+                        $this->product_stock->insert($newStock);
+                        $this->cart->delete($cart['cart_id']);
+                    }
+                }
+            $invoice_method = $this->request->getVar('invoice_method');
+            
+            $invoice_admin_fee = $this->transaction_fee($invoice_method, $amount);
+
+            $amount = $amount + $invoice_admin_fee;
+            $invoice_code = 'INV-' . $initial . '-'  . $this->request->getVar('medical_user') .date('YmdHis');
+            $newInvoice = [
+                'invoice_code'      => $invoice_code,
+                'invoice_medical'   => $medical_code,
+                'invoice_amount'    => $amount,
+                'invoice_method'    => $invoice_method,
+                'invoice_status'    => 'PENDING',
+                'invoice_admin_fee' => $invoice_admin_fee,
+            ];
+            $this->invoice->insert($newInvoice);
+
+            $this->db->transComplete();
+            //Transaction End
+
+            $response = [
+                'success' => 'Data Berhasil Disimpan',
+                'link'    => '/transaction/checkout/'.$medical_code, 
+            ]; 
+            echo json_encode($response);   
         }
     }
 

@@ -308,7 +308,7 @@ class Auth extends BaseController
                 'success' => true,
                 'code'    => '200',
                 'data'    => [
-                    'link' => 'login'
+                    'link' => '/login'
                 ], 
                 'message' => 'Berhasil, Redirect...', 
             ];

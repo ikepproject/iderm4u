@@ -495,7 +495,10 @@ class Medical extends BaseController
             if ($modul == 'Lokal') {
                 $this->invoice->delete($invoice['invoice_id']);
             } elseif ($modul != 'Lokal') {
-                $this->appointment->delete($appointment['appointment_id']);
+                if ($modul != 'StoreFoward') {
+                    $this->appointment->delete($appointment['appointment_id']);
+                }
+                
                 $medical = $this->medical->find($medical_code);
                 $medical_refer_code = $medical['medical_refer_code'];
                 $updateOrigin = [
@@ -504,7 +507,7 @@ class Medical extends BaseController
                     'medical_refer_code' => NULL
                 ];
                 $this->medical->update($medical_refer_code, $updateOrigin);
-                if ($modul == 'Teledermatologi') {
+                if ($modul != 'Kunjungan') {
                     $this->invoice->delete($invoice['invoice_id']);
                 }
             }

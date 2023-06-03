@@ -58,6 +58,24 @@ class Refer_Hospital extends BaseController
         }
     }
 
+    public function getdatastfw()
+    {
+        if ($this->request->isAJAX()) {
+            $user        = $this->userauth(); //Return array
+            $user_faskes = $user['user_faskes'];
+
+            $data = [
+                'list' => $this->medical->list_refer_stfw($user_faskes),
+            ];
+
+            $response = [
+                'data' => view('panel_faskes/refer_hospital/list_stfw', $data)
+            ];
+
+            echo json_encode($response);
+        }
+    }
+
     public function refer_visit()
 	{
 		$user           = $this->userauth(); // Return Object
