@@ -13,15 +13,18 @@ class Account extends BaseController
 
 		if ($user_role == '1011') {
 			$profile = $this->user->find_patient($user_id);
+			$patient_address = $profile['patient_address'];
 		} else {
 			$profile = $this->user->find($user_id);
+			$patient_address = NULL;
 		}
 
 		$data = [
-			'title' 	=> 'Pengaturan Akun',
-			'user'  	=> $user,
-			'profile'	=> $profile,
-			'user_role' => $user_role,
+			'title' 			=> 'Pengaturan Akun',
+			'user'  			=> $user,
+			'profile'			=> $profile,
+			'user_role' 		=> $user_role,
+			'patient_address'	=> $patient_address,
 		];
 		return view('panel/account', $data);
 	}

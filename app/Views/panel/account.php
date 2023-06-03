@@ -8,14 +8,14 @@
                 <ul class="nav nav-pills nav-justified" role="tablist">
                     <?php if ($user_role == 1011) { ?>
                         <li class="nav-item waves-effect waves-light">
-                            <a class="nav-link active" data-bs-toggle="tab" href="#profile-1" role="tab">
+                            <a class="nav-link" data-bs-toggle="tab" href="#profile-1" role="tab">
                                 <span class="d-block d-md-none">Profile</span>
                                 <span class="d-none d-md-block"><i class="fas fa-user-alt mr-2"></i> Profile</span> 
                             </a>
                         </li>
                     <?php } ?>
                     <li class="nav-item waves-effect waves-light">
-                        <a class="nav-link" data-bs-toggle="tab" href="#account-1" role="tab">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#account-1" role="tab">
                             <span class="d-block d-md-none">Akun</span>
                             <span class="d-none d-md-block"><i class="bx bx-user-circle mr-2"></i> Akun</span>   
                         </a>
@@ -24,7 +24,7 @@
                 <!-- Tab panes -->
                 <div class="tab-content p-3 text-muted">
                     <?php if ($user_role == 1011) { ?>
-                        <div class="tab-pane active" id="profile-1" role="tabpanel">
+                        <div class="tab-pane" id="profile-1" role="tabpanel">
                             <?= form_open('patient/update', ['class' => 'formupdate']) ?>
                             <?= csrf_field(); ?>
                                 <div class="row">
@@ -49,7 +49,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="edit_patient_gender" class="form-label">Jenis Kelamin <code>*</code></label>
-                                            <select class="form-select select2-edit" id="edit_patient_gender" name="edit_patient_gender">
+                                            <select class="form-select select2-edit" id="edit_patient_gender" name="edit_patient_gender" style="width: 100%;">
                                                 <option value="Perempuan" <?php if ($profile['patient_gender'] == "Perempuan") echo "selected"; ?> > Perempuan </option>
                                                 <option value="Laki-Laki" <?php if ($profile['patient_gender'] == "Laki-Laki") echo "selected"; ?> > Laki-Laki </option>
                                             </select>
@@ -67,7 +67,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="edit_patient_type" class="form-label">Kategori Pasien <code>*</code></label>
-                                            <select class="form-select select2-edit" id="edit_patient_type" name="edit_patient_type">
+                                            <select class="form-select select2-edit" style="width: 100%;" id="edit_patient_type" name="edit_patient_type">
                                                 <option value="Umum" <?php if ($profile['patient_type'] == "Umum") echo "selected"; ?> >Umum</option>
                                                 <option value="Eksekutif" <?php if ($profile['patient_type'] == "Eksekutif") echo "selected"; ?> >Eksekutif</option>
                                                 <option value="BPJS" <?php if ($profile['patient_type'] == "BPJS") echo "selected"; ?> >BPJS</option>
@@ -106,7 +106,7 @@
                             <?= form_close() ?>
                         </div>
                     <?php } ?>
-                    <div class="tab-pane" id="account-1" role="tabpanel">
+                    <div class="tab-pane active" id="account-1" role="tabpanel">
                             <?= form_open('account/update', ['class' => 'formaccount']) ?>
                             <?= csrf_field(); ?>
                                 <div class="row">
@@ -149,8 +149,8 @@
         $('.select2-edit').select2({
             minimumResultsForSearch: Infinity
         });
-
-        $('#edit_patient_address').val("<?= $profile['patient_address'] ?>");
+        
+        $('#edit_patient_address').val("<?= $patient_address ?>");
 
         $(".formupdate").submit(function (e) {
             e.preventDefault();

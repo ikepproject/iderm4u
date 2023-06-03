@@ -86,11 +86,6 @@
                             </div>
                         </div>
                         <!-- end row -->
-                        <div class="row">
-                        <div class="col-md-12">
-                            <div id="chart"></div>
-                        </div>
-                        </div>
                     <?php } ?>
                     <?php if ($user['user_role'] == 1011) { ?>
                         <div class="row">
@@ -181,6 +176,11 @@
                         </div>
                     </div> -->
                 </div>
+                <?php if ($user['user_role'] == 2020 || $user['user_role'] == 2022 || $user['user_role'] == 5050 || $user['user_role'] == 5055) { ?>
+                    <div class="row">
+                            <div id="chart"></div>
+                    </div>
+                <?php } ?>
                 <?php if ($user['user_role'] == 1011) { ?>
                     <div class="row">
                         <?php 
