@@ -68,7 +68,7 @@
 <hr>
 <h5 class="text-left">Data Rujuk Store & Foward</h5>
 
-<table id="datatable-refer-visit" class="table table-striped table-bordered dt-responsive wrap w-100 ">
+<table id="datatable-refer-snf" class="table table-striped table-bordered dt-responsive wrap w-100 ">
     <thead>
         <tr class="table-secondary">
             <th width="2%">#</th>
@@ -210,6 +210,24 @@ $(document).ready(function () {
     .buttons()
     .container()
     .appendTo("#datatable-refer-visit_wrapper .col-md-6:eq(0)");
+
+    $(".dataTables_length select").addClass("form-select form-select-sm");
+
+    //Refer Snf
+    var table_refer_snf = $("#datatable-refer-snf").DataTable({
+    stateSave: true,
+    lengthChange: true,
+    lengthMenu: [
+        [25, 70, 100, -1],
+        [25, 70, 100, "All"],
+    ],
+    buttons: ["copy", "excel", "pdf"],
+    });
+
+    table_refer_snf
+    .buttons()
+    .container()
+    .appendTo("#datatable-refer-snf_wrapper .col-md-6:eq(0)");
 
     $(".dataTables_length select").addClass("form-select form-select-sm");
 });

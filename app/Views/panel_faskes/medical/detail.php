@@ -82,8 +82,8 @@
                                                             <td><?= $patient['patient_type'] ?></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><b>UID - Email</b></td>
-                                                            <td><?= $user['user_id'] ?> - <?= $user['user_email'] ?></td>
+                                                            <td><b><?php if ($user_role != 1011) { ?>UID -<?php } ?>  Email</b></td>
+                                                            <td><?php if ($user_role != 1011) { ?><?= $user['user_id'] ?> - <?php } ?>  <?= $user['user_email'] ?></td>
                                                         </tr>
                                                         <tr>
                                                             <td><b>HP</b></td>

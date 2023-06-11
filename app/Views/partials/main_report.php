@@ -115,7 +115,7 @@
                             id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             <i class="bx bx-bell bx-tada"></i>
-                            <span class="badge bg-danger rounded-pill">1</span>
+                            <!-- <span class="badge bg-danger rounded-pill">1</span> -->
                         </button>
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                             aria-labelledby="page-header-notifications-dropdown">
@@ -128,7 +128,7 @@
                             </div>
                             <div data-simplebar style="max-height: 230px;">
                                 <a href="" class="text-reset notification-item">
-                                    <div class="d-flex">
+                                    <!-- <div class="d-flex">
                                         <div class="avatar-xs me-3">
                                             <span class="avatar-title bg-primary rounded-circle font-size-16">
                                                 <i class="bx bx-cart"></i>
@@ -142,7 +142,7 @@
                                                         key="t-min-ago">3 min ago</span></p>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </a>
                             </div>
                             <div class="p-2 border-top d-grid">
@@ -163,8 +163,8 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
                             <!-- item-->
-                            <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle me-1"></i>
-                                <span key="t-profile">Profile</span></a>
+                            <a class="dropdown-item" href="account"><i class="bx bx-user font-size-16 align-middle me-1"></i>
+                                <span key="t-profile">Akun</span></a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="" id=logout><i
                                     class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span
