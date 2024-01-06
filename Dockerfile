@@ -1,23 +1,22 @@
-FROM ubuntu:22.04
+# Use UBI9 as base image
+FROM registry.access.redhat.com/ubi9/ubi
 
-ARG DEBIAN_FRONTEND=noninteractive
-ENV TZ=Asia/Bangkok
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# add more repository
+RUN dnf -y install \ 
+    https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
+    https://rpms.remirepo.net/enterprise/remi-release-9.rpm \
+    'dnf-command(copr)'
+RUN dnf copr enable -y @caddy/caddy 
 
-# Update Ubuntu Software repository
-RUN apt-get update
+# install the supporting applications
+RUN dnf install -y unzip caddy supervisor
 
-# Install PHP
-RUN apt -y install software-properties-common
-RUN add-apt-repository ppa:ondrej/php
-RUN apt-get update
-RUN apt -y install php7.4 php7.4-cli php7.4-json php7.4-common php7.4-mysql php7.4-zip php7.4-gd php7.4-mbstring php7.4-curl php7.4-xml php7.4-bcmath php7.4-intl
-RUN apt -y install unzip curl supervisor
+# Install PHP and necessary PHP extensions
+RUN dnf module install -y php:remi-7.4 && dnf --enablerepo=remi install -y php-intl php-pgsql
 
 # Install Composer
-RUN mkdir -p /composer/bin
-RUN curl -sS https://getcomposer.org/installer -o ./composer-setup.php
-RUN php ./composer-setup.php --install-dir=/composer/bin --filename=composer
+RUN mkdir -p /composer/bin/
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/composer/bin/ --filename=composer
 
 # Copy your PHP CodeIgniter 4 application into the Docker image
 COPY . /application
@@ -34,6 +33,3 @@ RUN useradd -ms /bin/bash iderm4u
 # EXPOSE
 EXPOSE 8080
 ENTRYPOINT ["supervisord", "-c", "./supervisord.conf"]
-
-
-

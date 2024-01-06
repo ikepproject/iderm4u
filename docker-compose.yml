@@ -8,9 +8,9 @@ services:
       - iderm4u-database-storage:/var/lib/postgresql/data
     networks:
       - iderm4u-network
-      
+
   iDerm4U-Main:
-    image: angkringan.ibrain2u.com/iderm4u-main:1.0
+    image: angkringan.ibrain2u.com/iderm4u-main:3.0
     restart: unless-stopped
     container_name: 'iDerm4U-MainApp'
     networks:
