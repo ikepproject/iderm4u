@@ -12,7 +12,7 @@ RUN dnf copr enable -y @caddy/caddy
 RUN dnf install -y unzip caddy supervisor
 
 # Install PHP and necessary PHP extensions
-RUN dnf module install -y php:remi-7.4 && dnf --enablerepo=remi install -y php-intl php-pgsql
+RUN dnf module install -y php:remi-7.4 && dnf --enablerepo=remi install -y php-intl php-pgsql php-gd
 
 # Install Composer
 RUN mkdir -p /composer/bin/
