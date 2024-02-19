@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  iDerm4U-Database:
+    image: 'postgres:14-bookworm'
+    container_name: 'iDerm4U-Database'
+    restart: unless-stopped
+    volumes:
+      - iderm4u-database-storage:/var/lib/postgresql/data
+    networks:
+      - iderm4u-network
+
+  iDerm4U-Main:
+    image: angkringan.ibrain2u.com/iderm4u-main:3.0
+    restart: unless-stopped
+    container_name: 'iDerm4U-MainApp'
+    networks:
+      - iderm4u-network
+    ports:
+      - "0.0.0.0:8080:8080"
+    depends_on:
+      - iDerm4U-Database
+    volumes:
+      - iderm4u-asset-medical:/application/public/assets/images/medical
+      - iderm4u-asset-users:/application/public/assets/images/users
+      - /iderm4u-storage/app.env:/application/.env
+
+networks:
+  iderm4u-network:
+    name: iderm4u-network
+    external: true
+
+volumes:
+  iderm4u-database-storage:
+    external: true
+  iderm4u-asset-medical:
+    external: true
+  iderm4u-asset-users:
+    external: true
