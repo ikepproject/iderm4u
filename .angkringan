@@ -1,4 +1,5 @@
 {
+    "registry" : "angkringan.ibrain2u.com",
     "builds" : [
         {
             "name" : "iderm4u-main"
