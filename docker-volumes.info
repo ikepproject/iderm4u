@@ -1,0 +1,53 @@
+[iderm@iderm4u-temp iderm4u]$ docker volume ls
+DRIVER    VOLUME NAME
+local     iderm4u-asset-medical
+local     iderm4u-asset-users
+local     iderm4u-database-storage
+[iderm@iderm4u-temp iderm4u]$ docker volume inspect iderm4u-asset-medical
+[
+    {
+        "CreatedAt": "2024-01-06T08:41:03+07:00",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/iderm4u-asset-medical/_data",
+        "Name": "iderm4u-asset-medical",
+        "Options": {
+            "device": "/iderm4u-storage/asset-storage/medical",
+            "o": "bind",
+            "type": "none"
+        },
+        "Scope": "local"
+    }
+]
+[iderm@iderm4u-temp iderm4u]$ docker volume inspect iderm4u-asset-users
+[
+    {
+        "CreatedAt": "2024-01-06T08:41:10+07:00",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/iderm4u-asset-users/_data",
+        "Name": "iderm4u-asset-users",
+        "Options": {
+            "device": "/iderm4u-storage/asset-storage/users",
+            "o": "bind",
+            "type": "none"
+        },
+        "Scope": "local"
+    }
+]
+[iderm@iderm4u-temp iderm4u]$ docker volume inspect iderm4u-database-storage
+[
+    {
+        "CreatedAt": "2024-01-06T08:39:44+07:00",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/iderm4u-database-storage/_data",
+        "Name": "iderm4u-database-storage",
+        "Options": {
+            "device": "/iderm4u-storage/database-storage",
+            "o": "bind",
+            "type": "none"
+        },
+        "Scope": "local"
+    }
+]
