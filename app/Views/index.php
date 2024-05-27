@@ -88,7 +88,7 @@
                     <div class="col-lg-5">
                         <div class="text-white-50">
                             <h1 class="text-white fw-semibold mb-3 hero-title">iDerm4U - Intelligent Teledermatology System</h1>
-                            <p class="font-size-14">Discover a smarter way to care for your skin.</p>
+                            <p class="font-size-14">Discover a smarter way to care for your skin. Good</p>
                             
                             <div class="d-flex flex-wrap gap-2 mt-4">
                                 <a href="https://play.google.com/store/apps/details?id=app.ikeproject.iderm4u&hl=en" target="_blank" class="btn btn-primary"> <i class="mdi mdi-google-play"></i> Available on Playstore</a>
