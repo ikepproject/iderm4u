@@ -6,42 +6,41 @@
 :8080 {
 	root * /application
 
-	# ------------------------------------------------------------------
-	# 1. Path traversal — evaluated first, before anything else runs.
-	#    Caddy matches on the percent-decoded path, so %2e%2e is caught too.
-	#    Without this, /public/../app/Config/Database.php matches the
-	#    /public/* asset rule and file_server would serve that file, since the
-	#    resolved destination is still inside root.
-	# ------------------------------------------------------------------
-	@traverse path_regexp \.\.
-	respond @traverse 404
-
-	# ------------------------------------------------------------------
-	# 2. Hidden files: .env, .git/config, .htaccess, .dockerignore.
-	# ------------------------------------------------------------------
-	@hidden path_regexp (^|/)\.[^/]
-	respond @hidden 404
-
-	# ------------------------------------------------------------------
-	# 3. Sensitive trees and build artefacts. Redundant with the allowlist
-	#    below, kept deliberately so the intent survives refactors.
-	# ------------------------------------------------------------------
-	@blocked path /app /app/* \
-		/writable /writable/* \
-		/vendor /vendor/* \
-		/system /system/* \
-		/tests /tests/* \
-		/spark /preload.php /builds /info.php \
-		/composer.json /composer.lock /phpunit.xml.dist /phpunit.xml \
-		/Dockerfile /Caddyfile /supervisord.conf
-	respond @blocked 404
-
+	# EVERYTHING lives inside route{} on purpose.
+	#
+	# Caddy does NOT execute directives in written order — it sorts them into a
+	# canonical order. `route` sorts BEFORE `respond`, `reverse_proxy` and
+	# `file_server`. That means deny rules declared at the top level (outside
+	# route) never ran: route had already handled the request and terminated it.
+	# Inside a single route block, statements execute strictly top to bottom.
 	route {
-		# ------------------------------------------------------------------
-		# 4. Static assets — the ONLY tree served from disk.
-		#    Uploads land under public/assets/images/{medical,users}; images,
-		#    CSS, JS and fonts all serve normally through here.
-		# ------------------------------------------------------------------
+		# --- deny layer --------------------------------------------------
+		# 1. Path traversal. Caddy matches the percent-decoded path, so %2e%2e
+		#    is caught here too. Without this, /public/../app/Config/Database.php
+		#    matches the asset rule below and file_server would serve it, since
+		#    the resolved target is still inside root.
+		@traverse path_regexp \.\.
+		respond @traverse 404
+
+		# 2. Every dotfile: .env, .git/config, .htaccess, .dockerignore.
+		@hidden path_regexp (^|/)\.[^/]
+		respond @hidden 404
+
+		# 3. Sensitive trees and build artefacts.
+		@blocked path /app /app/* \
+			/writable /writable/* \
+			/vendor /vendor/* \
+			/system /system/* \
+			/tests /tests/* \
+			/spark /preload.php /builds /info.php \
+			/composer.json /composer.lock /phpunit.xml.dist /phpunit.xml \
+			/Dockerfile /Caddyfile /supervisord.conf
+		respond @blocked 404
+
+		# --- serve layer -------------------------------------------------
+		# 4. Static assets. The ONLY tree served from disk. Uploads land under
+		#    public/assets/images/{medical,users}; images, CSS, JS and fonts
+		#    all serve normally through here.
 		@assets path /public/*
 		handle @assets {
 			# Never execute an upload. Closes the "valid JPEG named x.php"
@@ -56,11 +55,9 @@
 			file_server
 		}
 
-		# ------------------------------------------------------------------
 		# 5. Everything else becomes the CodeIgniter front controller.
-		#    CI4 runs setAutoRoute(false), so non-routes return the app's
-		#    404 and nothing is ever read from disk.
-		# ------------------------------------------------------------------
+		#    CI4 runs setAutoRoute(false), so non-routes return the app's 404
+		#    and nothing is ever read from disk.
 		handle {
 			rewrite * /index.php
 			reverse_proxy fastcgi://127.0.0.1:9000 {
