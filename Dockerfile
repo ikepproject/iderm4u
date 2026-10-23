@@ -68,15 +68,26 @@ FROM php:8.5.12-fpm-bookworm
 RUN php -r 'if (PHP_VERSION_ID < 80512) { fwrite(STDERR, "FATAL: PHP " . PHP_VERSION . " predates 8.5.12 and is vulnerable to CVE-2026-109618 / CVE-2026-109619 (PHP2Shell).\n"); exit(1); } echo "PHP " . PHP_VERSION . " - patched for PHP2Shell.\n";'
 
 # --- PHP extensions -----------------------------------------------------------
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Extensions are installed ONE AT A TIME on purpose. Passing several to a
+# single `docker-php-ext-install -j` makes it configure them all into one shared
+# phpize build tree, and the parallel `make` then produces no .so at all
+# ("cp: cannot stat 'modules/*'"). Sequential is slower but deterministic.
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
       libpq-dev \
       libpng-dev libjpeg62-turbo-dev libfreetype6-dev libwebp-dev \
       libzip-dev libicu-dev \
-      unzip ca-certificates \
- && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
- && docker-php-ext-install -j"$(nproc)" pdo_pgsql gd intl opcache zip \
- && apt-get purge -y --auto-remove \
- && rm -rf /var/lib/apt/lists/*
+      unzip ca-certificates; \
+    docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp; \
+    docker-php-ext-install -j"$(nproc)" pdo_pgsql; \
+    docker-php-ext-install -j"$(nproc)" gd; \
+    docker-php-ext-install -j"$(nproc)" intl; \
+    docker-php-ext-install -j"$(nproc)" opcache; \
+    docker-php-ext-install -j"$(nproc)" zip; \
+    apt-get purge -y --auto-remove; \
+    rm -rf /var/lib/apt/lists/*; \
+    php -r 'foreach (["pdo_pgsql","gd","intl","zip","Zend OPcache"] as $e) { printf("%-14s %s\n", $e, extension_loaded($e) ? "OK" : "MISSING"); }'
 
 # git is intentionally NOT installed — only stage 1 needs it for --prefer-dist.
 
