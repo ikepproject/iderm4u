@@ -127,6 +127,18 @@ RUN set -eux; \
     php-fpm -v; \
     echo ">>> entrypoints OK: supervisord, php-fpm, caddy"
 
+# --- Validate the Caddyfile and php-fpm pool at BUILD time -------------------
+# Both configs produced runtime restart loops that looked fatal but were only
+# syntax errors. Catch them here instead:
+#   caddy validate -> "module not registered: http.matchers.*.yml",
+#                     "unsupported URL scheme fastcgi://"
+#   php-fpm -t     -> "unknown entry 'error_log'"
+RUN set -eux; \
+    /usr/bin/caddy fmt --overwrite /application/Caddyfile; \
+    /usr/bin/caddy validate --config /application/Caddyfile --adapter caddyfile; \
+    php-fpm -t -y /application/writable/logs/php-fpm-error.log; \
+    echo ">>> configs valid: Caddyfile + php-fpm pool"
+
 # --- User BEFORE COPY so ownership is correct from the start ------------------
 RUN useradd -ms /bin/bash iderm4u
 
@@ -148,8 +160,9 @@ RUN chown -R iderm4u:iderm4u /application
 #     there are NO comments inside this pool file — explanation lives here.
 #  2. PHP 8.4 fpm defaults error_log to /proc/self/fd/2. After dropping
 #     privileges to iderm4u it cannot reopen that fd and exits 78 with
-#     "failed to open error_log ... Permission denied". Point it at a real file.
-#     /application/writable is chowned to iderm4u in the step above.
+#     "failed to open error_log ... Permission denied". error_log is NOT a
+#     pool directive ("unknown entry 'error_log'") — it is passed with -e on
+#     the php-fpm command line in supervisord.conf instead.
 #  3. PHP2Shell (CVE-2026-109618 / CVE-2026-109619): upload progress off at the
 #     pool level is authoritative — a stray php.ini cannot re-enable it.
 RUN rm -f /usr/local/etc/php-fpm.d/www.conf \
@@ -168,8 +181,6 @@ RUN rm -f /usr/local/etc/php-fpm.d/www.conf \
       '' \
       'catch_workers_output = yes' \
       'decorate_workers_output = no' \
-      '' \
-      'error_log = /application/writable/logs/php-fpm-error.log' \
       '' \
       'php_admin_flag[session.upload_progress.enabled] = off' \
       > /usr/local/etc/php-fpm.d/www.conf
