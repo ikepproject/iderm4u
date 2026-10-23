@@ -148,9 +148,9 @@ RUN chown -R iderm4u:iderm4u /application
 #     there are NO comments inside this pool file — explanation lives here.
 #  2. PHP 8.4 fpm defaults error_log to /proc/self/fd/2. After dropping
 #     privileges to iderm4u it cannot reopen that fd and exits 78 with
-#     "failed to open error_log ... Permission denied". error_log is NOT a
-#     pool directive ("unknown entry 'error_log'") — it is passed with -e on
-#     the php-fpm command line in supervisord.conf instead.
+#     "failed to open error_log ... Permission denied". error_log is not a
+#     pool directive ("unknown entry 'error_log'") — it is set in the MAIN
+#     php-fpm.conf in a later step.
 #  3. PHP2Shell (CVE-2026-109618 / CVE-2026-109619): upload progress off at the
 #     pool level is authoritative — a stray php.ini cannot re-enable it.
 RUN rm -f /usr/local/etc/php-fpm.d/www.conf \
@@ -172,6 +172,17 @@ RUN rm -f /usr/local/etc/php-fpm.d/www.conf \
       '' \
       'php_admin_flag[session.upload_progress.enabled] = off' \
       > /usr/local/etc/php-fpm.d/www.conf
+
+# --- php-fpm master error log -------------------------------------------------
+# PHP 8.4 fpm defaults error_log to /proc/self/fd/2. After dropping privileges
+# to iderm4u it cannot reopen that fd and exits 78 with
+# "failed to open error_log ... Permission denied".
+#
+# error_log is valid in the MAIN php-fpm.conf only — NOT in a pool ("unknown
+# entry 'error_log'") and NOT via a CLI flag (-y is --fpm-config, a directory;
+# -e takes no argument). So it goes here, appended to the global section.
+RUN printf '\nerror_log = /application/writable/logs/php-fpm-error.log\n' \
+      >> /usr/local/etc/php-fpm.conf
 
 # --- php.ini ------------------------------------------------------------------
 # display_errors=Off is defence in depth. It does NOT replace CI_ENVIRONMENT=production,
@@ -205,7 +216,7 @@ RUN set -eux; \
     test -f /application/Caddyfile || { echo "FATAL: Caddyfile not copied into image"; exit 1; }; \
     /usr/bin/caddy fmt --overwrite /application/Caddyfile; \
     /usr/bin/caddy validate --config /application/Caddyfile --adapter caddyfile; \
-    php-fpm -t -y /application/writable/logs/php-fpm-error.log; \
+    php-fpm -t; \
     test -w /application/writable/logs || { echo "FATAL: writable/logs not writable by $(id -u)"; exit 1; }; \
     echo ">>> configs valid: Caddyfile + php-fpm pool"
 
