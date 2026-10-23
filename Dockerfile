@@ -49,7 +49,17 @@ RUN set -eux; \
 # ==================================================================
 # Stage 2 — runtime
 # ==================================================================
-FROM php:8.5-fpm-bookworm
+# Pinned, not floating. php:8.5-fpm-bookworm tracks whatever is newest, which
+# makes builds non-reproducible and could silently pull an unpatched runtime.
+# 8.5.12 is the release that fixes CVE-2026-109618 / CVE-2026-109619 (PHP2Shell).
+FROM php:8.5.12-fpm-bookworm
+
+# Fail the build loudly rather than shipping a vulnerable runtime.
+# PHP2Shell = CVE-2026-109618 + CVE-2026-109619, CVSS v4.0 9.2, unauthenticated
+# RCE in the PHP engine itself, exploited in the wild from 2026-10-17.
+# Fixed in 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35. PHP 7.4, 8.0 and 8.1 are EOL and
+# receive no upstream fix at all.
+RUN php -r 'if (PHP_VERSION_ID < 80512) { fwrite(STDERR, "FATAL: PHP " . PHP_VERSION . " predates 8.5.12 and is vulnerable to CVE-2026-109618 / CVE-2026-109619 (PHP2Shell).\n"); exit(1); } echo "PHP " . PHP_VERSION . " - patched for PHP2Shell.\n";'
 
 # --- PHP extensions -----------------------------------------------------------
 RUN apt-get update && apt-get install -y --no-install-recommends \
