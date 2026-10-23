@@ -49,7 +49,10 @@
 			respond @exec 404
 
 			# Block config/log/dump files that land in the upload tree.
-			@cfg *.yml *.yaml *.log *.ini *.env *.sql
+			# NOTE: the `path` keyword is required. Omitting it makes Caddy read
+			# "*.yml" as a matcher MODULE name and fail with
+			# "module not registered: http.matchers.*.yml".
+			@cfg path *.yml *.yaml *.log *.ini *.env *.sql
 			respond @cfg 404
 
 			file_server

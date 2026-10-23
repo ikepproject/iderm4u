@@ -153,10 +153,20 @@ RUN rm -f /usr/local/etc/php-fpm.d/www.conf \
       'pm.start_servers = 4' \
       'pm.min_spare_servers = 4' \
       'pm.max_spare_servers = 8' \
-      'pm.max_requests = 500' \
+      'pm.max_requests = 50' \
       '' \
       'catch_workers_output = yes' \
       'decorate_workers_output = no' \
+      '' \
+      '# PHP 8.4 fpm defaults error_log to /proc/self/fd/2. After dropping' \
+      '# privileges to iderm4u it cannot reopen that fd, so it dies immediately' \
+      '# with exit 78 and "failed to open error_log ... Permission denied".' \
+      '# Point it at a real file instead. This directory is chowned above.' \
+      'error_log = /application/writable/logs/php-fpm-error.log' \
+      '' \
+      '# PHP2Shell (CVE-2026-109618 / CVE-2026-109619) hardening. The pool-level' \
+      '# flag is authoritative: a stray php.ini elsewhere cannot re-enable it.' \
+      'php_admin_flag[session.upload_progress.enabled] = off' \
       > /usr/local/etc/php-fpm.d/www.conf
 
 # --- php.ini ------------------------------------------------------------------
@@ -170,6 +180,7 @@ RUN printf '%s\n' \
       'post_max_size = 20M' \
       'max_execution_time = 120' \
       'date.timezone = Asia/Jakarta' \
+      'session.upload_progress.enabled = Off' \
       'opcache.enable = 1' \
       'opcache.enable_cli = 0' \
       'opcache.memory_consumption = 256' \
