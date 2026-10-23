@@ -43,7 +43,7 @@ RUN set -eux; \
         echo '>>> installed from composer.lock (reproducible)'; \
     else \
         echo '>>> composer.lock missing or stale - resolving fresh'; \
-        composer update $$FLAGS $$IGN; \
+        composer update -W $$FLAGS $$IGN; \
     fi
 
 # ==================================================================
