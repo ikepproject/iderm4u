@@ -104,11 +104,7 @@ RUN set -eux; \
     docker-php-ext-install zip; \
     apt-get purge -y --auto-remove; \
     rm -rf /var/lib/apt/lists/*; \
-    php -r 'foreach (["pdo_pgsql","gd","intl","zip","Zend OPcache"] as $e) { printf("%-14s %s\n", $e, extension_loaded($e) ? "OK" : "MISSING"); }'; \
-    command -v supervisord  >/dev/null || { echo "FATAL: supervisord missing — apt-get purge --auto-remove removed it"; exit 1; }; \
-    command -v php-fpm      >/dev/null || { echo "FATAL: php-fpm missing"; exit 1; }; \
-    test -x /usr/bin/caddy        || { echo "FATAL: caddy missing"; exit 1; }; \
-    echo ">>> entrypoints OK: supervisord, php-fpm, caddy"
+    php -r 'foreach (["pdo_pgsql","gd","intl","zip","Zend OPcache"] as $e) { printf("%-14s %s\n", $e, extension_loaded($e) ? "OK" : "MISSING"); }'
 
 # git is intentionally NOT installed — only stage 1 needs it for --prefer-dist.
 
@@ -117,6 +113,19 @@ ARG CADDY_VERSION=2.8.4
 RUN curl -sSL "https://github.com/caddyserver/caddy/releases/download/v${CADDY_VERSION}/caddy_${CADDY_VERSION}_linux_amd64.tar.gz" \
       | tar -xz -C /usr/bin caddy \
  && chmod +x /usr/bin/caddy
+
+# --- Fail the BUILD, not `docker run` ---------------------------------------
+# Every executable the entrypoint and supervisord.conf reference must exist.
+# These checks run here, after all three are installed. A missing binary at
+# runtime is the worst possible failure: the image builds fine and only
+# explodes when you try to start it.
+RUN set -eux; \
+    command -v supervisord >/dev/null || { echo "FATAL: supervisord missing from \$PATH"; exit 1; }; \
+    command -v php-fpm     >/dev/null || { echo "FATAL: php-fpm missing from \$PATH"; exit 1; }; \
+    test -x /usr/bin/caddy           || { echo "FATAL: /usr/bin/caddy missing or not executable"; exit 1; }; \
+    /usr/bin/caddy version; \
+    php-fpm -v; \
+    echo ">>> entrypoints OK: supervisord, php-fpm, caddy"
 
 # --- User BEFORE COPY so ownership is correct from the start ------------------
 RUN useradd -ms /bin/bash iderm4u
