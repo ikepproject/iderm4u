@@ -94,7 +94,8 @@ RUN set -eux; \
       libpq-dev \
       libpng-dev libjpeg62-turbo-dev libfreetype6-dev libwebp-dev \
       libzip-dev libicu-dev \
-      unzip ca-certificates; \
+      unzip ca-certificates \
+      supervisor; \
     docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp; \
     docker-php-ext-install pdo_pgsql; \
     docker-php-ext-install gd; \
@@ -103,7 +104,11 @@ RUN set -eux; \
     docker-php-ext-install zip; \
     apt-get purge -y --auto-remove; \
     rm -rf /var/lib/apt/lists/*; \
-    php -r 'foreach (["pdo_pgsql","gd","intl","zip","Zend OPcache"] as $e) { printf("%-14s %s\n", $e, extension_loaded($e) ? "OK" : "MISSING"); }'
+    php -r 'foreach (["pdo_pgsql","gd","intl","zip","Zend OPcache"] as $e) { printf("%-14s %s\n", $e, extension_loaded($e) ? "OK" : "MISSING"); }'; \
+    command -v supervisord  >/dev/null || { echo "FATAL: supervisord missing — apt-get purge --auto-remove removed it"; exit 1; }; \
+    command -v php-fpm      >/dev/null || { echo "FATAL: php-fpm missing"; exit 1; }; \
+    test -x /usr/bin/caddy        || { echo "FATAL: caddy missing"; exit 1; }; \
+    echo ">>> entrypoints OK: supervisord, php-fpm, caddy"
 
 # git is intentionally NOT installed — only stage 1 needs it for --prefer-dist.
 
