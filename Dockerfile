@@ -23,8 +23,8 @@ WORKDIR /app
 #
 # composer.json is always copied. composer.lock is copied when present so a
 # committed, current lock makes the build reproducible. The committed lock in
-# this repo still pins codeigniter4/framework 4.3.8, which does not satisfy the
-# ^4.7 constraint, so `composer install` refuses it — the RUN below detects
+# this repo still pins codeigniter4/framework v4.3.2, which does not satisfy
+# the ^4.7 constraint, so `composer install` refuses it — the RUN below detects
 # that and resolves fresh instead of failing the build.
 #
 # Once a correct lock is committed, every later build is reproducible. To
@@ -36,14 +36,20 @@ COPY composer.lock* ./
 # ext-intl / ext-mbstring are ignored at resolve time because the resolver
 # container does not carry CI4's platform extensions. The RUNTIME image
 # genuinely provides both, so this only affects version selection.
-RUN set -eux; \
-    IGN='--ignore-platform-req=ext-intl --ignore-platform-req=ext-mbstring'; \
-    FLAGS="--no-dev --optimize-autoloader --no-interaction --prefer-dist"; \
-    if [ -f composer.lock ] && composer install $$FLAGS $$IGN; then \
-        echo '>>> installed from composer.lock (reproducible)'; \
+# No shell variables here on purpose. In a Dockerfile RUN, "$$FLAGS" is a
+# collision: Docker's parser escapes "$$" to "$", but /bin/sh expands "$$" to
+# the shell PID, so the flags became "1FLAGS" and Composer tried to install
+# packages literally named "1flags". Writing the flags out inline is dull but
+# cannot go wrong.
+RUN set -e; \
+    if [ -f composer.lock ] && \
+       composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist \
+         --ignore-platform-req=ext-intl --ignore-platform-req=ext-mbstring; then \
+      echo '>>> installed from composer.lock (reproducible)'; \
     else \
-        echo '>>> composer.lock missing or stale - resolving fresh'; \
-        composer update -W $$FLAGS $$IGN; \
+      echo '>>> composer.lock missing or stale - resolving fresh with -W'; \
+      composer update -W --no-dev --optimize-autoloader --no-interaction --prefer-dist \
+        --ignore-platform-req=ext-intl --ignore-platform-req=ext-mbstring; \
     fi
 
 # ==================================================================
