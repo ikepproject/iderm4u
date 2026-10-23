@@ -329,18 +329,17 @@ class Medical extends BaseController
                     }
                 }
                 
-                $images_items     = $this->request->getFileMultiple('images');
-                if ($images_items[0]->getName() != "") {
-                    foreach ($images_items as $images) {
-                        $img_name       = $images->getName();
-                        $disease        = trim($this->request->getVar('medgal_disease'));
+                $images_items = $this->request->getFileMultiple('images');
 
-                        if ($disease == NULL) {
-                            $disease = 'unnamed';
+                if (is_array($images_items) && $images_items !== []) {
+                    foreach ($images_items as $images) {
+                        if (! $images->isValid() || $images->hasMoved()) {
+                            continue;
                         }
 
-                        $datetime       = date("YmdHis");
-                        $new_img_name   = $disease . '_' . $medical_code . '_' . $datetime . '_' . $img_name;
+                        $disease      = trim((string) $this->request->getVar('medgal_disease'));
+                        $new_img_name = $this->safeImageName($disease, $images->getName());
+
                         \Config\Services::image()
                         ->withFile($images)
                         ->fit(250, 250, 'center')
@@ -387,19 +386,18 @@ class Medical extends BaseController
     public function addgallery()
     {
         if ($this->request->isAJAX()) {
-            $images_items     = $this->request->getFileMultiple('images');
-            $medical_code     = $this->request->getVar('medical_code');
-            $disease          = trim($this->request->getVar('medgal_disease'));
-                        
-            if ($disease == NULL) {
-                $disease = 'unnamed';
-            }
+            $images_items = $this->request->getFileMultiple('images');
+            $medical_code = $this->request->getVar('medical_code');
+            $disease      = trim((string) $this->request->getVar('medgal_disease'));
 
-            if ($images_items[0]->getName() != "") {
+            if (is_array($images_items) && $images_items !== []) {
                 foreach ($images_items as $images) {
-                    $img_name       = $images->getName();
-                    $datetime       = date("YmdHis");
-                    $new_img_name   = $disease . '_' . $medical_code . '_' . $datetime . '_' . $img_name;
+                    if (! $images->isValid() || $images->hasMoved()) {
+                        continue;
+                    }
+
+                    $new_img_name = $this->safeImageName($disease, $images->getName());
+
                     \Config\Services::image()
                     ->withFile($images)
                     ->fit(250, 250, 'center')
@@ -432,14 +430,36 @@ class Medical extends BaseController
     public function deletegallery()
     {
         if ($this->request->isAJAX()) {
-            $medgal_id      = $this->request->getVar('medgal_id');
-            $medgal_filename= $this->request->getVar('medgal_filename');
-            unlink('public/assets/images/medical/ori/' . $medgal_filename);
-            unlink('public/assets/images/medical/thumb/' . $medgal_filename);
+            $medgal_id   = (int) $this->request->getVar('medgal_id');
+            $user        = $this->userauth();
+            $user_faskes = $user['user_faskes'];
+
+            // The filename is looked up from the database, never taken from the
+            // request. Previously medgal_filename came straight from the client
+            // and was handed to unlink(), allowing arbitrary file deletion via
+            // "../". The ID was also unchecked, so any authenticated clinic user
+            // could delete another clinic's gallery records.
+            $gallery = $this->medgal->find($medgal_id);
+
+            if ($gallery === null) {
+                echo json_encode(['success' => false, 'message' => 'Foto tidak ditemukan.']);
+                return;
+            }
+
+            $medical = $this->medical->find($gallery['medgal_medical']);
+
+            if ($medical === null || $medical['medical_faskes'] != $user_faskes) {
+                echo json_encode(['success' => false, 'message' => 'Akses ditolak.']);
+                return;
+            }
+
+            $this->deleteUpload('public/assets/images/medical/ori', $gallery['medgal_filename']);
+            $this->deleteUpload('public/assets/images/medical/thumb', $gallery['medgal_filename']);
+
             $this->medgal->delete($medgal_id);
             $response = [
                 'success' => 'Berhasil Hapus Foto',
-                'link'    => 'medical', 
+                'link'    => 'medical',
             ];
             echo json_encode($response);
         }
@@ -486,8 +506,8 @@ class Medical extends BaseController
 
             if (count($medgal) != 0) {
                 foreach ($medgal as $gallery) {
-                    unlink('public/assets/images/medical/ori/' . $gallery['medgal_filename']);
-                    unlink('public/assets/images/medical/thumb/' . $gallery['medgal_filename']);
+                    $this->deleteUpload('public/assets/images/medical/ori', $gallery['medgal_filename']);
+                    $this->deleteUpload('public/assets/images/medical/thumb', $gallery['medgal_filename']);
                     $this->medgal->delete($gallery['medgal_id']);
                 }
             }

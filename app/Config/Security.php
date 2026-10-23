@@ -86,6 +86,32 @@ class Security extends BaseConfig
     public $regenerate = true;
 
     /**
+     * ------------------------------------------------------------------
+     * CSRF Protection Exceptions
+     * ------------------------------------------------------------------
+     *
+     * CSRF is enabled globally in Config\Filters::$globals. These endpoints
+     * cannot possibly carry a browser CSRF token and MUST stay excluded,
+     * otherwise every payment notification and every mobile login fails:
+     *
+     *  - transaction/hook    Midtrans server-to-server payment notification.
+     *                         Posted by Midtrans infrastructure: no browser,
+     *                         no session, no token.
+     *  - transaction/finish  Payment redirect callback carrying result_data.
+     *  - api/app/auth/login  Native mobile app login. A native HTTP client has
+     *                         no cookie jar to read the token from.
+     *
+     * Keep this list in sync if new webhook or native-app routes are added.
+     *
+     * @var list<string>
+     */
+    public $except = [
+        'transaction/hook',
+        'transaction/finish',
+        'api/app/auth/login',
+    ];
+
+    /**
      * --------------------------------------------------------------------------
      * CSRF Redirect
      * --------------------------------------------------------------------------

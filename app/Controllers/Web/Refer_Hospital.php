@@ -250,18 +250,17 @@ class Refer_Hospital extends BaseController
                     }
                 }
                 
-                $images_items     = $this->request->getFileMultiple('images');
-                if ($images_items[0]->getName() != "") {
-                    foreach ($images_items as $images) {
-                        $img_name       = $images->getName();
-                        $disease        = trim($this->request->getVar('medgal_disease'));
+                $images_items = $this->request->getFileMultiple('images');
 
-                        if ($disease == NULL) {
-                            $disease = 'unnamed';
+                if (is_array($images_items) && $images_items !== []) {
+                    foreach ($images_items as $images) {
+                        if (! $images->isValid() || $images->hasMoved()) {
+                            continue;
                         }
 
-                        $datetime       = date("YmdHis");
-                        $new_img_name   = $disease . '_' . $medical_code . '_' . $datetime . '_' . $img_name;
+                        $disease      = trim((string) $this->request->getVar('medgal_disease'));
+                        $new_img_name = $this->safeImageName($disease, $images->getName());
+
                         \Config\Services::image()
                         ->withFile($images)
                         ->fit(250, 250, 'center')
@@ -342,8 +341,8 @@ class Refer_Hospital extends BaseController
 
             if (count($medgal) != 0) {
                 foreach ($medgal as $gallery) {
-                    unlink('public/assets/images/medical/ori/' . $gallery['medgal_filename']);
-                    unlink('public/assets/images/medical/thumb/' . $gallery['medgal_filename']);
+                    $this->deleteUpload('public/assets/images/medical/ori', $gallery['medgal_filename']);
+                    $this->deleteUpload('public/assets/images/medical/thumb', $gallery['medgal_filename']);
                     $this->medgal->delete($gallery['medgal_id']);
                 }
             }

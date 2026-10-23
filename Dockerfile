@@ -19,27 +19,32 @@ FROM composer:2.8 AS vendor
 
 WORKDIR /app
 
-# composer.json only — no composer.lock. The committed lock still pins
-# codeigniter4/framework 4.3.8, which does not satisfy the ^4.7 constraint
-# in composer.json, and `composer install` would refuse to run against it.
-# With no lock present, `composer install` behaves as `composer update`
-# and resolves a correct set.
+# Dependency resolution.
 #
-# To make later builds reproducible, extract the lock this stage produced
-# and commit it:
+# composer.json is always copied. composer.lock is copied when present so a
+# committed, current lock makes the build reproducible. The committed lock in
+# this repo still pins codeigniter4/framework 4.3.8, which does not satisfy the
+# ^4.7 constraint, so `composer install` refuses it — the RUN below detects
+# that and resolves fresh instead of failing the build.
+#
+# Once a correct lock is committed, every later build is reproducible. To
+# capture the lock this stage produces:
 #   docker run --rm --entrypoint cat <image> /application/composer.lock > composer.lock
 COPY composer.json ./
+COPY composer.lock* ./
 
 # ext-intl / ext-mbstring are ignored at resolve time because the resolver
 # container does not carry CI4's platform extensions. The RUNTIME image
-# below genuinely provides both, so this only affects version selection.
-RUN composer install \
-      --no-dev \
-      --optimize-autoloader \
-      --no-interaction \
-      --prefer-dist \
-      --ignore-platform-req=ext-intl \
-      --ignore-platform-req=ext-mbstring
+# genuinely provides both, so this only affects version selection.
+RUN set -eux; \
+    IGN='--ignore-platform-req=ext-intl --ignore-platform-req=ext-mbstring'; \
+    FLAGS="--no-dev --optimize-autoloader --no-interaction --prefer-dist"; \
+    if [ -f composer.lock ] && composer install $$FLAGS $$IGN; then \
+        echo '>>> installed from composer.lock (reproducible)'; \
+    else \
+        echo '>>> composer.lock missing or stale - resolving fresh'; \
+        composer update $$FLAGS $$IGN; \
+    fi
 
 # ==================================================================
 # Stage 2 — runtime

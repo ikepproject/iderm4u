@@ -253,4 +253,70 @@ class BaseController extends Controller
         }
         return $result;
     }
+
+    /**
+     * Build a safe, server-controlled filename for an uploaded image.
+     *
+     * The previous code built names like:
+     *     $disease . '_' . $medical_code . '_' . $datetime . '_' . $clientName
+     * where both $disease and $clientName came from the request. That allowed
+     * path traversal (a "../" prefix in medgal_disease escaped the target
+     * directory) and let a client store a valid image under an arbitrary
+     * extension such as .php.
+     *
+     * @param string|null $prefix     Optional label; non-alphanumerics stripped.
+     * @param string|null $clientName Original filename, used only to pick the
+     *                                extension — never used as-is.
+     */
+    protected function safeImageName(?string $prefix = null, ?string $clientName = null): string
+    {
+        $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+
+        $ext = 'jpg';
+        if ($clientName !== null && $clientName !== '') {
+            $candidate = strtolower(pathinfo($clientName, PATHINFO_EXTENSION));
+            if (in_array($candidate, $allowed, true)) {
+                $ext = $candidate === 'jpeg' ? 'jpg' : $candidate;
+            }
+        }
+
+        $prefix = preg_replace('/[^A-Za-z0-9_-]/', '', (string) $prefix);
+        $prefix = substr((string) $prefix, 0, 40);
+
+        return ($prefix !== '' ? $prefix : 'img')
+            . '_' . date('YmdHis')
+            . '_' . bin2hex(random_bytes(4))
+            . '.' . $ext;
+    }
+
+    /**
+     * Delete a file from an upload directory, refusing anything that is not a
+     * plain filename resolved inside that directory.
+     *
+     * Guards against path traversal via a request-supplied name.
+     */
+    protected function deleteUpload(string $directory, ?string $filename): bool
+    {
+        if ($filename === null || $filename === '') {
+            return false;
+        }
+
+        // basename() discards any directory component the caller supplied.
+        $basename = basename($filename);
+
+        if ($basename !== $filename || $basename === '.' || $basename === '..') {
+            return false;
+        }
+
+        $path = rtrim($directory, '/') . '/' . $basename;
+        $real = realpath($path);
+        $root = realpath($directory);
+
+        // Only ever delete inside the intended directory.
+        if ($real === false || $root === false || strpos($real, $root . DIRECTORY_SEPARATOR) !== 0) {
+            return false;
+        }
+
+        return @unlink($real);
+    }
 }

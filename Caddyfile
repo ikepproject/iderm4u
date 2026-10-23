@@ -6,23 +6,61 @@
 :8080 {
 	root * /application
 
-	# Belt-and-braces. The allowlist below is the real protection, but these
-	# paths must never be reachable regardless of routing changes.
-	@blocked path /.env* /app/* /writable/* /vendor/* /system/* /tests/* /spark /preload.php /info.php
+	# ------------------------------------------------------------------
+	# 1. Path traversal — evaluated first, before anything else runs.
+	#    Caddy matches on the percent-decoded path, so %2e%2e is caught too.
+	#    Without this, /public/../app/Config/Database.php matches the
+	#    /public/* asset rule and file_server would serve that file, since the
+	#    resolved destination is still inside root.
+	# ------------------------------------------------------------------
+	@traverse path_regexp \.\.
+	respond @traverse 404
+
+	# ------------------------------------------------------------------
+	# 2. Hidden files: .env, .git/config, .htaccess, .dockerignore.
+	# ------------------------------------------------------------------
+	@hidden path_regexp (^|/)\.[^/]
+	respond @hidden 404
+
+	# ------------------------------------------------------------------
+	# 3. Sensitive trees and build artefacts. Redundant with the allowlist
+	#    below, kept deliberately so the intent survives refactors.
+	# ------------------------------------------------------------------
+	@blocked path /app /app/* \
+		/writable /writable/* \
+		/vendor /vendor/* \
+		/system /system/* \
+		/tests /tests/* \
+		/spark /preload.php /builds /info.php \
+		/composer.json /composer.lock /phpunit.xml.dist /phpunit.xml \
+		/Dockerfile /Caddyfile /supervisord.conf
 	respond @blocked 404
 
 	route {
-		# Static assets. This is the ONLY tree served from disk.
+		# ------------------------------------------------------------------
+		# 4. Static assets — the ONLY tree served from disk.
+		#    Uploads land under public/assets/images/{medical,users}; images,
+		#    CSS, JS and fonts all serve normally through here.
+		# ------------------------------------------------------------------
 		@assets path /public/*
 		handle @assets {
-			# User-uploaded files live here. Never execute them.
-			@uploadphp path *.php
-			respond @uploadphp 404
+			# Never execute an upload. Closes the "valid JPEG named x.php"
+			# store-as-executable hole.
+			@exec path *.php *.phtml *.phar *.cgi *.pl *.py
+			respond @exec 404
+
+			# Block config/log/dump files that land in the upload tree.
+			@cfg *.yml *.yaml *.log *.ini *.env *.sql
+			respond @cfg 404
+
 			file_server
 		}
 
-		# Everything else becomes the CodeIgniter front controller.
-		# CI4 has setAutoRoute(false), so unknown paths 404 through the app.
+		# ------------------------------------------------------------------
+		# 5. Everything else becomes the CodeIgniter front controller.
+		#    CI4 runs setAutoRoute(false), so non-routes return the app's
+		#    404 and nothing is ever read from disk.
+		# ------------------------------------------------------------------
 		handle {
 			rewrite * /index.php
 			reverse_proxy fastcgi://127.0.0.1:9000 {

@@ -137,9 +137,8 @@ class Patient extends BaseController
                 $user_faskes                = $this->request->getVar('user_faskes');
 
                 $userPhoto  = $this->request->getFile('user_photo');
-                if ($userPhoto->getName()!= NULL) {
-                    //Get Datetime now
-                    $namePhoto   = $patient_code . '_' . date("YmdHis") . '_' . $userPhoto->getName();
+                if ($userPhoto->isValid() && ! $userPhoto->hasMoved()) {
+                    $namePhoto   = $this->safeImageName($patient_code, $userPhoto->getName());
                     $user_photo  = $namePhoto;
                     \Config\Services::image()
                         ->withFile($userPhoto)
@@ -264,16 +263,20 @@ class Patient extends BaseController
                 
                 $userPhoto      = $this->request->getFile('edit_user_photo');
                 $user_photo_old = $this->request->getVar('user_photo_old');
-                if ($userPhoto->getName()!= NULL) {
-                    //Get Datetime now
-                    $date        = date("Y-m-d");
-                    $time        = date("H-i-s");
-                    $namePhoto   = $this->request->getVar('patient_code') . '_' . date("YmdHis") . '_' . $userPhoto->getName();
+
+                if ($userPhoto->isValid() && ! $userPhoto->hasMoved()) {
+                    $namePhoto   = $this->safeImageName(
+                        $this->request->getVar('patient_code'),
+                        $userPhoto->getName()
+                    );
                     $user_photo  = $namePhoto;
-                    if ($user_photo_old != 'default.png') {
-                        unlink('public/assets/images/users/' . $user_photo_old);
+
+                    // Guarded delete: this filename arrived from the client, so it
+                    // must not be able to traverse outside the users directory.
+                    if ($user_photo_old && $user_photo_old !== 'default.png') {
+                        $this->deleteUpload('public/assets/images/users', $user_photo_old);
                     }
-                    
+
                     \Config\Services::image()
                         ->withFile($userPhoto)
                         ->fit(250, 250, 'center')
@@ -318,7 +321,7 @@ class Patient extends BaseController
                 $user_photo   = $user['user_photo'];
 
                 if ($user_photo != 'default.png') {
-                    unlink('public/assets/images/users/' . $user_photo);
+                    $this->deleteUpload('public/assets/images/users', $user_photo);
                 }
 
                 $this->user->delete($user_id);
