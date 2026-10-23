@@ -55,23 +55,39 @@ RUN set -e; \
 # ==================================================================
 # Stage 2 — runtime
 # ==================================================================
-# Pinned, not floating. php:8.5-fpm-bookworm tracks whatever is newest, which
-# makes builds non-reproducible and could silently pull an unpatched runtime.
-# 8.5.12 is the release that fixes CVE-2026-109618 / CVE-2026-109619 (PHP2Shell).
-FROM php:8.5.12-fpm-bookworm
+# Pinned, not floating. A floating tag such as php:8.4-fpm-bookworm tracks
+# whatever is newest, which makes builds non-reproducible and could silently
+# pull an unpatched runtime.
+#
+# 8.4.27 is the release that fixes CVE-2026-109618 / CVE-2026-109619
+# (PHP2Shell). Chosen over 8.5.12 deliberately: both carry the same fix and
+# both are supported by CodeIgniter 4.7 (which requires PHP ^8.2), but 8.4 is a
+# mature branch whereas the 8.5.12 image layer is days old and its extension
+# builds proved unreliable. Moving to 8.5 later is a one-line change.
+FROM php:8.4.27-fpm-bookworm
 
 # Fail the build loudly rather than shipping a vulnerable runtime.
 # PHP2Shell = CVE-2026-109618 + CVE-2026-109619, CVSS v4.0 9.2, unauthenticated
 # RCE in the PHP engine itself, exploited in the wild from 2026-10-17.
 # Fixed in 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35. PHP 7.4, 8.0 and 8.1 are EOL and
-# receive no upstream fix at all.
-RUN php -r 'if (PHP_VERSION_ID < 80512) { fwrite(STDERR, "FATAL: PHP " . PHP_VERSION . " predates 8.5.12 and is vulnerable to CVE-2026-109618 / CVE-2026-109619 (PHP2Shell).\n"); exit(1); } echo "PHP " . PHP_VERSION . " - patched for PHP2Shell.\n";'
+# receive no upstream fix at all — which is why rolling back to the previous
+# 7.4 image is not a safe option.
+RUN php -r 'if (PHP_VERSION_ID < 80427) { fwrite(STDERR, "FATAL: PHP " . PHP_VERSION . " predates 8.4.27 and is vulnerable to CVE-2026-109618 / CVE-2026-109619 (PHP2Shell).\n"); exit(1); } echo "PHP " . PHP_VERSION . " - patched for PHP2Shell.\n";'
 
 # --- PHP extensions -----------------------------------------------------------
-# Extensions are installed ONE AT A TIME on purpose. Passing several to a
-# single `docker-php-ext-install -j` makes it configure them all into one shared
-# phpize build tree, and the parallel `make` then produces no .so at all
-# ("cp: cannot stat 'modules/*'"). Sequential is slower but deterministic.
+# Extensions are installed ONE AT A TIME and WITHOUT -j, on purpose.
+#
+# With -j"$(nproc)" this fails as:
+#   Build complete. Don't forget to run 'make test'.
+#   cp: cannot stat 'modules/*': No such file or directory
+#   make: *** [Makefile:89: install-modules] Error 1
+#   make: *** Waiting for unfinished jobs....
+#
+# "Waiting for unfinished jobs" is the tell: parallel make is the problem. When
+# a compile job dies (typically the compiler being OOM-killed), make still runs
+# install-modules, finds an empty modules/ dir, and reports that instead of the
+# real cause. Sequential and single-threaded is slower but tells you the truth
+# and does not race the shared PHP build tree.
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
@@ -80,11 +96,11 @@ RUN set -eux; \
       libzip-dev libicu-dev \
       unzip ca-certificates; \
     docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp; \
-    docker-php-ext-install -j"$(nproc)" pdo_pgsql; \
-    docker-php-ext-install -j"$(nproc)" gd; \
-    docker-php-ext-install -j"$(nproc)" intl; \
-    docker-php-ext-install -j"$(nproc)" opcache; \
-    docker-php-ext-install -j"$(nproc)" zip; \
+    docker-php-ext-install pdo_pgsql; \
+    docker-php-ext-install gd; \
+    docker-php-ext-install intl; \
+    docker-php-ext-install opcache; \
+    docker-php-ext-install zip; \
     apt-get purge -y --auto-remove; \
     rm -rf /var/lib/apt/lists/*; \
     php -r 'foreach (["pdo_pgsql","gd","intl","zip","Zend OPcache"] as $e) { printf("%-14s %s\n", $e, extension_loaded($e) ? "OK" : "MISSING"); }'
