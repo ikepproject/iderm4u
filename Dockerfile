@@ -127,18 +127,6 @@ RUN set -eux; \
     php-fpm -v; \
     echo ">>> entrypoints OK: supervisord, php-fpm, caddy"
 
-# --- Validate the Caddyfile and php-fpm pool at BUILD time -------------------
-# Both configs produced runtime restart loops that looked fatal but were only
-# syntax errors. Catch them here instead:
-#   caddy validate -> "module not registered: http.matchers.*.yml",
-#                     "unsupported URL scheme fastcgi://"
-#   php-fpm -t     -> "unknown entry 'error_log'"
-RUN set -eux; \
-    /usr/bin/caddy fmt --overwrite /application/Caddyfile; \
-    /usr/bin/caddy validate --config /application/Caddyfile --adapter caddyfile; \
-    php-fpm -t -y /application/writable/logs/php-fpm-error.log; \
-    echo ">>> configs valid: Caddyfile + php-fpm pool"
-
 # --- User BEFORE COPY so ownership is correct from the start ------------------
 RUN useradd -ms /bin/bash iderm4u
 
@@ -205,6 +193,21 @@ RUN printf '%s\n' \
       'opcache.validate_timestamps = 1' \
       'opcache.revalidate_freq = 2' \
       > /usr/local/etc/php/conf.d/iderm4u.ini
+
+# --- Validate BOTH configs at BUILD time --------------------------------------
+# Placed last, once /application/Caddyfile exists and the pool file has been
+# written. Every one of these errors previously presented as a container
+# restart loop rather than a build failure:
+#   caddy validate -> "module not registered: http.matchers.*.yml",
+#                     "unsupported URL scheme fastcgi://"
+#   php-fpm -t     -> "unknown entry 'error_log'"
+RUN set -eux; \
+    test -f /application/Caddyfile || { echo "FATAL: Caddyfile not copied into image"; exit 1; }; \
+    /usr/bin/caddy fmt --overwrite /application/Caddyfile; \
+    /usr/bin/caddy validate --config /application/Caddyfile --adapter caddyfile; \
+    php-fpm -t -y /application/writable/logs/php-fpm-error.log; \
+    test -w /application/writable/logs || { echo "FATAL: writable/logs not writable by $(id -u)"; exit 1; }; \
+    echo ">>> configs valid: Caddyfile + php-fpm pool"
 
 EXPOSE 8080
 ENTRYPOINT ["supervisord", "-c", "/application/supervisord.conf"]
