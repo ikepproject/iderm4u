@@ -37,12 +37,13 @@ class Filters extends BaseConfig
     public $globals = [
         'before' => [
             // 'honeypot',
-            // 'csrf',
+            'csrf',
             // 'invalidchars',
             'cors'
         ],
         'after' => [
-            'toolbar',
+            // 'toolbar' — removed. This ran on every response and, combined with
+            // CI_ENVIRONMENT=development, leaked SQL/debug output to visitors.
             // 'honeypot',
             // 'secureheaders',
         ],

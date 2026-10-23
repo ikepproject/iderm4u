@@ -97,13 +97,13 @@ class JWTCI4 {
 
     public function getBearerToken($token)
     {
-        $token = explode(" ", $token);
-        if( !isset($token[0]) && $token[0] != 'Bearer' )
-        {
+        $parts = explode(" ", (string) $token);
+
+        if (! isset($parts[0], $parts[1]) || $parts[0] !== 'Bearer') {
             return false;
         }
 
-        return $token[2];
+        return $parts[1];
     }
 
     public function setTime($date)

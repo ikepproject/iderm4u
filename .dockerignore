@@ -1,12 +1,20 @@
-# .dockerignore
-
 .git
 .gitignore
+
+# Secrets — never bake these into an image layer
+.env
+.env.*
 
 LICENSE
 README.md
 
-composer.lock
-
-vendor/
 tests/
+
+# Dependencies — the multi-stage vendor build is authoritative
+vendor/
+
+# 51 committed node_modules trees under public/assets/libs
+public/assets/libs/**/node_modules/
+
+# NOTE: composer.lock is deliberately NOT ignored.
+# Shipping the lock file is what makes `composer install` reproducible.

@@ -8,7 +8,8 @@
  | it and display a generic error message.
  */
 ini_set('display_errors', '0');
-error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
+// E_STRICT was removed from PHP 8.4. Referencing it here fatals on 8.4+.
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
 
 /*
  |--------------------------------------------------------------------------

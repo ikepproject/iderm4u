@@ -343,7 +343,7 @@ class App extends BaseConfig
      *
      * @var string|string[]
      */
-    public $proxyIPs = '';
+    public $proxyIPs = '172.16.0.0/12';
 
     /**
      * --------------------------------------------------------------------------

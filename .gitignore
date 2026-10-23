@@ -1,12 +1,38 @@
-# IDE Files
-#-------------------------
+# Secrets — MUST NEVER be committed
+.env
+.env.*
+/app.env
+
+# Dependencies
+/vendor/
+
+# Runtime artefacts
+/writable/cache/*
+/writable/logs/*
+/writable/session/*
+/writable/uploads/*
+!/writable/**/.gitkeep
+!/writable/**/index.html
+
+# User-uploaded media (persisted in Docker volumes, not in git)
+/public/assets/images/medical/
+/public/assets/images/users/
+!/public/assets/images/**/.gitkeep
+!/public/assets/images/**/index.html
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# nbproject
 /nbproject/
 .idea/*
 
-## Sublime Text cache files
+# Sublime Text cache files
 *.tmlanguage.cache
 *.tmPreferences.cache
 *.stTheme.cache
 *.sublime-workspace
 *.sublime-project
-

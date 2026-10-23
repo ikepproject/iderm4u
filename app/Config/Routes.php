@@ -103,10 +103,8 @@ $routes->post('appointment/accept', 'Web\Appointment::accept', ["filter" => "aut
 /**--- transaction ---*/
 $routes->post('transaction/cash', 'Web\Transaction::cash', ["filter" => "authweb:2020-2022-5050-5055-7077"]);                    
 $routes->post('medicalrefer/create', 'Web\MedicalRefer::create', ["filter" => "authweb:2020-2022-5050-5055-7077"]);              
-/**--- tes function ---*/
-$routes->get('77test77/encrypt', 'Api\Test::encrypt:2020-2022-5050-5055-7077');
-$routes->get('77test77/decrypt', 'Api\Test::decrypt:2020-2022-5050-5055-7077');
-$routes->get('77test77/check', 'Api\Test::check:2020-2022-5050-5055-7077');  
+// NOTE: the /77test77/* debug routes (Api\Test) were removed on the PHP 8.5
+// migration. They were unauthenticated and exposed the live encryption key.  
 
 /**--- FRONT END ROUTES (Endpoint pages)---*/
 /**--- landing page ---*/

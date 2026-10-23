@@ -4,7 +4,6 @@ namespace App\Controllers\Web;
 
 use App\Controllers\BaseController;
 use Midtrans\Notification;
-use App\Libraries\Veritrans;
 
 class Midtrans extends BaseController
 {

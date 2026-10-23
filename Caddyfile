@@ -1,0 +1,35 @@
+{
+	admin off
+	auto_https off
+}
+
+:8080 {
+	root * /application
+
+	# Belt-and-braces. The allowlist below is the real protection, but these
+	# paths must never be reachable regardless of routing changes.
+	@blocked path /.env* /app/* /writable/* /vendor/* /system/* /tests/* /spark /preload.php /info.php
+	respond @blocked 404
+
+	route {
+		# Static assets. This is the ONLY tree served from disk.
+		@assets path /public/*
+		handle @assets {
+			# User-uploaded files live here. Never execute them.
+			@uploadphp path *.php
+			respond @uploadphp 404
+			file_server
+		}
+
+		# Everything else becomes the CodeIgniter front controller.
+		# CI4 has setAutoRoute(false), so unknown paths 404 through the app.
+		handle {
+			rewrite * /index.php
+			reverse_proxy fastcgi://127.0.0.1:9000 {
+				transport fastcgi {
+					split .php
+				}
+			}
+		}
+	}
+}

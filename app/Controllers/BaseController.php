@@ -52,6 +52,37 @@ class BaseController extends Controller
 	protected $helpers = ['form', 'url', 'cookie', 'Tgl_indo'];
 
 	/**
+	 * Services and models assigned in initController().
+	 *
+	 * These were previously dynamic properties. PHP 8.2 deprecated dynamic
+	 * property creation and PHP 9.0 removes it, so they must be declared.
+	 */
+	protected $session;
+	protected $db;
+
+	protected Model_User $user;
+	protected Model_Visitor $visitor;
+	protected Model_Role $role;
+	protected Model_Faskes $faskes;
+	protected Model_Patient $patient;
+	protected Model_Employee $employee;
+	protected Model_Product $product;
+	protected Model_Treatment $treatment;
+	protected Model_Medical $medical;
+	protected Model_Medprod $medprod;
+	protected Model_Medtreat $medtreat;
+	protected Model_Medoth $medoth;
+	protected Model_Medgal $medgal;
+	protected Model_Invoice $invoice;
+	protected Model_Product_Stock $product_stock;
+	protected Model_Appointment $appointment;
+	protected Model_Midtrans $midtrans;
+	protected Model_Treatment_Discount $discount;
+	protected Model_Type $type;
+	protected Model_Disease $disease;
+	protected Model_Cart $cart;
+
+	/**
 	 * Constructor.
 	 */
 	public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
