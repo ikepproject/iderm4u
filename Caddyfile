@@ -63,7 +63,10 @@
 		#    and nothing is ever read from disk.
 		handle {
 			rewrite * /index.php
-			reverse_proxy fastcgi://127.0.0.1:9000 {
+			# NOTE: no fastcgi:// prefix. reverse_proxy does not accept a URL
+			# scheme here — "unsupported URL scheme fastcgi://". The transport is
+			# selected by the `transport` block, not by the upstream address.
+			reverse_proxy 127.0.0.1:9000 {
 				transport fastcgi {
 					split .php
 				}

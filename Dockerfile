@@ -141,6 +141,17 @@ RUN chown -R iderm4u:iderm4u /application
 
 # --- php-fpm pool -------------------------------------------------------------
 # Runs as iderm4u; listens on loopback only. Caddy is the sole client.
+#
+# Two things learned the hard way, both encoded below:
+#  1. php-fpm's pool parser uses ';' for comments. A '#' line is parsed as a
+#     directive and dies with "value is NULL for a ZEND_INI_PARSER_ENTRY", so
+#     there are NO comments inside this pool file — explanation lives here.
+#  2. PHP 8.4 fpm defaults error_log to /proc/self/fd/2. After dropping
+#     privileges to iderm4u it cannot reopen that fd and exits 78 with
+#     "failed to open error_log ... Permission denied". Point it at a real file.
+#     /application/writable is chowned to iderm4u in the step above.
+#  3. PHP2Shell (CVE-2026-109618 / CVE-2026-109619): upload progress off at the
+#     pool level is authoritative — a stray php.ini cannot re-enable it.
 RUN rm -f /usr/local/etc/php-fpm.d/www.conf \
  && printf '%s\n' \
       '[www]' \
@@ -158,14 +169,8 @@ RUN rm -f /usr/local/etc/php-fpm.d/www.conf \
       'catch_workers_output = yes' \
       'decorate_workers_output = no' \
       '' \
-      '# PHP 8.4 fpm defaults error_log to /proc/self/fd/2. After dropping' \
-      '# privileges to iderm4u it cannot reopen that fd, so it dies immediately' \
-      '# with exit 78 and "failed to open error_log ... Permission denied".' \
-      '# Point it at a real file instead. This directory is chowned above.' \
       'error_log = /application/writable/logs/php-fpm-error.log' \
       '' \
-      '# PHP2Shell (CVE-2026-109618 / CVE-2026-109619) hardening. The pool-level' \
-      '# flag is authoritative: a stray php.ini elsewhere cannot re-enable it.' \
       'php_admin_flag[session.upload_progress.enabled] = off' \
       > /usr/local/etc/php-fpm.d/www.conf
 
