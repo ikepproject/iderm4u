@@ -57,4 +57,35 @@ class Exceptions extends BaseConfig
      * @var array
      */
     public $sensitiveDataInTrace = [];
+
+    /**
+     * ------------------------------------------------------------------
+     * LOG DEPRECATIONS
+     * ------------------------------------------------------------------
+     *
+     * If true, deprecation notices are logged instead of being thrown as
+     * exceptions.
+     *
+     * This matters on PHP 8.4. CodeIgniter registers its error handler
+     * unconditionally (not just in debug mode) and THROWS an
+     * ErrorException on every E_DEPRECATED it sees, unless this is true.
+     * PHP 8.4 raises a deprecation for every implicitly-nullable
+     * parameter type, and CodeIgniter's own system/ directory still
+     * contains ~450 of them. With this false, every request dies on the
+     * first deprecation raised while loading a framework class.
+     *
+     * @var bool
+     */
+    public $logDeprecations = true;
+
+    /**
+     * ------------------------------------------------------------------
+     * Deprecation Log Level
+     * ------------------------------------------------------------------
+     *
+     * The log level used when writing deprecation notices to the log.
+     *
+     * @var string
+     */
+    public $deprecationLogLevel = 'warning';
 }

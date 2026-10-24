@@ -1,0 +1,75 @@
+{
+	# Caddy is behind the edge server that terminates TLS, so it must not
+	# try to manage certificates or redirect to https on its own.
+	admin off
+	auto_https off
+}
+
+:8080 {
+	root * /application
+
+	# EVERYTHING lives inside route{} on purpose.
+	#
+	# Caddy does NOT execute directives in written order — it sorts them
+	# into a canonical order:
+	#
+	#   ... handle, handle_path, route, abort, error, copy_response, respond,
+	#       metrics, reverse_proxy, php_fastcgi, file_server
+	#
+	# `route` sorts BEFORE `respond`. That means a deny rule declared at
+	# the top level (outside route) never runs: route handled the request
+	# and terminated it, so the respond is never reached. No error, no log
+	# line, no warning — the rule just does nothing.
+	#
+	# Inside a single route block, statements execute strictly top to
+	# bottom, in the order written.
+	route {
+		# --- deny layer --------------------------------------------------
+		# 1. Path traversal. Caddy matches the percent-decoded path, so
+		#    %2e%2e is caught here too. Without this, a request like
+		#    /public/../app/Config/Database.php matches nothing below and
+		#    would be relayed to PHP, whose dev server resolves the ".."
+		#    and hands back the file.
+		@traverse path_regexp \.\.
+		respond @traverse 404
+
+		# 2. Every dotfile: .env, .env.example, .git/config, .htaccess,
+		#    .dockerignore, .gitignore. This is the rule that stops the
+		#    production secrets being served as plaintext.
+		@hidden path_regexp (^|/)\.[^/]
+		respond @hidden 404
+
+		# 3. Source trees, build artefacts and config files.
+		@blocked path /app /app/* \
+			/vendor /vendor/* \
+			/system /system/* \
+			/tests /tests/* \
+			/writable /writable/* \
+			/spark /preload.php /builds /info.php \
+			/composer.json /composer.lock /phpunit.xml.dist \
+			/Dockerfile /Caddyfile /supervisord.conf \
+			/docker-compose.yml /docker-volumes.info \
+			/.angkringan
+		respond @blocked 404
+
+		# 4. Never execute a PHP file that was uploaded into the asset
+		#    tree. public/assets/libs/jquery.repeater/ ships a real
+		#    test-post-parse.php, and an attacker who can write into
+		#    public/ could drop a .php file. The dev server would run it.
+		@exec path_regexp ^/public/.*\.(php|phtml|phar|cgi|pl|py)$
+		respond @exec 404
+
+		# 5. Block config, log and dump files that land in the upload
+		#    tree.
+		#    NOTE: the `path` keyword is required. Omitting it makes Caddy
+		#    read "*.yml" as a matcher MODULE name and fail with
+		#    "module not registered: http.matchers.*.yml".
+		@cfg path *.yml *.yaml *.log *.ini *.env *.sql
+		respond @cfg 404
+
+		# --- relay layer -------------------------------------------------
+		# 6. Everything else is the application's problem. Relay to the
+		#    PHP process; it decides what to do with the path.
+		reverse_proxy 127.0.0.1:8081
+	}
+}

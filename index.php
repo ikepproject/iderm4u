@@ -1,7 +1,7 @@
 <?php
 
 // Check PHP version.
-$minPhpVersion = '7.4'; // If you update this, don't forget to update `spark`.
+$minPhpVersion = '8.2'; // If you update this, don't forget to update `spark`.
 if (version_compare(PHP_VERSION, $minPhpVersion, '<')) {
     $message = sprintf(
         'Your PHP version must be %s or higher to run CodeIgniter. Current version: %s',
@@ -9,7 +9,10 @@ if (version_compare(PHP_VERSION, $minPhpVersion, '<')) {
         PHP_VERSION
     );
 
-    exit($message);
+    header('HTTP/1.1 503 Service Unavailable.', true, 503);
+    echo $message;
+
+    exit(1);
 }
 
 // Path to the front controller (this file)
@@ -34,34 +37,17 @@ require FCPATH . 'app/Config/Paths.php';
 
 $paths = new Config\Paths();
 
-// Location of the framework bootstrap file.
-require rtrim($paths->systemDirectory, '\\/ ') . DIRECTORY_SEPARATOR . 'bootstrap.php';
+// LOAD THE FRAMEWORK BOOTSTRAP FILE
+//
+// CodeIgniter 4.5 moved the bootstrap out of system/bootstrap.php into
+// system/Boot.php. The old path still exists on 4.5+ but is a dead file
+// that returns HTTP 503 and prints "the upgrade is not complete" — it
+// does NOT bootstrap anything. Requiring it means every request 503s.
+//
+// Note the front controller stays at the PROJECT ROOT in this application
+// (FCPATH is the project root, not public/ as in the stock appstarter).
+// The views hardcode /public/assets/... URLs, so moving index.php into
+// public/ would break every asset reference.
+require $paths->systemDirectory . '/Boot.php';
 
-// Load environment settings from .env files into $_SERVER and $_ENV
-require_once SYSTEMPATH . 'Config/DotEnv.php';
-(new CodeIgniter\Config\DotEnv(ROOTPATH))->load();
-
-/*
- * ---------------------------------------------------------------
- * GRAB OUR CODEIGNITER INSTANCE
- * ---------------------------------------------------------------
- *
- * The CodeIgniter class contains the core functionality to make
- * the application run, and does all of the dirty work to get
- * the pieces all working together.
- */
-
-$app = Config\Services::codeigniter();
-$app->initialize();
-$context = is_cli() ? 'php-cli' : 'web';
-$app->setContext($context);
-
-/*
- *---------------------------------------------------------------
- * LAUNCH THE APPLICATION
- *---------------------------------------------------------------
- * Now that everything is setup, it's time to actually fire
- * up the engines and make this app do its thang.
- */
-
-$app->run();
+exit(\CodeIgniter\Boot::bootWeb($paths));

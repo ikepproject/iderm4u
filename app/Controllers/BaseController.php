@@ -52,6 +52,129 @@ class BaseController extends Controller
 	protected $helpers = ['form', 'url', 'cookie', 'Tgl_indo'];
 
 	/**
+	 * Shared models, session and database connection.
+	 *
+	 * These were previously created as dynamic properties in
+	 * initController(). PHP 8.2 deprecated dynamic property creation and
+	 * PHP 9.0 makes it a fatal error, so every one of them is declared
+	 * here instead. They are all assigned in initController() below and
+	 * read by the child controllers.
+	 *
+	 * @var Model_Appointment
+	 */
+	protected $appointment;
+
+	/**
+	 * @var Model_Cart
+	 */
+	protected $cart;
+
+	/**
+	 * @var \CodeIgniter\Database\ConnectionInterface
+	 */
+	protected $db;
+
+	/**
+	 * @var Model_Treatment_Discount
+	 */
+	protected $discount;
+
+	/**
+	 * @var Model_Disease
+	 */
+	protected $disease;
+
+	/**
+	 * @var Model_Employee
+	 */
+	protected $employee;
+
+	/**
+	 * @var Model_Faskes
+	 */
+	protected $faskes;
+
+	/**
+	 * @var Model_Invoice
+	 */
+	protected $invoice;
+
+	/**
+	 * @var Model_Medgal
+	 */
+	protected $medgal;
+
+	/**
+	 * @var Model_Medical
+	 */
+	protected $medical;
+
+	/**
+	 * @var Model_Medoth
+	 */
+	protected $medoth;
+
+	/**
+	 * @var Model_Medprod
+	 */
+	protected $medprod;
+
+	/**
+	 * @var Model_Medtreat
+	 */
+	protected $medtreat;
+
+	/**
+	 * @var Model_Midtrans
+	 */
+	protected $midtrans;
+
+	/**
+	 * @var Model_Patient
+	 */
+	protected $patient;
+
+	/**
+	 * @var Model_Product
+	 */
+	protected $product;
+
+	/**
+	 * @var Model_Product_Stock
+	 */
+	protected $product_stock;
+
+	/**
+	 * @var Model_Role
+	 */
+	protected $role;
+
+	/**
+	 * @var \CodeIgniter\Session\Session
+	 */
+	protected $session;
+
+	/**
+	 * @var Model_Treatment
+	 */
+	protected $treatment;
+
+	/**
+	 * @var Model_Type
+	 */
+	protected $type;
+
+	/**
+	 * @var Model_User
+	 */
+	protected $user;
+
+	/**
+	 * @var Model_Visitor
+	 */
+	protected $visitor;
+
+	/**
 	 * Constructor.
 	 */
 	public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)

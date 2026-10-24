@@ -98,7 +98,7 @@ class JWTCI4 {
     public function getBearerToken($token)
     {
         $token = explode(" ", $token);
-        if( !isset($token[0]) && $token[0] != 'Bearer' )
+        if( !isset($token[0]) || $token[0] != 'Bearer' || !isset($token[2]) )
         {
             return false;
         }
