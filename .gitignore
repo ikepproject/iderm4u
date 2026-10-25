@@ -10,23 +10,3 @@
 *.sublime-workspace
 *.sublime-project
 
-# Environment / secrets
-#
-# The .env holds jwt.secretkey, recaptchaSecret, the database password and
-# app.encryption.key. It must never be committed — it is mounted into the
-# container from /iderm4u-storage/app.env, and .env.example is the
-# committed template.
-.env
-.env.*
-!.env.example
-
-# Composer / dependencies
-/vendor/
-composer.phar
-
-# Framework runtime output
-/writable/cache/*
-/writable/logs/*
-/writable/session/*
-/writable/uploads/*
-!/writable/**/index.html

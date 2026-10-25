@@ -27,7 +27,7 @@ if (strpos(PHP_SAPI, 'cgi') === 0) {
 }
 
 // Check PHP version.
-$minPhpVersion = '8.2'; // If you update this, don't forget to update `index.php`.
+$minPhpVersion = '7.4'; // If you update this, don't forget to update `public/index.php`.
 if (version_compare(PHP_VERSION, $minPhpVersion, '<')) {
     $message = sprintf(
         'Your PHP version must be %s or higher to run CodeIgniter. Current version: %s',
@@ -71,13 +71,32 @@ require FCPATH . 'app/Config/Paths.php';
 
 $paths = new Config\Paths();
 
-// LOAD THE FRAMEWORK BOOTSTRAP FILE
-//
-// CodeIgniter 4.5 moved the bootstrap out of system/bootstrap.php into
-// system/Boot.php. The old path still exists on 4.5+ but is a dead file
-// that returns HTTP 503 and prints "the upgrade is not complete" — it
-// does NOT bootstrap anything. Requiring it means every CLI command
-// fails the same way.
-require $paths->systemDirectory . '/Boot.php';
+// Location of the framework bootstrap file.
+require rtrim($paths->systemDirectory, '\\/ ') . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
-exit(\CodeIgniter\Boot::bootSpark($paths));
+// Load environment settings from .env files into $_SERVER and $_ENV
+require_once SYSTEMPATH . 'Config/DotEnv.php';
+(new CodeIgniter\Config\DotEnv(ROOTPATH))->load();
+
+// Grab our CodeIgniter
+$app = Config\Services::codeigniter();
+$app->initialize();
+$app->setContext('spark');
+
+// Grab our Console
+$console = new CodeIgniter\CLI\Console($app);
+
+// Show basic information before we do anything else.
+if (is_int($suppress = array_search('--no-header', $_SERVER['argv'], true))) {
+    unset($_SERVER['argv'][$suppress]); // @codeCoverageIgnore
+    $suppress = true;
+}
+
+$console->showHeader($suppress);
+
+// fire off the command in the main framework.
+$response = $console->run();
+
+if ($response->getStatusCode() >= 300) {
+    exit($response->getStatusCode());
+}

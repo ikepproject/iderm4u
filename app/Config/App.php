@@ -27,24 +27,6 @@ class App extends BaseConfig
     public $baseURL = '';
 
     /**
-     * ------------------------------------------------------------------
-     * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
-     * If you want to accept multiple Hostnames, set this.
-     *
-     * E.g.,
-     * When your site URL ($baseURL) is 'http://example.com/', and your site
-     * also accepts 'http://media.example.com/' and 'http://accounts.example.com/':
-     *     ['media.example.com', 'accounts.example.com']
-     *
-     * NOTE: new in CodeIgniter 4.4. SiteURIFactory reads this property
-     * unconditionally, so it must exist or the request fails with a
-     * TypeError.
-     *
-     * @var string[]
-     */
-    public $allowedHostnames = [];
-
-    /**
      * --------------------------------------------------------------------------
      * Index File
      * --------------------------------------------------------------------------
@@ -75,31 +57,6 @@ class App extends BaseConfig
      * @var string
      */
     public $uriProtocol = 'REQUEST_URI';
-
-    /**
-     * ------------------------------------------------------------------
-     * Permitted URI Characters
-     * ------------------------------------------------------------------
-     *
-     * This lets you specify which characters are permitted within your URLs.
-     * When someone tries to submit a URL with disallowed characters they will
-     * get a warning message.
-     *
-     * As a security measure you are STRONGLY encouraged to restrict URLs to
-     * as few characters as possible.
-     *
-     * By default, only these are allowed: `a-z 0-9~%.:_-`
-     *
-     * The configured value is actually a regular expression character group
-     * and it will be used as: '/\A[<permittedURIChars>]+\z/iu'
-     *
-     * NOTE: new in CodeIgniter 4.4. The Router assigns this to a typed
-     * string property on every request, so it must exist — a missing
-     * property is a TypeError on every single request.
-     *
-     * @var string
-     */
-    public $permittedURIChars = 'a-z 0-9~%.:_\-';
 
     /**
      * --------------------------------------------------------------------------
@@ -384,18 +341,9 @@ class App extends BaseConfig
      * Comma-separated:	'10.0.1.200,192.168.5.0/24'
      * Array: ['10.0.1.200', '192.168.5.0/24']
      *
-     * NOTE: on CodeIgniter 4.4+ this MUST be an array. A plain string
-     * makes CodeIgniter throw a ConfigException on every request that
-     * starts a session, because 4.4 removed the old "empty string means
-     * no proxies" workaround.
-     *
-     * The Caddy container sits in front of the app, so the proxy IP that
-     * needs whitelisting is the Docker bridge gateway. Docker's default
-     * bridge network is 172.16.0.0/12.
-     *
-     * @var string[]
+     * @var string|string[]
      */
-    public $proxyIPs = ['172.16.0.0/12' => 'X-Forwarded-For'];
+    public $proxyIPs = '';
 
     /**
      * --------------------------------------------------------------------------

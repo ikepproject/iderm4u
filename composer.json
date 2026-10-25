@@ -5,9 +5,10 @@
     "homepage": "https://codeigniter.com",
     "license": "MIT",
     "require": {
-        "php": "^8.3",
-        "codeigniter4/framework": "^4.7",
+        "php": "^7.4 || ^8.0",
+        "codeigniter4/framework": "4.3.8",
         "firebase/php-jwt": "^6.3",
+        "xendit/xendit-php": "^2.19",
         "google/recaptcha": "^1.2",
         "midtrans/midtrans-php": "^2.5",
         "guzzlehttp/guzzle": "^7.5"
